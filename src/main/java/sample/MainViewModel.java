@@ -19,7 +19,7 @@ public class MainViewModel {
 
     public void calculateOutputString() {
         System.out.println("VM: calculate Output");
-        this.output.set("Hello ".concat(this.input.get()).concat("!"));
+        this.output.set(this.input.get());
         this.input.set("");
     }
 }
