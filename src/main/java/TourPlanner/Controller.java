@@ -16,7 +16,8 @@ import java.util.ResourceBundle;
 
         // fx:id and use intelliJ to create field in controller
         public TextField InputTextField;
-        public TextField OutputTextField;
+        public TextField OutputDestinationField;
+        public TextField OutputDurationField;
 
         public Controller()
         {
@@ -33,6 +34,7 @@ import java.util.ResourceBundle;
         public void initialize(URL url, ResourceBundle resourceBundle) {
             System.out.println("Controller init/created");
             InputTextField.textProperty().bindBidirectional(viewModel.inputProperty());
-            OutputTextField.textProperty().bindBidirectional(viewModel.outputProperty());
+            OutputDestinationField.textProperty().bindBidirectional(viewModel.outputDestinationProperty());
+            OutputDurationField.textProperty().bindBidirectional(viewModel.outputDurationProperty());
         }
     }

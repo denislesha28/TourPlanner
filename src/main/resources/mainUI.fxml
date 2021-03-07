@@ -20,6 +20,7 @@
    <rowConstraints>
       <RowConstraints />
       <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" />
+      <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" />
       <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
       <RowConstraints />
       <RowConstraints />
@@ -30,8 +31,11 @@
    <children>
       <Label prefHeight="20.0" prefWidth="152.0" text="Enter your destination: " />
       <TextField fx:id="InputTextField" prefHeight="25.0" prefWidth="162.0" GridPane.columnIndex="5" />
-      <TextField fx:id="OutputTextField" prefHeight="49.0" prefWidth="138.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="confirm" GridPane.columnIndex="6" onAction="#calculateDestination" />
+      <TextField fx:id="OutputDestinationField" prefHeight="49.0" prefWidth="138.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+      <TextField fx:id="OutputDurationField" layoutX="217.0" layoutY="137.0" prefHeight="49.0" prefWidth="138.0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+      <Button mnemonicParsing="false" onAction="#calculateDestination" prefHeight="25.0" prefWidth="100.0" text="confirm" GridPane.columnIndex="6" />
       <Label prefHeight="55.0" prefWidth="151.0" text="Current Destination" GridPane.rowIndex="1" />
+      <Label layoutX="29.0" layoutY="136.0" prefHeight="55.0" prefWidth="151.0" text="Estimated Time" GridPane.rowIndex="2" />
+
    </children>
 </GridPane>
