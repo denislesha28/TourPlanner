@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="center" hgap="10" prefHeight="387.0" prefWidth="521.0" vgap="10" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane alignment="center" hgap="10" prefHeight="387.0" prefWidth="521.0" vgap="10" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TourPlanner.Controller">
    <columnConstraints>
       <ColumnConstraints minWidth="138.0" percentWidth="30.0" />
       <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
@@ -31,7 +31,7 @@
       <Label prefHeight="20.0" prefWidth="152.0" text="Enter your destination: " />
       <TextField fx:id="InputTextField" prefHeight="25.0" prefWidth="162.0" GridPane.columnIndex="5" />
       <TextField fx:id="OutputTextField" prefHeight="49.0" prefWidth="138.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="confirm" GridPane.columnIndex="6" onAction="#calculateOutput" />
+      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="confirm" GridPane.columnIndex="6" onAction="#calculateDestination" />
       <Label prefHeight="55.0" prefWidth="151.0" text="Current Destination" GridPane.rowIndex="1" />
    </children>
 </GridPane>
