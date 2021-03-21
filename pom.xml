@@ -16,6 +16,11 @@
             <version>15.0.1</version>
         </dependency>
         <dependency>
+            <groupId>com.gluonhq</groupId>
+            <artifactId>substrate</artifactId>
+            <version>${substrate.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>15.0.1</version>
