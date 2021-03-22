@@ -1,10 +1,36 @@
 package mainPackage;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Model {
 
-    String destination;
-    double durationMin;
 
+    private String destination;
+    private double durationMin;
+    private List<String> tours;
+    Model(){
+        tours=new ArrayList<>();
+        tours.add("TourB");
+        tours.add("TourC");
+
+    }
+
+    public List<String> getTours() {
+        return tours;
+    }
+
+    public void addTour(String Tour){
+        tours.add(Tour);
+    }
+
+    public void setTours(List<String> tours) {
+        this.tours = tours;
+    }
     public double getDurationMin() {
         return durationMin;
     }

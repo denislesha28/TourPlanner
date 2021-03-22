@@ -9,15 +9,17 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainPackage.PrimaryController">
    <children>
       <MenuBar>
          <menus>
@@ -72,9 +74,9 @@
                            <padding>
                               <Insets left="10.0" />
                            </padding></Label>
-                        <ButtonBar buttonMinWidth="20.0" maxWidth="265.0" minWidth="100.0" prefHeight="40.0" prefWidth="200.0">
+                        <ButtonBar buttonMinWidth="30.0" maxWidth="265.0" minWidth="100.0" prefHeight="40.0" prefWidth="200.0">
                           <buttons>
-                            <Button mnemonicParsing="false" text="add" />
+                            <Button mnemonicParsing="false" text="add" onAction="#addTour"/>
                               <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="50.0" text="delete" />
                               <Button mnemonicParsing="false" text="......." />
                           </buttons>
@@ -84,15 +86,54 @@
                         </ButtonBar>
                      </children>
                   </HBox>
-                  <ListView prefHeight="644.0" prefWidth="269.0" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="tourList" prefHeight="644.0" prefWidth="269.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
             <VBox>
                <children>
-                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="737.0" prefWidth="838.0">
+                  <SplitPane dividerPositions="0.5954088952654233" orientation="VERTICAL" prefHeight="737.0" prefWidth="838.0">
                     <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                        <VBox prefHeight="394.0" prefWidth="921.0">
+                           <children>
+                              <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                                <buttons>
+                                  <Button mnemonicParsing="false" text="Route" ButtonBar.buttonData="LEFT" />
+                                    <Button mnemonicParsing="false" text="Description" ButtonBar.buttonData="LEFT" />
+                                </buttons>
+                              </ButtonBar>
+                              <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <HBox prefHeight="44.0" prefWidth="921.0">
+                                 <children>
+                                    <Label prefHeight="44.0" prefWidth="721.0" text="Logs" HBox.hgrow="ALWAYS">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <ButtonBar buttonMinWidth="40.0" maxWidth="212.0" minWidth="200.0" prefHeight="44.0" prefWidth="212.0">
+                                      <buttons>
+                                        <Button mnemonicParsing="false" text="add" />
+                                          <Button mnemonicParsing="false" text="delete" />
+                                          <Button mnemonicParsing="false" text="......." />
+                                      </buttons>
+                                       <padding>
+                                          <Insets right="10.0" />
+                                       </padding>
+                                    </ButtonBar>
+                                 </children>
+                              </HBox>
+                              <TableView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn minWidth="7.0" prefWidth="75.0" text="Date" />
+                                  <TableColumn minWidth="7.0" prefWidth="75.0" text="Duration" />
+                                    <TableColumn minWidth="20.0" prefWidth="770.0" text="Remarks" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
                     </items>
                   </SplitPane>
                </children>

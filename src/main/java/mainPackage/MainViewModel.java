@@ -1,39 +1,31 @@
 package mainPackage;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.Observable;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 
 public class MainViewModel {
-    private final StringProperty input = new SimpleStringProperty("");
-    private final StringProperty outputDestination = new SimpleStringProperty("At home!");
-    private final StringProperty outputDuration = new SimpleStringProperty("---");
+
     private Model model=new Model();
+    private ObservableList<String> tourList = FXCollections.observableArrayList(model.getTours());
+    private final ObjectProperty<ObservableList<String>> tourListView = new SimpleObjectProperty<>(tourList);
 
-    public StringProperty inputProperty() {
-        System.out.println("VM: get input field");
-        return input;
+
+
+
+    public Property tourListProperty() {
+        System.out.println("VM: get Tour ListView");
+        return tourListView;
     }
 
-    public StringProperty outputDestinationProperty() {
-        System.out.println("VM: set output Destination field");
-        return outputDestination;
+
+    public void addTour(){
+        model.addTour("TourA");
+        tourList.add("TourA");
+        this.tourListView.set(tourList);
     }
 
-    public StringProperty outputDurationProperty() {
-        System.out.println("VM: set output Time field");
-        return outputDuration;
-    }
 
-    public void calculateDestination() {
-        System.out.println("VM: print Destination");
-        String destination=this.input.get();
-        this.outputDestination.set(destination);
-        model.setDestination(destination);
-        this.input.set("");
-    }
-
-    public void calculateDuration() {
-        this.outputDestination.set("23 minutes");
-        model.setDurationMin(23.24);
-    }
 }

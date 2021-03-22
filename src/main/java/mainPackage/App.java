@@ -17,7 +17,11 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("mainUI_2"), 640, 480);
+        /* Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();*/
+        // todo set layout based on screen size
+        scene = new Scene(loadFXML("mainUI_v2"), 640, 480);
         stage.setScene(scene);
         stage.show();
     }

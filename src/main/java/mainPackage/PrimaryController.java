@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 public class PrimaryController implements Initializable {
@@ -15,9 +17,7 @@ public class PrimaryController implements Initializable {
     public MainViewModel viewModel = new MainViewModel();
 
     // fx:id and use intelliJ to create field in controller
-    public TextField InputTextField;
-    public TextField OutputDestinationField;
-    public TextField OutputDurationField;
+    public ListView tourList;
 
     public PrimaryController()
     {
@@ -25,17 +25,15 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void calculateDestination(ActionEvent actionEvent) {
-        System.out.println("Controller generate Destination");
-        viewModel.calculateDestination();
+    public void addTour(ActionEvent actionEvent) {
+        System.out.println("Controller generate new Tour");
+        viewModel.addTour();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Controller init/created");
-        InputTextField.textProperty().bindBidirectional(viewModel.inputProperty());
-        OutputDestinationField.textProperty().bindBidirectional(viewModel.outputDestinationProperty());
-        OutputDurationField.textProperty().bindBidirectional(viewModel.outputDurationProperty());
+        tourList.itemsProperty().bindBidirectional(viewModel.tourListProperty());
     }
 
     @FXML
