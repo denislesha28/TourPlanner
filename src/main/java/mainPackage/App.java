@@ -21,7 +21,7 @@ public class App extends Application {
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();*/
         // todo set layout based on screen size
-        scene = new Scene(loadFXML("mainUI_v2"), 640, 480);
+        scene = new Scene(loadFXML("mainUI_v2"), 980  , 700);
         stage.setScene(scene);
         stage.show();
     }

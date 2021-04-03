@@ -13,7 +13,7 @@ public class Model {
     private String destination;
     private double durationMin;
     private List<String> tours;
-    Model(){
+    public Model(){
         tours=new ArrayList<>();
         tours.add("TourB");
         tours.add("TourC");
@@ -27,6 +27,8 @@ public class Model {
     public void addTour(String Tour){
         tours.add(Tour);
     }
+
+    public void deleteTour(String Tour){ tours.remove(Tour); }
 
     public void setTours(List<String> tours) {
         this.tours = tours;

@@ -33,7 +33,10 @@ public class PrimaryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Controller init/created");
-        tourList.itemsProperty().bindBidirectional(viewModel.tourListProperty());
+        //tourList.itemsProperty().bindBidirectional(viewModel.tourListProperty());
+        tourList.setItems(viewModel.tourList);
+        // set cell item type tourList.setCellFactory();
+        // no need to bind listview bidirectionally because the listview is and observable list
     }
 
     @FXML

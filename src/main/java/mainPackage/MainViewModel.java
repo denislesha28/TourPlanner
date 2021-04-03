@@ -9,9 +9,9 @@ import javafx.scene.control.ListView;
 public class MainViewModel {
 
     private Model model=new Model();
-    private ObservableList<String> tourList = FXCollections.observableArrayList(model.getTours());
+    public ObservableList<String> tourList = FXCollections.observableArrayList(model.getTours());
     private final ObjectProperty<ObservableList<String>> tourListView = new SimpleObjectProperty<>(tourList);
-
+    // define cell item type <> insteadd of string
 
 
 
