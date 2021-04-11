@@ -1,10 +1,8 @@
-package mainPackage;
+package MainPackage;
 
-import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ListView;
 
 public class MainViewModel {
 

@@ -2,8 +2,15 @@ module org.openjfx {
     requires javafx.controls;
     requires javafx.fxml;
     requires junit;
+    requires postgresql;
+    requires java.sql;
+    requires jdk.jsobject;
+    requires com.fasterxml.jackson.annotation;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
 
-    opens mainPackage to javafx.fxml;
-    exports mainPackage;
-    exports testingPackage;
+    opens MainPackage to javafx.fxml;
+    exports MainPackage;
+    exports TestingPackage;
+    exports ServerPackage;
 }

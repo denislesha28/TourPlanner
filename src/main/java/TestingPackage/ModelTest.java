@@ -1,6 +1,6 @@
-package testingPackage;
+package TestingPackage;
 
-import mainPackage.Model;
+import MainPackage.Model;
 import org.junit.Assert;
 import org.junit.Test;
 

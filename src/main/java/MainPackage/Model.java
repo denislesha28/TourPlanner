@@ -1,10 +1,6 @@
-package mainPackage;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+package MainPackage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Model {
