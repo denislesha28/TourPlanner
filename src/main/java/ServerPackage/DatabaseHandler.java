@@ -11,10 +11,12 @@ import java.sql.Statement;
 import java.util.*;
 
 public class DatabaseHandler {
-    HashMap <String,String> connectionData;
-    private Connection connection;
 
-    public DatabaseHandler() throws SQLException, IOException {
+    private HashMap <String,String> connectionData;
+    private Connection connection;
+    private static DatabaseHandler instance=null;
+
+    private DatabaseHandler() throws SQLException, IOException {
         // List of connection parameters
         connectionData= new HashMap<String, String>();
         // ObjectMapper to conver json lines to String
@@ -32,6 +34,13 @@ public class DatabaseHandler {
                 connectionData.get("password"));
 
         System.out.println("Database Connected");
+    }
+
+    public static DatabaseHandler getDatabaseInstance() throws SQLException, IOException {
+        if(instance==null){
+            instance=new DatabaseHandler();
+        }
+        return  instance;
     }
 
 

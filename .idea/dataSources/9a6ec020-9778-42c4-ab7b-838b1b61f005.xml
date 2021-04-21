@@ -792,7 +792,7 @@ false YEKT
 false Z
 false Zulu
 </TimeZones>
-      <StartupTime>1618151269</StartupTime>
+      <StartupTime>1619019601</StartupTime>
     </root>
     <database id="2" parent="1" name="TourPlanner">
       <ObjectId>16394</ObjectId>
@@ -808,8 +808,10 @@ false Zulu
 13158||-9223372036854775808|U|G
 13158||10|U|G</Grants>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>492</IntrospectionStateNumber>
+      <IntrospectionStateNumber>500</IntrospectionStateNumber>
       <Current>1</Current>
+      <Relations>sequence|table|16396|16398|1
+</Relations>
     </database>
     <database id="3" parent="1" name="postgres">
       <ObjectId>13442</ObjectId>
@@ -866,7 +868,7 @@ false Zulu
       <ObjectId>16395</ObjectId>
       <StateNumber>489</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>493</IntrospectionStateNumber>
+      <IntrospectionStateNumber>501</IntrospectionStateNumber>
     </schema>
     <schema id="16" parent="2" name="information_schema">
       <ObjectId>13158</ObjectId>
@@ -884,7 +886,6 @@ false Zulu
       <Comment>standard public schema</Comment>
       <StateNumber>287</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>491</IntrospectionStateNumber>
       <Current>1</Current>
     </schema>
     <extension id="19" parent="2" name="plpgsql">
@@ -984,5 +985,88 @@ false Zulu
       <HandlerId>335</HandlerId>
       <Type>index</Type>
     </access-method>
+    <sequence id="31" parent="15" name="tour_id_seq">
+      <ObjectId>16396</ObjectId>
+      <Owner>postgres</Owner>
+      <StateNumber>494</StateNumber>
+      <DataType>integer|0s</DataType>
+    </sequence>
+    <table id="32" parent="15" name="tour">
+      <ObjectId>16398</ObjectId>
+      <Owner>postgres</Owner>
+      <StateNumber>494</StateNumber>
+    </table>
+    <column id="33" parent="32" name="id">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>494</StateNumber>
+      <DefaultExpression>nextval(&apos;&quot;TourPlanner&quot;.tour_id_seq&apos;::regclass)</DefaultExpression>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="34" parent="32" name="name">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>494</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="35" parent="32" name="tourDescription">
+      <Position>3</Position>
+      <DataType>varchar(2000)|0s</DataType>
+      <StateNumber>494</StateNumber>
+      <DefaultExpression>&apos;No Description&apos;::character varying</DefaultExpression>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="36" parent="32" name="routeInformation">
+      <Position>4</Position>
+      <DataType>varchar(1000)|0s</DataType>
+      <StateNumber>494</StateNumber>
+      <DefaultExpression>&apos;No Description&apos;::character varying</DefaultExpression>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="37" parent="32" name="tourDistance">
+      <Position>5</Position>
+      <DataType>double precision|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>494</StateNumber>
+      <TypeId>701</TypeId>
+    </column>
+    <index id="38" parent="32" name="tour_id_uindex">
+      <ObjectId>16407</ObjectId>
+      <StateNumber>495</StateNumber>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>0</CollationIds>
+      <ClassIds>1978</ClassIds>
+    </index>
+    <index id="39" parent="32" name="tour_pk">
+      <ObjectId>16409</ObjectId>
+      <StateNumber>497</StateNumber>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+      <Primary>1</Primary>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>0</CollationIds>
+      <ClassIds>1978</ClassIds>
+    </index>
+    <index id="40" parent="32" name="tour_name_uindex">
+      <ObjectId>16408</ObjectId>
+      <StateNumber>496</StateNumber>
+      <ColNames>name</ColNames>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>100</CollationIds>
+      <CollationNames>default</CollationNames>
+      <ClassIds>3126</ClassIds>
+    </index>
+    <key id="41" parent="32" name="tour_pk">
+      <ObjectId>16410</ObjectId>
+      <StateNumber>497</StateNumber>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>tour_pk</UnderlyingIndexName>
+    </key>
   </database-model>
 </dataSource>
