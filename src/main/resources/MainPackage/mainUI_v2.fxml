@@ -95,7 +95,7 @@
             </VBox>
             <VBox>
                <children>
-                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="737.0" prefWidth="838.0">
+                  <SplitPane dividerPositions="0.5794117647058824" orientation="VERTICAL" prefHeight="737.0" prefWidth="838.0">
                     <items>
                         <VBox prefHeight="394.0" prefWidth="921.0">
                            <children>
@@ -123,6 +123,7 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="2.0" vgrow="SOMETIMES" />
                                              </rowConstraints>
                                              <children>
                                                 <Label text="Name" GridPane.columnIndex="1">
@@ -130,17 +131,17 @@
                                                       <Font size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="TourDescription" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                <Label prefHeight="21.0" prefWidth="141.0" text="Tour Description" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="RouteInformation" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                <Label prefHeight="21.0" prefWidth="156.0" text="Route Information" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="TourDistance" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                <Label text="Tour Distance" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
@@ -157,6 +158,7 @@
                                                       <Insets bottom="10.0" top="10.0" />
                                                    </GridPane.margin>
                                                 </TextArea>
+                                                <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                                              </children>
                                              <padding>
                                                 <Insets bottom="5.0" />
