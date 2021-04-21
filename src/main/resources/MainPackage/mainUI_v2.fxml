@@ -9,6 +9,8 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -18,8 +20,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPackage.PrimaryController">
+<?import javafx.scene.layout.AnchorPane?>
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPackage.PrimaryController">
    <children>
       <MenuBar>
          <menus>
@@ -76,7 +80,7 @@
                            </padding></Label>
                         <ButtonBar buttonMinWidth="30.0" maxWidth="265.0" minWidth="100.0" prefHeight="40.0" prefWidth="200.0">
                           <buttons>
-                            <Button mnemonicParsing="false" text="add" onAction="#addTour"/>
+                            <Button mnemonicParsing="false" onAction="#addTour" text="add" />
                               <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="50.0" text="delete" />
                               <Button mnemonicParsing="false" text="......." />
                           </buttons>
@@ -91,17 +95,82 @@
             </VBox>
             <VBox>
                <children>
-                  <SplitPane dividerPositions="0.5954088952654233" orientation="VERTICAL" prefHeight="737.0" prefWidth="838.0">
+                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="737.0" prefWidth="838.0">
                     <items>
                         <VBox prefHeight="394.0" prefWidth="921.0">
                            <children>
-                              <ButtonBar prefHeight="40.0" prefWidth="200.0">
-                                <buttons>
-                                  <Button mnemonicParsing="false" text="Route" ButtonBar.buttonData="LEFT" />
-                                    <Button mnemonicParsing="false" text="Description" ButtonBar.buttonData="LEFT" />
-                                </buttons>
-                              </ButtonBar>
-                              <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                              <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                                <tabs>
+                                  <Tab text="Description">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="244.0" prefWidth="921.0">
+                                             <children>
+                                                <Label text="Label" />
+                                                <Label text="Label" />
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                       <content>
+                                          <GridPane>
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="2.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="3.0" prefWidth="100.0" />
+                                             </columnConstraints>
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                             </rowConstraints>
+                                             <children>
+                                                <Label text="Name" GridPane.columnIndex="1">
+                                                   <font>
+                                                      <Font size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="TourDescription" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                   <font>
+                                                      <Font size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="RouteInformation" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                   <font>
+                                                      <Font size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="TourDistance" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                   <font>
+                                                      <Font size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <TextField GridPane.columnIndex="2" />
+                                                <TextField GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                   <GridPane.margin>
+                                                      <Insets bottom="10.0" top="10.0" />
+                                                   </GridPane.margin>
+                                                </TextArea>
+                                                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                                   <GridPane.margin>
+                                                      <Insets bottom="10.0" top="10.0" />
+                                                   </GridPane.margin>
+                                                </TextArea>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" />
+                                             </padding>
+                                          </GridPane>
+                                       </content>
+                                  </Tab>
+                                  <Tab text="Route ">
+                                    <content>
+                                          <VBox />
+                                    </content>
+                                  </Tab>
+                                </tabs>
+                              </TabPane>
                            </children>
                         </VBox>
                         <VBox>
@@ -140,5 +209,6 @@
             </VBox>
         </items>
       </SplitPane>
+      <Label text="Label" />
    </children>
 </VBox>

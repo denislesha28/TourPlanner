@@ -13,4 +13,5 @@ module org.openjfx {
     exports MainPackage;
     exports TestingPackage;
     exports ServerPackage;
+    opens ServerPackage to javafx.fxml;
 }

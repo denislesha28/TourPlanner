@@ -1,5 +1,7 @@
-package MainPackage;
+package ServerPackage;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,10 @@ public class Model {
     private String destination;
     private double durationMin;
     private List<String> tours;
-    public Model(){
+    private BackendTourManager backendTourManager;
+    public Model() throws SQLException, IOException {
+
+        backendTourManager=new BackendTourManager();
         tours=new ArrayList<>();
         tours.add("TourB");
         tours.add("TourC");
@@ -29,6 +34,7 @@ public class Model {
     public void setTours(List<String> tours) {
         this.tours = tours;
     }
+
     public double getDurationMin() {
         return durationMin;
     }
@@ -43,6 +49,11 @@ public class Model {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public void saveTourBackend(String tourName,String tourDescription,
+                                String routeInformation, double tourDistance) throws SQLException {
+        backendTourManager.createTour(tourName,tourDescription,routeInformation,tourDistance);
     }
 
 }

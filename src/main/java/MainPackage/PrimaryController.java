@@ -2,6 +2,7 @@ package MainPackage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -17,13 +18,12 @@ public class PrimaryController implements Initializable {
     // fx:id and use intelliJ to create field in controller
     public ListView tourList;
 
-    public PrimaryController()
-    {
+    public PrimaryController() throws SQLException, IOException {
         System.out.println("Controller generated");
     }
 
     @FXML
-    public void addTour(ActionEvent actionEvent) {
+    public void addTour(ActionEvent actionEvent) throws SQLException {
         System.out.println("Controller generate new Tour");
         viewModel.addTour();
     }

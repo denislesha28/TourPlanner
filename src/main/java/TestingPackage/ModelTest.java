@@ -1,14 +1,16 @@
 package TestingPackage;
 
-import MainPackage.Model;
+import ServerPackage.Model;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ModelTest {
     @Test
-    public void testBackendTours(){
+    public void testBackendTours() throws SQLException, IOException {
         //Arrange
         Model dataModelBackend = new Model();
         String tourTest="TestTour";
