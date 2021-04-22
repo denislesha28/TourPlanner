@@ -90,7 +90,7 @@
                         </ButtonBar>
                      </children>
                   </HBox>
-                  <ListView fx:id="tourList" prefHeight="644.0" prefWidth="269.0" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="tourList" prefHeight="644.0" prefWidth="269.0" VBox.vgrow="ALWAYS" onMouseClicked="#displayTourDetails"/>
                </children>
             </VBox>
             <VBox>
@@ -101,7 +101,7 @@
                            <children>
                               <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                                 <tabs>
-                                  <Tab text="Description">
+                                  <Tab text="Description" fx:id="attributesTab"> <!-- onSelectionChanged="#displayTourDetails" -->
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="244.0" prefWidth="921.0">
                                              <children>
@@ -146,14 +146,14 @@
                                                       <Font size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField GridPane.columnIndex="2" />
-                                                <TextField GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                <TextField GridPane.columnIndex="2" fx:id="tourName" />
+                                                <TextField GridPane.columnIndex="2" GridPane.rowIndex="1"  fx:id="tourDistance" />
+                                                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2"  fx:id="routeInformation">
                                                    <GridPane.margin>
                                                       <Insets bottom="10.0" top="10.0" />
                                                    </GridPane.margin>
                                                 </TextArea>
-                                                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3"  fx:id="tourDescription">
                                                    <GridPane.margin>
                                                       <Insets bottom="10.0" top="10.0" />
                                                    </GridPane.margin>

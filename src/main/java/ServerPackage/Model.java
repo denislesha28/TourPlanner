@@ -3,6 +3,7 @@ package ServerPackage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Model {
@@ -54,6 +55,10 @@ public class Model {
     public void saveTourBackend(String tourName,String tourDescription,
                                 String routeInformation, double tourDistance) throws SQLException {
         backendTourManager.createTour(tourName,tourDescription,routeInformation,tourDistance);
+    }
+
+    public HashMap<String,String> getTourDetails(int tourID,String tourName) throws SQLException {
+        return backendTourManager.getTourDetails(tourID,tourName);
     }
 
 }
