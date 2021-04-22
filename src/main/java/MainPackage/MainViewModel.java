@@ -51,7 +51,6 @@ public class MainViewModel {
     public void addTour() throws SQLException {
         model.addTour("TourA");
         tourList.add("TourA");
-        model.saveTourBackend("TourA","test","test",100);
         this.tourListView.set(tourList);
     }
 

@@ -8,54 +8,28 @@ import java.util.List;
 
 public class Model {
 
-
-    private String destination;
-    private double durationMin;
-    private List<String> tours;
+    //private List<String> tours;
     private BackendTourManager backendTourManager;
+    private TourListManager tourListManager;
     public Model() throws SQLException, IOException {
-
+        tourListManager=TourListManager.getTourListManagerInstance();
         backendTourManager=new BackendTourManager();
-        tours=new ArrayList<>();
-        tours.add("TourB");
-        tours.add("TourC");
+        //tours=new ArrayList<>();
+        tourListManager.addTour(new Tour("TourB"));
+        tourListManager.addTour(new Tour("TourC"));
 
     }
 
     public List<String> getTours() {
-        return tours;
+        return tourListManager.getTours();
     }
 
-    public void addTour(String Tour){
-        tours.add(Tour);
+    public void addTour(String tourName) throws SQLException {
+        tourListManager.addTour(new Tour(tourName));
+        backendTourManager.createTour(tourName);
     }
 
-    public void deleteTour(String Tour){ tours.remove(Tour); }
-
-    public void setTours(List<String> tours) {
-        this.tours = tours;
-    }
-
-    public double getDurationMin() {
-        return durationMin;
-    }
-
-    public void setDurationMin(double durationMin) {
-        this.durationMin = durationMin;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    public void saveTourBackend(String tourName,String tourDescription,
-                                String routeInformation, double tourDistance) throws SQLException {
-        backendTourManager.createTour(tourName,tourDescription,routeInformation,tourDistance);
-    }
+    public void deleteTour(String tourName){ tourListManager.deleteTour(tourName); }
 
     public HashMap<String,String> getTourDetails(int tourID,String tourName) throws SQLException {
         return backendTourManager.getTourDetails(tourID,tourName);

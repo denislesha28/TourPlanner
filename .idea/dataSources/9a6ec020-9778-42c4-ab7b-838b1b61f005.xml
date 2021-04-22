@@ -792,7 +792,7 @@ false YEKT
 false Z
 false Zulu
 </TimeZones>
-      <StartupTime>1619093576</StartupTime>
+      <StartupTime>1619127921</StartupTime>
     </root>
     <database id="2" parent="1" name="TourPlanner">
       <ObjectId>16394</ObjectId>
@@ -808,7 +808,7 @@ false Zulu
 13158||-9223372036854775808|U|G
 13158||10|U|G</Grants>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>521</IntrospectionStateNumber>
+      <IntrospectionStateNumber>535</IntrospectionStateNumber>
       <Current>1</Current>
       <Relations>sequence|table|16396|16398|1
 </Relations>
@@ -868,7 +868,7 @@ false Zulu
       <ObjectId>16395</ObjectId>
       <StateNumber>489</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>522</IntrospectionStateNumber>
+      <IntrospectionStateNumber>536</IntrospectionStateNumber>
     </schema>
     <schema id="16" parent="2" name="information_schema">
       <ObjectId>13158</ObjectId>
@@ -1051,7 +1051,17 @@ false Zulu
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <key id="40" parent="32" name="tour_pk">
+    <index id="40" parent="32" name="tour_name_uindex">
+      <ObjectId>16411</ObjectId>
+      <StateNumber>534</StateNumber>
+      <ColNames>name</ColNames>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>100</CollationIds>
+      <CollationNames>default</CollationNames>
+      <ClassIds>3126</ClassIds>
+    </index>
+    <key id="41" parent="32" name="tour_pk">
       <ObjectId>16410</ObjectId>
       <StateNumber>497</StateNumber>
       <ColNames>id</ColNames>

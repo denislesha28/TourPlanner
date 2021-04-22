@@ -12,15 +12,14 @@ public class BackendTourManager {
         dbInstance=DatabaseHandler.getDatabaseInstance();
     }
 
-    public int createTour(String tourName,String tourDescription,
-                           String routeInformation, double tourDistance) throws SQLException {
+    public int createTour(String tourName) throws SQLException {
         String sqlInsert="insert into \"TourPlanner\".tour (\"name\", \"tourDescription\", \"routeInformation\", \"tourDistance\")\n" +
                 "values (?,?,?,?) RETURNING \"id\";";
         PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(sqlInsert);
         preparedStatement.setString(1,tourName);
-        preparedStatement.setString(2,tourDescription);
-        preparedStatement.setString(3,routeInformation);
-        preparedStatement.setDouble(4,tourDistance);
+        preparedStatement.setString(2,"------");
+        preparedStatement.setString(3,"------");
+        preparedStatement.setDouble(4,100);
         ResultSet resultSet=preparedStatement.executeQuery();
         if (resultSet.next()){
             return resultSet.getInt("id");
