@@ -55,6 +55,11 @@ public class MainViewModel {
         this.tourListView.set(tourList);
     }
 
+    public void deleteTour(String item) throws SQLException {
+        model.deleteTour(item);
+        tourList.remove(item);
+    }
+
     public void displayTourAttributes(String item) throws SQLException {
         HashMap<String,String> tourDetails=model.getTourDetails(0,item);
         if(tourDetails!=null) {

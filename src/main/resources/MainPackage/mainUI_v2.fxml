@@ -81,7 +81,7 @@
                         <ButtonBar buttonMinWidth="30.0" maxWidth="265.0" minWidth="100.0" prefHeight="40.0" prefWidth="200.0">
                           <buttons>
                             <Button mnemonicParsing="false" onAction="#addTour" text="add" />
-                              <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="50.0" text="delete" />
+                              <Button minHeight="-Infinity" onAction="#deleteTour" minWidth="-Infinity" mnemonicParsing="false" prefWidth="50.0" text="delete" />
                               <Button mnemonicParsing="false" text="......." />
                           </buttons>
                            <HBox.margin>

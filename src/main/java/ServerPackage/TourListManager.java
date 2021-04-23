@@ -42,11 +42,13 @@ public class TourListManager {
     }
 
     public void deleteTour(String tourName){
+        Tour toRemove = null;
         for (Tour tour : tours ){
             if (tourName.equals(tour.getTourName())){
-                tours.remove(tour);
+                toRemove=tour;
             }
         }
+        tours.remove(toRemove);
     }
 
 

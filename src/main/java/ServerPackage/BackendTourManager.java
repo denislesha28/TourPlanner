@@ -27,6 +27,15 @@ public class BackendTourManager {
         return 0;
     }
 
+    public void deleteTour(String tourName) throws SQLException {
+        String deleteSql="delete\n" +
+                "from \"TourPlanner\".tour\n" +
+                "where name=?";
+        PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(deleteSql);
+        preparedStatement.setString(1,tourName);
+        preparedStatement.executeUpdate();
+    }
+
     public HashMap<String, String> getTourDetails(int tourID, String tourName) throws SQLException {
         HashMap<String,String> tourDetails = new HashMap<String, String>();
 

@@ -28,7 +28,13 @@ public class Model {
         backendTourManager.createTour(tourName);
     }
 
-    public void deleteTour(String tourName){ tourListManager.deleteTour(tourName); }
+    public void deleteTour(String tourName) throws SQLException {
+        if (tourName==null){
+            return;
+        }
+        tourListManager.deleteTour(tourName);
+        backendTourManager.deleteTour(tourName);
+    }
 
     public HashMap<String,String> getTourDetails(int tourID,String tourName) throws SQLException {
         return backendTourManager.getTourDetails(tourID,tourName);

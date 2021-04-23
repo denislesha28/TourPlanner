@@ -39,6 +39,14 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
+    public void deleteTour(ActionEvent actionEvent)throws SQLException {
+        String item=(String) tourList.getSelectionModel().getSelectedItem();
+        System.out.println("Controller deleting Tour "+item);
+        viewModel.deleteTour(item);
+
+    }
+
+    @FXML
     public void displayTourDetails(Event event) throws SQLException {
         System.out.println("Showing Details for selected Element");
         String item=(String) tourList.getSelectionModel().getSelectedItem();
