@@ -52,4 +52,19 @@ public class BackendTourManager {
         return tourDetails;
     }
 
+    public void getAllToursFromBackend(TourListManager tourListManager) throws SQLException {
+        String sqlSelect="select *\n" +
+                "from \"TourPlanner\".tour";
+        PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(sqlSelect);
+        ResultSet resultSet=preparedStatement.executeQuery();
+        while (resultSet.next()){
+            Tour tour=new Tour();
+            tour.setTourName(resultSet.getString("name"));
+            tour.setTourDistance(resultSet.getDouble("tourDistance"));
+            tour.setTourDescription(resultSet.getString("tourDescription"));
+            tour.setRouteInformation(resultSet.getString("routeInformation"));
+            tourListManager.addTour(tour);
+        }
+    }
+
 }

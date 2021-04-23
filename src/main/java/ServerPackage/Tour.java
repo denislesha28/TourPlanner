@@ -8,6 +8,14 @@ public class Tour {
     private String tourDescription;
     private String routeInformation;
 
+    Tour(){
+        this.tourName="";
+        this.tourID=0;
+        this.tourDistance=0;
+        this.tourDescription="";
+        this.routeInformation="";
+
+    }
     Tour(String tourName){
         this.tourName=tourName;
         this.tourID=0;

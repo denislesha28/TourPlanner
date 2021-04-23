@@ -14,10 +14,8 @@ public class Model {
     public Model() throws SQLException, IOException {
         tourListManager=TourListManager.getTourListManagerInstance();
         backendTourManager=new BackendTourManager();
+        backendTourManager.getAllToursFromBackend(tourListManager);
         //tours=new ArrayList<>();
-        tourListManager.addTour(new Tour("TourB"));
-        tourListManager.addTour(new Tour("TourC"));
-
     }
 
     public List<String> getTours() {
