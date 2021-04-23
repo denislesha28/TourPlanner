@@ -47,6 +47,13 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
+    public void updateTour(ActionEvent actionEvent)throws SQLException {
+        String item=(String) tourList.getSelectionModel().getSelectedItem();
+        System.out.println("Controller updating Tour "+item);
+        viewModel.updateTour(item);
+    }
+
+    @FXML
     public void displayTourDetails(Event event) throws SQLException {
         System.out.println("Showing Details for selected Element");
         String item=(String) tourList.getSelectionModel().getSelectedItem();

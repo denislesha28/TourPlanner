@@ -60,6 +60,19 @@ public class MainViewModel {
         tourList.remove(item);
     }
 
+    public void updateTour(String item) throws SQLException {
+        String tourName=this.tourName.getValue();
+        String tourDescription=this.tourDescription.getValue();
+        String routeInformation=this.routeInformation.getValue();
+        double tourDistance= Double.parseDouble(this.tourDistance.getValue());
+        model.updateTour(item,tourDescription,tourName,routeInformation,tourDistance);
+        if (tourName.equals(item)){
+            return;
+        }
+        int curr_pos=tourList.indexOf(item);
+        tourList.set(curr_pos,tourName);
+    }
+
     public void displayTourAttributes(String item) throws SQLException {
         HashMap<String,String> tourDetails=model.getTourDetails(0,item);
         if(tourDetails!=null) {

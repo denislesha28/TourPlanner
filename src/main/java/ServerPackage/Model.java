@@ -40,6 +40,12 @@ public class Model {
         return backendTourManager.getTourDetails(tourID,tourName);
     }
 
+    public void updateTour(String actualTourName,String tourDescription, String desTourName
+            ,String routeInformation, double tourDistance) throws SQLException {
+        backendTourManager.updateTour(actualTourName,tourDescription,desTourName,
+                routeInformation,tourDistance);
+    }
+
     public String generateTourRandomName() {
         while (true) {
             String randomPart=generateRandomString();
@@ -64,5 +70,7 @@ public class Model {
 
         return generatedString;
     }
+
+
 
 }

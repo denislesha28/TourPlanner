@@ -76,4 +76,20 @@ public class BackendTourManager {
         }
     }
 
+    public void updateTour(String actualTourName,String tourDescription, String desTourName
+                        ,String routeInformation, double tourDistance) throws SQLException {
+        String updateSql="update \"TourPlanner\".tour\n" +
+                "set \"name\"  = ?, \"tourDescription\" = ?, \"routeInformation\" = ?,\n" +
+                "    \"tourDistance\" = ? where \"name\" = ?";
+        PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(updateSql);
+        preparedStatement.setString(1,desTourName);
+        preparedStatement.setString(2,tourDescription);
+        preparedStatement.setString(3,routeInformation);
+        preparedStatement.setDouble(4,tourDistance);
+        preparedStatement.setString(5,actualTourName);
+        preparedStatement.executeUpdate();
+    }
+
+
+
 }

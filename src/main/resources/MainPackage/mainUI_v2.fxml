@@ -158,7 +158,7 @@
                                                       <Insets bottom="10.0" top="10.0" />
                                                    </GridPane.margin>
                                                 </TextArea>
-                                                <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                                <Button mnemonicParsing="false" onAction="#updateTour" prefHeight="25.0" prefWidth="72.0" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                                              </children>
                                              <padding>
                                                 <Insets bottom="5.0" />
