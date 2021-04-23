@@ -32,6 +32,15 @@ public class TourListManager {
 
     public void addTour(Tour Tour){ tours.add(Tour); }
 
+    public boolean containsTour(String tourName) {
+        for (Tour tour : tours ){
+            if (tourName.equals(tour.getTourName())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void deleteTour(String tourName){
         for (Tour tour : tours ){
             if (tourName.equals(tour.getTourName())){

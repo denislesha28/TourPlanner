@@ -49,8 +49,9 @@ public class MainViewModel {
     }*/
 
     public void addTour() throws SQLException {
-        model.addTour("TourA");
-        tourList.add("TourA");
+        String newTourName=model.generateTourRandomName();
+        model.addTour(newTourName);
+        tourList.add(newTourName);
         this.tourListView.set(tourList);
     }
 
