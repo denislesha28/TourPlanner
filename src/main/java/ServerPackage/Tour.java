@@ -16,7 +16,7 @@ public class Tour {
         this.routeInformation="";
 
     }
-    Tour(String tourName){
+    public Tour(String tourName){
         this.tourName=tourName;
         this.tourID=0;
         this.tourDistance=0;
@@ -24,8 +24,8 @@ public class Tour {
         this.routeInformation="";
     }
 
-    Tour(int tourID,double tourDistance,
-         String tourName,String tourDescription,String routeInformation){
+    public Tour(int tourID, double tourDistance,
+                String tourName, String tourDescription, String routeInformation){
         this.tourID=tourID;
         this.tourName=tourName;
         this.tourDistance=tourDistance;

@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class MainViewModel {
 
-    private Model model=new Model();
+    private Model model=Model.getModelInstance();
     public ObservableList<String> tourList = FXCollections.observableArrayList(model.getTours());
     private final ObjectProperty<ObservableList<String>> tourListView = new SimpleObjectProperty<>(tourList);
     private final StringProperty tourName = new SimpleStringProperty("");

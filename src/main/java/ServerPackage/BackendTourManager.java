@@ -63,7 +63,7 @@ public class BackendTourManager {
 
     public void getAllToursFromBackend(TourListManager tourListManager) throws SQLException {
         String sqlSelect="select *\n" +
-                "from \"TourPlanner\".tour";
+                "from \"TourPlanner\".tour LIMIT 100";
         PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(sqlSelect);
         ResultSet resultSet=preparedStatement.executeQuery();
         while (resultSet.next()){

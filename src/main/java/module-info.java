@@ -8,10 +8,12 @@ module org.openjfx {
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
+    requires org.opentest4j;
+    requires mockito.all;
 
     opens MainPackage to javafx.fxml;
     exports MainPackage;
     exports TestingPackage;
     exports ServerPackage;
-    opens ServerPackage to javafx.fxml;
+    opens ServerPackage to javafx.fxml, mockito.all;
 }
