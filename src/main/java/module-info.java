@@ -9,7 +9,10 @@ module org.openjfx {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires org.opentest4j;
-    requires mockito.all;
+    requires org.mockito;
+    requires java.net.http;
+    requires org.json;
+
 
     opens MainPackage to javafx.fxml;
     exports MainPackage;

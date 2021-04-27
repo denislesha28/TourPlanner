@@ -1,14 +1,21 @@
 package MainPackage;
 
 import ServerPackage.DatabaseHandler;
+import ServerPackage.MapApiHttpHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import org.json.JSONObject;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * JavaFX App
@@ -40,6 +47,31 @@ public class App extends Application {
     public static void main(String[] args) {
         try {
             DatabaseHandler dbHandler=DatabaseHandler.getDatabaseInstance();
+            
+            // create a client
+            //HttpClient client = HttpClient.newHttpClient();
+
+            // create a request
+            /*HttpRequest request = HttpRequest.newBuilder(
+                    URI.create("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"))
+                    .header("accept", "application/json")
+                    .build();*/
+
+            // use the client to send the request
+
+            MapApiHttpHandler mapApiHttpHandler=new MapApiHttpHandler();
+            String response=mapApiHttpHandler.sendRequest();
+
+            JSONObject jsonObject=new JSONObject(response);
+            JSONObject route=jsonObject.getJSONObject("route");
+            JSONObject boundingBox=route.getJSONObject("boundingBox");
+            JSONObject ul=boundingBox.getJSONObject("ul");
+            Double ulLat=ul.getDouble("lat");
+            Double ulLng=ul.getDouble("lng");
+
+            System.out.println(jsonObject);
+            System.out.println(ulLat);
+            System.out.println(ulLng);
             launch();
         } catch (SQLException | IOException throwables) {
             throwables.printStackTrace();
