@@ -47,7 +47,7 @@ public class App extends Application {
     public static void main(String[] args) {
         try {
             DatabaseHandler dbHandler=DatabaseHandler.getDatabaseInstance();
-            
+
             // create a client
             //HttpClient client = HttpClient.newHttpClient();
 
@@ -60,22 +60,11 @@ public class App extends Application {
             // use the client to send the request
 
             MapApiHttpHandler mapApiHttpHandler=new MapApiHttpHandler();
-            String response=mapApiHttpHandler.sendRequest();
+            var response=mapApiHttpHandler.sendRequest2();
 
-            JSONObject jsonObject=new JSONObject(response);
-            JSONObject route=jsonObject.getJSONObject("route");
-            JSONObject boundingBox=route.getJSONObject("boundingBox");
-            JSONObject ul=boundingBox.getJSONObject("ul");
-            Double ulLat=ul.getDouble("lat");
-            Double ulLng=ul.getDouble("lng");
-
-            System.out.println(jsonObject);
-            System.out.println(ulLat);
-            System.out.println(ulLng);
             launch();
         } catch (SQLException | IOException throwables) {
             throwables.printStackTrace();
         }
     }
-
 }

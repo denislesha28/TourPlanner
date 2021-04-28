@@ -12,6 +12,7 @@ module org.openjfx {
     requires org.mockito;
     requires java.net.http;
     requires org.json;
+    requires java.desktop;
 
 
     opens MainPackage to javafx.fxml;
