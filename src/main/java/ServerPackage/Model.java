@@ -104,6 +104,9 @@ public class Model {
         return generatedString;
     }
 
-
+    public void updateTourRoute(String tourName,String from,String to) throws SQLException {
+        tourListManager.updateTourRoute(tourName,from,to);
+        backendTourManager.updateTourRoute(tourName,from,to);
+    }
 
 }

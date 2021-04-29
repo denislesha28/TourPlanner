@@ -792,7 +792,7 @@ false YEKT
 false Z
 false Zulu
 </TimeZones>
-      <StartupTime>1619127921</StartupTime>
+      <StartupTime>1619515264</StartupTime>
     </root>
     <database id="2" parent="1" name="TourPlanner">
       <ObjectId>16394</ObjectId>
@@ -808,7 +808,7 @@ false Zulu
 13158||-9223372036854775808|U|G
 13158||10|U|G</Grants>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>535</IntrospectionStateNumber>
+      <IntrospectionStateNumber>575</IntrospectionStateNumber>
       <Current>1</Current>
       <Relations>sequence|table|16396|16398|1
 </Relations>
@@ -868,7 +868,7 @@ false Zulu
       <ObjectId>16395</ObjectId>
       <StateNumber>489</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>536</IntrospectionStateNumber>
+      <IntrospectionStateNumber>576</IntrospectionStateNumber>
     </schema>
     <schema id="16" parent="2" name="information_schema">
       <ObjectId>13158</ObjectId>
@@ -994,7 +994,7 @@ false Zulu
     <table id="32" parent="15" name="tour">
       <ObjectId>16398</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>494</StateNumber>
+      <StateNumber>574</StateNumber>
     </table>
     <column id="33" parent="32" name="id">
       <Position>1</Position>
@@ -1032,7 +1032,21 @@ false Zulu
       <StateNumber>494</StateNumber>
       <TypeId>701</TypeId>
     </column>
-    <index id="38" parent="32" name="tour_id_uindex">
+    <column id="38" parent="32" name="from">
+      <Position>6</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>573</StateNumber>
+      <DefaultExpression>NULL::character varying</DefaultExpression>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="39" parent="32" name="to">
+      <Position>7</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>574</StateNumber>
+      <DefaultExpression>NULL::character varying</DefaultExpression>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="40" parent="32" name="tour_id_uindex">
       <ObjectId>16407</ObjectId>
       <StateNumber>495</StateNumber>
       <ColNames>id</ColNames>
@@ -1041,7 +1055,7 @@ false Zulu
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <index id="39" parent="32" name="tour_pk">
+    <index id="41" parent="32" name="tour_pk">
       <ObjectId>16409</ObjectId>
       <StateNumber>497</StateNumber>
       <ColNames>id</ColNames>
@@ -1051,7 +1065,7 @@ false Zulu
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <index id="40" parent="32" name="tour_name_uindex">
+    <index id="42" parent="32" name="tour_name_uindex">
       <ObjectId>16411</ObjectId>
       <StateNumber>534</StateNumber>
       <ColNames>name</ColNames>
@@ -1061,7 +1075,7 @@ false Zulu
       <CollationNames>default</CollationNames>
       <ClassIds>3126</ClassIds>
     </index>
-    <key id="41" parent="32" name="tour_pk">
+    <key id="43" parent="32" name="tour_pk">
       <ObjectId>16410</ObjectId>
       <StateNumber>497</StateNumber>
       <ColNames>id</ColNames>

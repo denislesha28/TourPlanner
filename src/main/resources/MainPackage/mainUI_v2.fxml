@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -15,6 +16,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -22,8 +25,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPackage.PrimaryController">
+<VBox maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPackage.PrimaryController">
    <children>
       <MenuBar>
          <menus>
@@ -68,11 +70,11 @@
             </GridPane>
          </children>
       </HBox>
-      <SplitPane dividerPositions="0.2913188647746244">
+      <SplitPane dividerPositions="0.2913188647746244" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1200.0" prefWidth="1200.0">
         <items>
             <VBox maxWidth="269.0" minWidth="169.0" prefHeight="699.0" prefWidth="269.0">
                <children>
-                  <HBox prefHeight="45.0" prefWidth="354.0" VBox.vgrow="ALWAYS">
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="45.0" prefWidth="354.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Label prefHeight="45.0" prefWidth="51.0" text="Tours">
                            <padding>
@@ -81,7 +83,7 @@
                         <ButtonBar buttonMinWidth="30.0" maxWidth="265.0" minWidth="100.0" prefHeight="40.0" prefWidth="200.0">
                           <buttons>
                             <Button mnemonicParsing="false" onAction="#addTour" text="add" />
-                              <Button minHeight="-Infinity" onAction="#deleteTour" minWidth="-Infinity" mnemonicParsing="false" prefWidth="50.0" text="delete" />
+                              <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteTour" prefWidth="50.0" text="delete" />
                               <Button mnemonicParsing="false" text="......." />
                           </buttons>
                            <HBox.margin>
@@ -90,25 +92,19 @@
                         </ButtonBar>
                      </children>
                   </HBox>
-                  <ListView fx:id="tourList" prefHeight="644.0" prefWidth="269.0" VBox.vgrow="ALWAYS" onMouseClicked="#displayTourDetails"/>
+                  <ListView fx:id="tourList" onMouseClicked="#displayTourInfo"  prefHeight="644.0" prefWidth="269.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
             <VBox>
                <children>
-                  <SplitPane dividerPositions="0.5794117647058824" orientation="VERTICAL" prefHeight="737.0" prefWidth="838.0">
+                  <SplitPane dividerPositions="0.6700143472022956" orientation="VERTICAL" prefHeight="737.0" prefWidth="838.0">
                     <items>
-                        <VBox prefHeight="394.0" prefWidth="921.0">
+                        <VBox prefHeight="500.0" prefWidth="921.0">
                            <children>
                               <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                                 <tabs>
-                                  <Tab text="Description" fx:id="attributesTab"> <!-- onSelectionChanged="#displayTourDetails" -->
+                                  <Tab fx:id="attributesTab" text="Description"> <!-- onSelectionChanged="#displayTourDetails" -->
                                     <content>
-                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="244.0" prefWidth="921.0">
-                                             <children>
-                                                <Label text="Label" />
-                                                <Label text="Label" />
-                                             </children>
-                                          </AnchorPane>
                                     </content>
                                        <content>
                                           <GridPane>
@@ -146,14 +142,14 @@
                                                       <Font size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField GridPane.columnIndex="2" fx:id="tourName" />
-                                                <TextField GridPane.columnIndex="2" GridPane.rowIndex="1"  fx:id="tourDistance" />
-                                                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2"  fx:id="routeInformation">
+                                                <TextField fx:id="tourName" GridPane.columnIndex="2" />
+                                                <TextField fx:id="tourDistance" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <TextArea fx:id="routeInformation" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                                    <GridPane.margin>
                                                       <Insets bottom="10.0" top="10.0" />
                                                    </GridPane.margin>
                                                 </TextArea>
-                                                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3"  fx:id="tourDescription">
+                                                <TextArea fx:id="tourDescription" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                                    <GridPane.margin>
                                                       <Insets bottom="10.0" top="10.0" />
                                                    </GridPane.margin>
@@ -166,9 +162,71 @@
                                           </GridPane>
                                        </content>
                                   </Tab>
-                                  <Tab text="Route ">
+                                  <Tab text="Route" fx:id="routeTab" onSelectionChanged="#displayTourRoute">
                                     <content>
-                                          <VBox />
+                                          <HBox>
+                                             <children>
+                                                <GridPane hgap="7.0" minWidth="200.0" prefHeight="384.0" prefWidth="200.0" vgap="5.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="173.0" minWidth="10.0" prefWidth="48.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="152.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                      <RowConstraints percentHeight="3.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <children>
+                                                      <Label minHeight="20.0" minWidth="30.0" prefHeight="20.0" prefWidth="79.0" text="From" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                                         <GridPane.margin>
+                                                            <Insets left="10.0" />
+                                                         </GridPane.margin>
+                                                      </Label>
+                                                      <Label minHeight="20.0" minWidth="30.0" prefHeight="20.0" prefWidth="57.0" text="To" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                                         <GridPane.margin>
+                                                            <Insets left="20.0" />
+                                                         </GridPane.margin>
+                                                      </Label>
+                                                      <TextField fx:id="fromDestination" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="toDestination" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                      <Button mnemonicParsing="false" onAction="#updateTourRoute" text="Update" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                                         <GridPane.margin>
+                                                            <Insets />
+                                                         </GridPane.margin>
+                                                      </Button>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets left="3.0" />
+                                                   </padding>
+                                                </GridPane>
+                                                <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="372.0" prefWidth="725.0">
+                                                   <content>
+                                                      <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                                         <columnConstraints>
+                                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                                         </columnConstraints>
+                                                         <rowConstraints>
+                                                            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                         </rowConstraints>
+                                                         <children>
+                                                            <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                                                               <center>
+                                                                  <ImageView fx:id="tourImage" fitHeight="401.0" fitWidth="715.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+                                                               </center>
+                                                            </BorderPane>
+                                                         </children>
+                                                      </GridPane>
+                                                   </content>
+                                                   <padding>
+                                                      <Insets left="10.0" />
+                                                   </padding>
+                                                   <HBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </HBox.margin>
+                                                </ScrollPane>
+                                             </children>
+                                          </HBox>
                                     </content>
                                   </Tab>
                                 </tabs>
@@ -177,7 +235,7 @@
                         </VBox>
                         <VBox>
                            <children>
-                              <HBox prefHeight="44.0" prefWidth="921.0">
+                              <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="921.0">
                                  <children>
                                     <Label prefHeight="44.0" prefWidth="721.0" text="Logs" HBox.hgrow="ALWAYS">
                                        <padding>
@@ -195,8 +253,11 @@
                                        </padding>
                                     </ButtonBar>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </VBox.margin>
                               </HBox>
-                              <TableView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                              <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" prefWidth="921.0" VBox.vgrow="ALWAYS">
                                 <columns>
                                   <TableColumn minWidth="7.0" prefWidth="75.0" text="Date" />
                                   <TableColumn minWidth="7.0" prefWidth="75.0" text="Duration" />
@@ -211,6 +272,5 @@
             </VBox>
         </items>
       </SplitPane>
-      <Label text="Label" />
    </children>
 </VBox>

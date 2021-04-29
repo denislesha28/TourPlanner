@@ -47,21 +47,6 @@ public class App extends Application {
     public static void main(String[] args) {
         try {
             DatabaseHandler dbHandler=DatabaseHandler.getDatabaseInstance();
-
-            // create a client
-            //HttpClient client = HttpClient.newHttpClient();
-
-            // create a request
-            /*HttpRequest request = HttpRequest.newBuilder(
-                    URI.create("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"))
-                    .header("accept", "application/json")
-                    .build();*/
-
-            // use the client to send the request
-
-            MapApiHttpHandler mapApiHttpHandler=new MapApiHttpHandler();
-            var response=mapApiHttpHandler.sendRequest2();
-
             launch();
         } catch (SQLException | IOException throwables) {
             throwables.printStackTrace();

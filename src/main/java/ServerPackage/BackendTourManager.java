@@ -54,6 +54,8 @@ public class BackendTourManager {
             tourDetails.put("tourDescription", resultSet.getString("tourDescription"));
             tourDetails.put("tourDistance", resultSet.getString("tourDistance"));
             tourDetails.put("routeInformation", resultSet.getString("routeInformation"));
+            tourDetails.put("from",resultSet.getString("from"));
+            tourDetails.put("to",resultSet.getString("to"));
         }
         else {
             return null;
@@ -72,6 +74,8 @@ public class BackendTourManager {
             tour.setTourDistance(resultSet.getDouble("tourDistance"));
             tour.setTourDescription(resultSet.getString("tourDescription"));
             tour.setRouteInformation(resultSet.getString("routeInformation"));
+            tour.setTourFrom(resultSet.getString("from"));
+            tour.setTourTo(resultSet.getString("to"));
             tourListManager.addTour(tour);
         }
     }
@@ -87,6 +91,17 @@ public class BackendTourManager {
         preparedStatement.setString(3,routeInformation);
         preparedStatement.setDouble(4,tourDistance);
         preparedStatement.setString(5,actualTourName);
+        preparedStatement.executeUpdate();
+    }
+
+    public void updateTourRoute(String tourName,String from,String to) throws SQLException {
+        String sqlInsert="update \"TourPlanner\".tour\n" +
+                "set \"from\" = ?, \"to\" = ?\n" +
+                "where name = ?";
+        PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(sqlInsert);
+        preparedStatement.setString(1,from);
+        preparedStatement.setString(2,to);
+        preparedStatement.setString(3,tourName);
         preparedStatement.executeUpdate();
     }
 

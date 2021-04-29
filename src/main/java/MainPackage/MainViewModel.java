@@ -1,47 +1,67 @@
 package MainPackage;
 
+import ServerPackage.MapApiHttpHandler;
 import ServerPackage.Model;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javafx.scene.image.Image;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 public class MainViewModel {
 
     private Model model=Model.getModelInstance();
+    MapApiHttpHandler mapApiHttpHandler = new MapApiHttpHandler();
     public ObservableList<String> tourList = FXCollections.observableArrayList(model.getTours());
     private final ObjectProperty<ObservableList<String>> tourListView = new SimpleObjectProperty<>(tourList);
     private final StringProperty tourName = new SimpleStringProperty("");
     private final StringProperty tourDistance = new SimpleStringProperty("");
     private final StringProperty tourDescription = new SimpleStringProperty("");
     private final StringProperty routeInformation = new SimpleStringProperty("");
+    private final StringProperty fromDestination = new SimpleStringProperty("");
+    private final StringProperty toDestination = new SimpleStringProperty("");
+    private final ObjectProperty<javafx.scene.image.Image> tourImage = new SimpleObjectProperty<>();
 
     public StringProperty tourNameProperty() {
-        System.out.println("VM: get input field");
+        System.out.println("VM: init tourName field");
         return tourName;
     }
 
     public StringProperty tourDistanceProperty() {
-        System.out.println("VM: set output Destination field");
+        System.out.println("VM: init tourDistance field");
         return tourDistance;
     }
 
     public StringProperty tourDescriptionProperty() {
-        System.out.println("VM: set output Time field");
+        System.out.println("VM: init tourDescription field");
         return tourDescription;
     }
 
     public StringProperty routeInformationProperty() {
-        System.out.println("VM: set output Time field");
+        System.out.println("VM: init routeInformation field");
         return routeInformation;
     }
 
+    public StringProperty fromDestinationProperty(){
+        System.out.println("VM: init fromDestination field");
+        return fromDestination;
+    }
 
+    public StringProperty toDestinationProperty(){
+        System.out.println("VM: init toDestination field");
+        return toDestination;
+    }
+
+    public ObjectProperty<javafx.scene.image.Image> tourImageProperty(){
+        System.out.println("Image init");
+        return tourImage;
+    }
     public MainViewModel() throws SQLException, IOException {}
-
 
     /*public Property tourListProperty() {
         System.out.println("VM: get Tour ListView");
@@ -73,6 +93,11 @@ public class MainViewModel {
         tourList.set(curr_pos,tourName);
     }
 
+    private void setTourPicture(String from,String to) throws URISyntaxException, IOException, ExecutionException, InterruptedException {
+        Image image=mapApiHttpHandler.sendMapApiRequest(from,to);
+        tourImage.set(image);
+    }
+
     public void displayTourAttributes(String item) throws SQLException {
         HashMap<String,String> tourDetails=model.getTourDetails(0,item);
         if(tourDetails!=null) {
@@ -86,10 +111,30 @@ public class MainViewModel {
             tourDescription.set("----------");
             routeInformation.set("----------");
         }
-
     }
 
+    public void displayTourRoute(String item) throws SQLException, URISyntaxException, IOException, ExecutionException, InterruptedException {
+        if (item==null){
+            return;
+        }
+        HashMap<String,String> tourDetails=model.getTourDetails(0,item);
+        String routeFrom=tourDetails.get("from");
+        String routeTo=tourDetails.get("to");
+        if (routeFrom==null || routeTo==null){
+            return;
+        }
+        fromDestination.set(routeFrom);
+        toDestination.set(routeTo);
+        setTourPicture(fromDestination.get(),toDestination.get());
+    }
 
-
-
+    public void updateTourRoute(String item) throws SQLException, URISyntaxException, IOException, ExecutionException, InterruptedException {
+        if (item==null){
+            return;
+        }
+        String routeFrom=fromDestination.get();
+        String routeTo=toDestination.get();
+        model.updateTourRoute(item,routeFrom,routeTo);
+        setTourPicture(routeFrom,routeTo);
+    }
 }

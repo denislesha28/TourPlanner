@@ -13,6 +13,7 @@ module org.openjfx {
     requires java.net.http;
     requires org.json;
     requires java.desktop;
+    requires javafx.swing;
 
 
     opens MainPackage to javafx.fxml;

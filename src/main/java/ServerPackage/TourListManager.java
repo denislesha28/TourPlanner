@@ -71,6 +71,8 @@ public class TourListManager {
                 tourDetails.put("tourDescription", tour.getTourDescription());
                 tourDetails.put("tourDistance", String.valueOf(tour.getTourDistance()));
                 tourDetails.put("routeInformation", tour.getRouteInformation());
+                tourDetails.put("from", tour.getTourFrom());
+                tourDetails.put("to", tour.getTourTo());
                 return tourDetails;
             }
         }
@@ -85,6 +87,17 @@ public class TourListManager {
                 tour.setTourDescription(tourDescription);
                 tour.setTourDistance(tourDistance);
                 tour.setRouteInformation(routeInformation);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateTourRoute(String tourName,String from,String to){
+        for (Tour tour : tours ) {
+            if (tourName.equals(tour.getTourName())) {
+                tour.setTourTo(to);
+                tour.setTourFrom(from);
                 return true;
             }
         }

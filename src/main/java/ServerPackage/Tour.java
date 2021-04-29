@@ -7,6 +7,8 @@ public class Tour {
     private double tourDistance;
     private String tourDescription;
     private String routeInformation;
+    private String from;
+    private String to;
 
     Tour(){
         this.tourName="";
@@ -14,7 +16,8 @@ public class Tour {
         this.tourDistance=0;
         this.tourDescription="";
         this.routeInformation="";
-
+        this.from="";
+        this.to="";
     }
     public Tour(String tourName){
         this.tourName=tourName;
@@ -22,6 +25,8 @@ public class Tour {
         this.tourDistance=0;
         this.tourDescription="";
         this.routeInformation="";
+        this.from="";
+        this.to="";
     }
 
     public Tour(int tourID, double tourDistance,
@@ -31,6 +36,8 @@ public class Tour {
         this.tourDistance=tourDistance;
         this.tourDescription=tourDescription;
         this.routeInformation=routeInformation;
+        this.from="";
+        this.to="";
     }
 
 
@@ -41,6 +48,14 @@ public class Tour {
     public void setTourID(int tourID) {
         this.tourID = tourID;
     }
+
+    public String getTourFrom() { return from; }
+
+    public void setTourFrom(String from) { this.from = from; }
+
+    public String getTourTo() { return to; }
+
+    public void setTourTo(String to) { this.to = to; }
 
     public String getTourName() {
         return tourName;
