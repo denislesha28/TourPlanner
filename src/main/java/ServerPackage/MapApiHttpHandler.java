@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -30,7 +31,8 @@ public class MapApiHttpHandler {
         return image;
     }
 
-    private String sendFromToRequest(String from, String to) throws URISyntaxException, ExecutionException, InterruptedException {
+
+     public String sendFromToRequest(String from, String to) throws URISyntaxException, ExecutionException, InterruptedException {
 
         String requestUrl = "http://open.mapquestapi.com/directions/v2/route" +
                 "?key=" + key + "&from=" + from + "&to=" + to;
@@ -51,7 +53,7 @@ public class MapApiHttpHandler {
 
     }
 
-    private Image sendImageRequest(String requestFromToResponse) throws IOException, ExecutionException, InterruptedException, URISyntaxException {
+    public Image sendImageRequest(String requestFromToResponse) throws IOException, ExecutionException, InterruptedException, URISyntaxException {
 
         String resp = requestFromToResponse;
         JSONObject jsonObject = new JSONObject(resp);
@@ -82,11 +84,10 @@ public class MapApiHttpHandler {
         HttpResponse<InputStream> response = responseAsync.get();
         BufferedImage bufferedImage= ImageIO.read(response.body());
         Image image = SwingFXUtils.toFXImage(bufferedImage,null);
-        /*
-        BufferedImage image = ImageIO.read(response.body());
+ /*
         File outputFile = new File("image.jpg");
-        ImageIO.write(image, "jpg", outputFile);
-         */
+        ImageIO.write(bufferedImage, "jpg", outputFile);
+*/
         return image;
 
     }

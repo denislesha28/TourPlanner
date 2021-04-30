@@ -10,21 +10,22 @@ import java.util.HashMap;
 
 public class TourListManagerTest {
 
+    TourListManager tourListManager=TourListManager.getTourListManagerInstance();
+
     @Test
-    public void testAddTour(){
+    public void testTourAdd(){
         //Arrange
-        TourListManager tourListManager=TourListManager.getTourListManagerInstance();
         //Act
         tourListManager.addTour(new Tour("testTour1"));
         HashMap<String,String> tour=tourListManager.getTour("testTour1");
+        tourListManager.deleteTour("testTour1");
         //Assert
         Assert.assertEquals("testTour1",tour.get("tourName"));
     }
 
     @Test
-    public void testDeleteTour(){
+    public void testTourDelete(){
         //Arrange
-        TourListManager tourListManager=TourListManager.getTourListManagerInstance();
         //Act
         tourListManager.addTour(new Tour("testTour1"));
         tourListManager.deleteTour("testTour1");
@@ -34,42 +35,63 @@ public class TourListManagerTest {
     }
 
     @Test
-    public void testFalseDeleteTour(){
+    public void test_NonExisting_TourDelete(){
         //Arrange
-        TourListManager tourListManager=TourListManager.getTourListManagerInstance();
         //Act
-        boolean validation=tourListManager.deleteTour("testTour1");
+        boolean isSuccessful=tourListManager.deleteTour("testTour1");
         //Assert
-        Assert.assertEquals(false,validation);
+        Assert.assertEquals(false,isSuccessful);
     }
 
     @Test
-    public void testFalseUpdateTour(){
+    public void test_NonExisting_TourUpdate(){
         //Arrange
-        TourListManager tourListManager=TourListManager.getTourListManagerInstance();
         //Act
-        boolean validation=tourListManager.updateTour("testTour1","test",
+        boolean isSuccessful=tourListManager.updateTour("testTour1","test",
                 "newTourTest","test",111);
         //Assert
-        Assert.assertEquals(false,validation);
+        Assert.assertEquals(false,isSuccessful);
     }
 
     @Test
-    public void testUpdateTour(){
+    public void testTourUpdate(){
         //Arrange
-        TourListManager tourListManager=TourListManager.getTourListManagerInstance();
         //Act
         tourListManager.addTour(new Tour("testTour1"));
-        boolean validation=tourListManager.updateTour("testTour1","test",
+        boolean isSuccessful=tourListManager.updateTour("testTour1","test",
                 "newTourTest","test",111);
         HashMap<String,String> updatedTour= tourListManager.getTour("newTourTest");
         //Assert
-        Assert.assertEquals(true,validation);
+        Assert.assertEquals(true,isSuccessful);
         Assert.assertEquals("newTourTest",updatedTour.get("tourName"));
         Assert.assertEquals("test",updatedTour.get("routeInformation"));
         Assert.assertEquals("test",updatedTour.get("tourDescription"));
         Assert.assertEquals("111.0",updatedTour.get("tourDistance"));
         tourListManager.deleteTour("testTour1");
+    }
+
+    @Test
+    public void testTourRouteUpdate(){
+        //Arrange
+        TourListManager tourListManager=TourListManager.getTourListManagerInstance();
+        //Act
+        tourListManager.addTour(new Tour("testTour1"));
+        boolean isSuccessful=tourListManager.updateTourRoute("testTour1","Wien","Berlin");
+        HashMap<String,String> updatedTour= tourListManager.getTour("testTour1");
+        //Assert
+        Assert.assertEquals(true,isSuccessful);
+        Assert.assertEquals("Wien",updatedTour.get("from"));
+        Assert.assertEquals("Berlin",updatedTour.get("to"));
+        tourListManager.deleteTour("testTour1");
+    }
+
+    @Test
+    public void test_NonExisting_TourRouteUpdate(){
+        //Arrange
+        //Act
+        boolean isSuccessful=tourListManager.updateTourRoute("testTour1","Wien","Berlin");
+        //Assert
+        Assert.assertEquals(false,isSuccessful);
     }
 
 

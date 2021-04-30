@@ -1,5 +1,44 @@
 package TestingPackage;
 
+import ServerPackage.DatabaseHandler;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.*;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import static org.mockito.Mockito.mock;
+
 public class DatabaseHandlerTest {
+
+    @Spy
+    @InjectMocks
+    private DatabaseHandler dbHandler = DatabaseHandler.getDatabaseInstance();
+
+    @Mock private Connection mockConnection;
+    @Mock private DatabaseHandler mockHandler;
+
+    public DatabaseHandlerTest() throws SQLException, IOException {
+    }
+
+    @Test
+    public void testConnectionDBInstance() throws SQLException, IOException {
+        //Arrange
+        Mockito.when(dbHandler.getDatabaseInstance()).thenReturn(mockHandler);
+        Mockito.when(dbHandler.getConnection()).thenReturn(mockConnection);
+        //Act
+        mockHandler=DatabaseHandler.getDatabaseInstance();
+        Connection connection=mockHandler.getConnection();
+        //Assert
+        Assert.assertEquals(mockConnection,connection);
+        //Mockito.times number of calls to mocker
+        //Mockito.verify(dbHandler.getConnection(),Mockito.times(1));
+    }
+
 
 }

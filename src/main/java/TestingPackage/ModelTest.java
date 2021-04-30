@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 //import static org.mockito.Mockito.mock;
@@ -17,7 +18,7 @@ import java.util.List;
 public class ModelTest {
 
     @Test
-    public void testBackendToursCreate() throws SQLException, IOException {
+    public void testToursCreation() throws SQLException, IOException {
         //Arrange
         Model dataModelBackend = Model.getModelInstance();
         String tourTest="TestTour";
@@ -25,9 +26,9 @@ public class ModelTest {
         //Act
         dataModelBackend.addTour(tourTest);
         tourList=dataModelBackend.getTours();
+        dataModelBackend.deleteTour(tourTest); // Cleanup
         //Assert
         Assert.assertEquals(tourTest,tourList.get(tourList.size()-1));
-        dataModelBackend.deleteTour(tourTest); // Cleanup
     }
 
     @Test
@@ -49,22 +50,43 @@ public class ModelTest {
         Assert.assertEquals(false,matches);
     }
 
-/* todo after improving TourListManager
+/* todo after improving TourListManager */
     @Test
-    public void testBackendTourUpdate() throws SQLException, IOException {
+    public void testTourUpdate() throws SQLException, IOException {
+        //Arrange
+        Model dataModelBackend = Model.getModelInstance();
+        String tourTest="TestTour";
+        HashMap<String,String> tourDetails;
+        //Act
+        dataModelBackend.addTour(tourTest);
+        dataModelBackend.updateTour(tourTest,"testDescription"
+                ,"NewName","TestRoute",100);
+        tourDetails=dataModelBackend.getTourDetails(0,"NewName");
+        dataModelBackend.deleteTour("NewName");
+        //Assert
+        Assert.assertEquals("NewName",tourDetails.get("tourName"));
+        Assert.assertEquals("testDescription",tourDetails.get("tourDescription"));
+        Assert.assertEquals("TestRoute",tourDetails.get("routeInformation"));
+        Assert.assertEquals("100.0",tourDetails.get("tourDistance"));
+    }
+
+    @Test
+    public void testGetTourRoute() throws SQLException, IOException {
+        //Arrange
         Model dataModelBackend = Model.getModelInstance();
         String tourTest="TestTour";
         List<String> tourList;
         //Act
         dataModelBackend.addTour(tourTest);
-        dataModelBackend.updateTour(tourTest,"testDescription"
-                ,"NewName","TestRoute",100);
-        tourList=dataModelBackend.getTours();
+        dataModelBackend.updateTourRoute(tourTest,"Wien","Berlin");
+        HashMap<String,String> tourDetails = dataModelBackend.getTourDetails(0,tourTest);
+        dataModelBackend.deleteTour(tourTest);
         //Assert
-        Assert.assertEquals("NewName",tourList.get(tourList.size()-1));
-        dataModelBackend.deleteTour("NewName");
+        Assert.assertEquals("Wien",tourDetails.get("from"));
+        Assert.assertEquals("Berlin",tourDetails.get("to"));
+
     }
-*/
+
 
 
 }
