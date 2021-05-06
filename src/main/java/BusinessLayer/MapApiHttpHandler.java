@@ -1,4 +1,4 @@
-package ServerPackage;
+package BusinessLayer;
 
 
 import org.json.JSONObject;
@@ -81,7 +81,8 @@ public class MapApiHttpHandler {
                 .build()
                 .sendAsync(request, HttpResponse.BodyHandlers.ofInputStream());
 
-        HttpResponse<InputStream> response = responseAsync.get();
+
+        HttpResponse<InputStream> response = responseAsync.get(); // future als ruckgavbetyp
         BufferedImage bufferedImage= ImageIO.read(response.body());
         Image image = SwingFXUtils.toFXImage(bufferedImage,null);
  /*

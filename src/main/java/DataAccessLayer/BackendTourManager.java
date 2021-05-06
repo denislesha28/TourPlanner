@@ -1,4 +1,7 @@
-package ServerPackage;
+package DataAccessLayer;
+
+import BusinessLayer.Tour;
+import BusinessLayer.TourListManager;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;

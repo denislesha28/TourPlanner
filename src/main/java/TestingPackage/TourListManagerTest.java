@@ -1,11 +1,10 @@
 package TestingPackage;
 
-import ServerPackage.Tour;
-import ServerPackage.TourListManager;
+import BusinessLayer.Tour;
+import BusinessLayer.TourListManager;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.security.PublicKey;
 import java.util.HashMap;
 
 public class TourListManagerTest {
@@ -17,10 +16,28 @@ public class TourListManagerTest {
         //Arrange
         //Act
         tourListManager.addTour(new Tour("testTour1"));
-        HashMap<String,String> tour=tourListManager.getTour("testTour1");
+        String tour=tourListManager.getTours().get(tourListManager.getTours().size()-1);
         tourListManager.deleteTour("testTour1");
         //Assert
-        Assert.assertEquals("testTour1",tour.get("tourName"));
+        Assert.assertEquals("testTour1",tour);
+    }
+
+    @Test
+    public void testGetTour(){
+        //Arrange
+        //Act
+        tourListManager.addTour(new Tour("testTour1"));
+        HashMap<String,String> actualTour=tourListManager.getTour("testTour1");
+        tourListManager.deleteTour("testTour1");
+        //Assert
+        Assert.assertEquals("testTour1",actualTour.get("tourName"));
+    }
+
+    @Test
+    public void testGetNonExistingTour(){
+        HashMap<String,String> actualTour=tourListManager.getTour("testTour1");
+        //Assert
+        Assert.assertEquals(null,actualTour);
     }
 
     @Test

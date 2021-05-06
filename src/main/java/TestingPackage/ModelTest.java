@@ -1,7 +1,6 @@
 package TestingPackage;
 
-import ServerPackage.Model;
-import ServerPackage.TourListManager;
+import DataAccessLayer.Model;
 import org.junit.Assert;
 import org.junit.Test;
 //import org.mockito.Mock;

@@ -1,9 +1,8 @@
 package MainPackage;
 
 
-import javafx.scene.image.Image;
+import BusinessLayer.MainViewModel;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;

@@ -1,16 +1,13 @@
 package TestingPackage;
 
-import ServerPackage.DatabaseHandler;
+import DataAccessLayer.DatabaseHandler;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import static org.mockito.Mockito.mock;
 

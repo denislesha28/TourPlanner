@@ -1,6 +1,6 @@
 package TestingPackage;
 
-import ServerPackage.MapApiHttpHandler;
+import BusinessLayer.MapApiHttpHandler;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.json.JSONObject;
@@ -9,12 +9,9 @@ import org.junit.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import static java.awt.image.ImageObserver.HEIGHT;
@@ -69,6 +66,7 @@ public class MapApiHttpHandlerTest {
         Image resultImage_WT = mapApiHttpHandler.sendMapApiRequest("Wien","Tirana");
         actualImage_WG_buffered = SwingFXUtils.fromFXImage(resultImage_WG, null);
         actualImage_WT_buffered = SwingFXUtils.fromFXImage(resultImage_WT, null);
+        //byte[] byteArray = ((DataBufferByte) actualImage_WG_buffered.getData().getDataBuffer()).getData();
 
         //Assert
         Assert.assertEquals(expectedImage_WG_buffered.getMinX(),actualImage_WG_buffered.getMinX());

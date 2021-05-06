@@ -19,6 +19,8 @@ module org.openjfx {
     opens MainPackage to javafx.fxml;
     exports MainPackage;
     exports TestingPackage;
-    exports ServerPackage;
-    opens ServerPackage to javafx.fxml, mockito.all;
+    exports DataAccessLayer;
+    opens DataAccessLayer to javafx.fxml, mockito.all;
+    exports BusinessLayer;
+    opens BusinessLayer to javafx.fxml, mockito.all;
 }

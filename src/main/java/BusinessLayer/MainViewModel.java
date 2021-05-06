@@ -1,7 +1,6 @@
-package MainPackage;
+package BusinessLayer;
 
-import ServerPackage.MapApiHttpHandler;
-import ServerPackage.Model;
+import DataAccessLayer.Model;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

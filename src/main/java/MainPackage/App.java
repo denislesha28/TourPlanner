@@ -1,21 +1,14 @@
 package MainPackage;
 
-import ServerPackage.DatabaseHandler;
-import ServerPackage.MapApiHttpHandler;
+import DataAccessLayer.DatabaseHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.json.JSONObject;
+
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * JavaFX App

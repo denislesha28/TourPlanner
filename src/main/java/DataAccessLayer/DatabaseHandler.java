@@ -1,4 +1,4 @@
-package ServerPackage;
+package DataAccessLayer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 
 public class DatabaseHandler {

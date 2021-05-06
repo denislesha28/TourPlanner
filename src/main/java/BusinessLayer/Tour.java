@@ -1,4 +1,4 @@
-package ServerPackage;
+package BusinessLayer;
 
 public class Tour {
 
