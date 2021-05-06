@@ -14,8 +14,6 @@ module org.openjfx {
     requires org.json;
     requires java.desktop;
     requires javafx.swing;
-
-
     opens MainPackage to javafx.fxml;
     exports MainPackage;
     exports TestingPackage;

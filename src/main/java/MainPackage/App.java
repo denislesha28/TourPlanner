@@ -38,11 +38,6 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        try {
-            DatabaseHandler dbHandler=DatabaseHandler.getDatabaseInstance();
-            launch();
-        } catch (SQLException | IOException throwables) {
-            throwables.printStackTrace();
-        }
+        launch();
     }
 }

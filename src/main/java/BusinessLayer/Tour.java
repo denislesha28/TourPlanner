@@ -10,7 +10,7 @@ public class Tour {
     private String from;
     private String to;
 
-    Tour(){
+    public Tour(){
         this.tourName="";
         this.tourID=0;
         this.tourDistance=0;

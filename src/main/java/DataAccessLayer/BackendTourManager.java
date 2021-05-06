@@ -10,9 +10,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class BackendTourManager {
-    DatabaseHandler dbInstance;
+    IDAL dbInstance;
     public BackendTourManager() throws SQLException, IOException {
-        dbInstance=DatabaseHandler.getDatabaseInstance();
+        dbInstance = DALFactory.getDAL();
     }
 
     public int createTour(String tourName) throws SQLException {
@@ -29,6 +29,7 @@ public class BackendTourManager {
         }
         return 0;
     }
+
 
     public void deleteTour(String tourName) throws SQLException {
         String deleteSql="delete\n" +

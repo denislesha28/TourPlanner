@@ -7,17 +7,19 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-public class DatabaseHandler implements IDAL {
+public class DatabaseHandlerMock implements IDAL {
 
-    private HashMap <String,String> connectionData;
+    private HashMap<String,String> connectionData;
     private Connection connection;
-    private static DatabaseHandler instance=null;
+    private static DatabaseHandlerMock instance=null;
 
-    private DatabaseHandler() throws SQLException, IOException {
+    private DatabaseHandlerMock() throws SQLException, IOException {
         // List of connection parameters
         connectionData= new HashMap<String, String>();
+        connection=null;
         // ObjectMapper to conver json lines to String
         ObjectMapper mapper = new ObjectMapper();
         // convert JSON file to map
@@ -31,20 +33,14 @@ public class DatabaseHandler implements IDAL {
 
     }
 
-
     @Override
     public void initialize() throws SQLException {
-        connection = DriverManager.getConnection(
-                connectionData.get("jdbcURL"),
-                connectionData.get("username"),
-                connectionData.get("password"));
-
-        System.out.println("Database Connected");
+        System.out.println("Mock Database Connected");
     }
 
-    public static DatabaseHandler getDatabaseInstance() throws SQLException, IOException {
+    public static DatabaseHandlerMock getDatabaseInstance() throws SQLException, IOException {
         if(instance==null){
-            instance=new DatabaseHandler();
+            instance=new DatabaseHandlerMock();
         }
         return  instance;
     }

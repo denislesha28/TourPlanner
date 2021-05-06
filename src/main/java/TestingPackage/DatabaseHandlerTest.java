@@ -1,41 +1,66 @@
 package TestingPackage;
 
+import DataAccessLayer.DALFactory;
 import DataAccessLayer.DatabaseHandler;
+import DataAccessLayer.IDAL;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.*;
+
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 
-import static org.mockito.Mockito.mock;
 
 public class DatabaseHandlerTest {
-
-    @Spy
-    @InjectMocks
-    private DatabaseHandler dbHandler = DatabaseHandler.getDatabaseInstance();
-
-    @Mock private Connection mockConnection;
-    @Mock private DatabaseHandler mockHandler;
-
-    public DatabaseHandlerTest() throws SQLException, IOException {
+    @Test
+    public void testSingleInstance() throws SQLException, IOException {
+        //Arrange
+        DALFactory dalFactory=new DALFactory();
+        dalFactory.useMock();
+        boolean actualRes=false;
+        //Act
+        IDAL databaseHandler = dalFactory.getDAL();
+        IDAL databaseHandler_test = dalFactory.getDAL();
+        if(databaseHandler_test == databaseHandler){
+            actualRes = true;
+        }
+        //Assert
+        Assert.assertEquals(true,actualRes);
+    }
+    @Test
+    public void testGetConnection() throws SQLException, IOException {
+        //Arrange
+        DALFactory dalFactory=new DALFactory();
+        dalFactory.useMock();
+        Connection expectedConnection=null;
+        //Act
+        IDAL databaseHandler_test = dalFactory.getDAL();
+        Connection actualConnection = databaseHandler_test.getConnection();
+        //Assert
+        Assert.assertEquals(expectedConnection,actualConnection);
     }
 
     @Test
-    public void testConnectionDBInstance() throws SQLException, IOException {
+    public void testConnectionData() throws SQLException, IOException {
         //Arrange
-        Mockito.when(dbHandler.getDatabaseInstance()).thenReturn(mockHandler);
-        Mockito.when(dbHandler.getConnection()).thenReturn(mockConnection);
+        DALFactory dalFactory=new DALFactory();
+        dalFactory.useMock();
+        Connection expectedConnection=null;
+        HashMap<String,String> expectedConnData = new HashMap<>();
+        expectedConnData.put("jdbcURL","jdbc:postgresql://localhost:5432/TourPlanner");
+        expectedConnData.put("username","postgres");
+        expectedConnData.put("password","root");
         //Act
-        mockHandler=DatabaseHandler.getDatabaseInstance();
-        Connection connection=mockHandler.getConnection();
+        IDAL databaseHandler_test = dalFactory.getDAL();
+        HashMap<String,String> connectionData = databaseHandler_test.getConnectionData();
         //Assert
-        Assert.assertEquals(mockConnection,connection);
-        //Mockito.times number of calls to mocker
-        //Mockito.verify(dbHandler.getConnection(),Mockito.times(1));
+        Assert.assertEquals(expectedConnData.get("jdbcURL"),connectionData.get("jdbcURL"));
+        Assert.assertEquals(expectedConnData.get("username"),connectionData.get("username"));
+        Assert.assertEquals(expectedConnData.get("password"),connectionData.get("password"));
     }
+
 
 
 }
