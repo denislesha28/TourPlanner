@@ -5,12 +5,24 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
 public class MainViewModel {
 
@@ -93,11 +105,15 @@ public class MainViewModel {
     }
 
     private void setTourPicture(String from,String to) throws URISyntaxException, IOException, ExecutionException, InterruptedException {
-        Image image=mapApiHttpHandler.sendMapApiRequest(from,to);
-        tourImage.set(image);
+        Image srcGif = new Image("file:src/main/resources/MainPackage/loading_2.gif");
+        tourImage.set(srcGif);
+        mapApiHttpHandler.sendMapApiRequest(tourImage,from,to);
     }
 
     public void displayTourAttributes(String item) throws SQLException {
+        if (item==null){
+            return;
+        }
         HashMap<String,String> tourDetails=model.getTourDetails(0,item);
         if(tourDetails!=null) {
             tourName.set(tourDetails.get("tourName"));
@@ -136,4 +152,5 @@ public class MainViewModel {
         model.updateTourRoute(item,routeFrom,routeTo);
         setTourPicture(routeFrom,routeTo);
     }
+
 }

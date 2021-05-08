@@ -1,6 +1,7 @@
 package BusinessLayer;
 
 
+import javafx.beans.property.ObjectProperty;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
@@ -25,14 +26,13 @@ public class MapApiHttpHandler {
         key = "sbA2AG4PAtKsucb54CDBLp8YOsxS8oL1";
     }
 
-    public Image sendMapApiRequest(String from, String to) throws URISyntaxException, ExecutionException, InterruptedException, IOException {
-        String requestFromToResult = sendFromToRequest(from, to);
-        Image image = sendImageRequest(requestFromToResult);
-        return image;
+
+    public void sendMapApiRequest(ObjectProperty<Image> tourImage, String from, String to) throws URISyntaxException, ExecutionException, InterruptedException, IOException {
+        sendFromToRequest(tourImage,from, to);
     }
 
 
-     public String sendFromToRequest(String from, String to) throws URISyntaxException, ExecutionException, InterruptedException {
+    public void sendFromToRequest(ObjectProperty<Image> tourImage,String from, String to) throws URISyntaxException, ExecutionException, InterruptedException {
 
         String requestUrl = "http://open.mapquestapi.com/directions/v2/route" +
                 "?key=" + key + "&from=" + from + "&to=" + to;
@@ -43,17 +43,29 @@ public class MapApiHttpHandler {
                 .GET()
                 .build();
 
-        CompletableFuture<HttpResponse<String>> asyncResponse = HttpClient.newBuilder()
+        CompletableFuture asyncResponse = HttpClient.newBuilder()
                 .build()
-                .sendAsync(request, HttpResponse.BodyHandlers.ofString());
+                .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(stringHttpResponse -> stringHttpResponse.body())
+                .thenApply(input -> {
+                    try {
+                        return sendImageRequest(tourImage,input);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                });
 
-
-        HttpResponse<String> response = asyncResponse.get();
-        return response.body();
 
     }
 
-    public Image sendImageRequest(String requestFromToResponse) throws IOException, ExecutionException, InterruptedException, URISyntaxException {
+    public int sendImageRequest(ObjectProperty<Image> tourImage,String requestFromToResponse) throws IOException, ExecutionException, InterruptedException, URISyntaxException {
 
         String resp = requestFromToResponse;
         JSONObject jsonObject = new JSONObject(resp);
@@ -77,20 +89,25 @@ public class MapApiHttpHandler {
                 .GET()
                 .build();
 
-        CompletableFuture<HttpResponse<InputStream>> responseAsync = HttpClient.newBuilder()
+        CompletableFuture<Void> voidCompletableFuture = HttpClient.newBuilder()
                 .build()
-                .sendAsync(request, HttpResponse.BodyHandlers.ofInputStream());
-
-
-        HttpResponse<InputStream> response = responseAsync.get(); // future als ruckgavbetyp
-        BufferedImage bufferedImage= ImageIO.read(response.body());
-        Image image = SwingFXUtils.toFXImage(bufferedImage,null);
- /*
-        File outputFile = new File("image.jpg");
-        ImageIO.write(bufferedImage, "jpg", outputFile);
-*/
-        return image;
-
+                .sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
+                .thenApply(inputStreamHttpResponse -> inputStreamHttpResponse.body())
+                .thenApply(input -> {
+                    try {
+                        return ImageIO.read(input);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
+                .thenApply((BufferedImage bufferedImage) -> SwingFXUtils.toFXImage(bufferedImage,null))
+                .thenAccept(t -> tourImage.set(t));
+        return 0;
+        //HttpResponse<InputStream> response = (HttpResponse<InputStream>) responseAsync.get();
+        //BufferedImage bufferedImage = ImageIO.read(response.body());
+        //Image image = SwingFXUtils.toFXImage(bufferedImage,null);
+        //tourImage.set(image);
     }
 
 }
