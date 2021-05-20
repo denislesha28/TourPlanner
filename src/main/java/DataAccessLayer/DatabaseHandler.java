@@ -1,6 +1,9 @@
 package DataAccessLayer;
 
+import BusinessLayer.MapApiHttpHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -14,8 +17,10 @@ public class DatabaseHandler implements IDAL {
     private HashMap <String,String> connectionData;
     private Connection connection;
     private static DatabaseHandler instance=null;
+    private final Logger log;
 
     private DatabaseHandler() throws SQLException, IOException {
+        log = LogManager.getLogger(DatabaseHandler.class);
         // List of connection parameters
         connectionData= new HashMap<String, String>();
         // ObjectMapper to conver json lines to String
@@ -26,6 +31,7 @@ public class DatabaseHandler implements IDAL {
         for (Map.Entry<?, ?> entry : readValues.entrySet()) {
             connectionData.put(entry.getKey().toString(),entry.getValue().toString());
         }
+        log.info("Read Connection Attributes from config file");
         // Build Connenction
         initialize();
 
@@ -40,6 +46,7 @@ public class DatabaseHandler implements IDAL {
                 connectionData.get("password"));
 
         System.out.println("Database Connected");
+        log.info("Database Connected");
     }
 
     public static DatabaseHandler getDatabaseInstance() throws SQLException, IOException {
@@ -51,6 +58,7 @@ public class DatabaseHandler implements IDAL {
 
     @Override
     public Connection getConnection(){
+        log.debug("Connection Instance accessed");
         return connection;
     }
     @Override

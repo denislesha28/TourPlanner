@@ -1,18 +1,25 @@
 package DataAccessLayer;
 
+import BusinessLayer.MapApiHttpHandler;
 import BusinessLayer.Tour;
 import BusinessLayer.TourListManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BackendTourManager {
     IDAL dbInstance;
+    private final Logger log;
+
     public BackendTourManager() throws SQLException, IOException {
         dbInstance = DALFactory.getDAL();
+        log = LogManager.getLogger(BackendTourManager.class);
     }
 
     public int createTour(String tourName) throws SQLException {
@@ -25,6 +32,7 @@ public class BackendTourManager {
         preparedStatement.setDouble(4,100);
         ResultSet resultSet=preparedStatement.executeQuery();
         if (resultSet.next()){
+            log.debug("Created Tour Successfully");
             return resultSet.getInt("id");
         }
         return 0;

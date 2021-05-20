@@ -2,6 +2,8 @@ package DataAccessLayer;
 
 import BusinessLayer.Tour;
 import BusinessLayer.TourListManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -12,16 +14,19 @@ import java.util.Random;
 public class Model {
 
     //private List<String> tours;
-
+    private final Logger log = LogManager.getLogger(Model.class);;
     private BackendTourManager backendTourManager;
     private TourListManager tourListManager;
     private static Model instance=null;
     private static Model testInstance=null;
 
+
     private Model() throws SQLException, IOException {
         tourListManager=TourListManager.getTourListManagerInstance();
         backendTourManager=new BackendTourManager();
         backendTourManager.getAllToursFromBackend(tourListManager);
+        log.debug("Tours pulled from Database and saved locally");
+        log.debug("DAL Layer logic instantiated");
         //tours=new ArrayList<>();
     }
 
@@ -49,12 +54,14 @@ public class Model {
 
 
     public List<String> getTours() {
+        log.debug("DAL Layer return all Tours");
         return tourListManager.getTours();
     }
 
     public void addTour(String tourName) throws SQLException {
         tourListManager.addTour(new Tour(tourName));
         backendTourManager.createTour(tourName);
+        log.debug("DAL Layer add Tour in Backend");
     }
 
     public void deleteTour(String tourName) throws SQLException {
@@ -63,6 +70,7 @@ public class Model {
         }
         tourListManager.deleteTour(tourName);
         backendTourManager.deleteTour(tourName);
+        log.debug("DAL Layer delete Tour in Backend");
     }
 
     public HashMap<String,String> getTourDetails(int tourID,String tourName) throws SQLException {
@@ -70,7 +78,9 @@ public class Model {
         if(returnTour != null){
             return returnTour;
         }
+        log.debug("DAL Layer return TourDetails unconditionally");
         return backendTourManager.getTourDetails(tourID,tourName);
+
     }
 
     public void updateTour(String actualTourName,String tourDescription, String desTourName
@@ -79,6 +89,7 @@ public class Model {
                 routeInformation,tourDistance);
         tourListManager.updateTour(actualTourName,tourDescription,desTourName,
                 routeInformation,tourDistance);
+        log.debug("DAL Layer update TourDetails unconditionally");
     }
 
     public String generateTourRandomName() {
@@ -86,6 +97,7 @@ public class Model {
             String randomPart=generateRandomString();
             String tourName="Tour_"+randomPart;
             if (!tourListManager.containsTour(tourName)){
+                log.info("Generated random name for new Tour");
                 return tourName;
             }
         }
@@ -102,13 +114,14 @@ public class Model {
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
-
+        log.debug("Generated random String");
         return generatedString;
     }
 
     public void updateTourRoute(String tourName,String from,String to) throws SQLException {
         tourListManager.updateTourRoute(tourName,from,to);
         backendTourManager.updateTourRoute(tourName,from,to);
+        log.debug("DAL Layer update TourRoute unconditionally");
     }
 
 }

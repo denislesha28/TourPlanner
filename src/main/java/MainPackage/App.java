@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -19,11 +19,11 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        /* Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
-        double height = screenSize.getHeight();*/
+        double height = screenSize.getHeight()-70;
         // todo set layout based on screen size
-        scene = new Scene(loadFXML("mainUI_v2"), 980  , 700);
+        scene = new Scene(loadFXML("mainUI_v2"), width  , height);
         stage.setScene(scene);
         stage.show();
     }

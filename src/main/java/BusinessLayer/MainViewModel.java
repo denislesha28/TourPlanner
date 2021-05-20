@@ -1,32 +1,29 @@
 package BusinessLayer;
 
 import DataAccessLayer.Model;
-import javafx.beans.property.*;
+import MainPackage.PrimaryController;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+
 
 public class MainViewModel {
 
     private Model model=Model.getModelInstance();
+    private final Logger log;
     MapApiHttpHandler mapApiHttpHandler = new MapApiHttpHandler();
     public ObservableList<String> tourList = FXCollections.observableArrayList(model.getTours());
     private final ObjectProperty<ObservableList<String>> tourListView = new SimpleObjectProperty<>(tourList);
@@ -37,6 +34,11 @@ public class MainViewModel {
     private final StringProperty fromDestination = new SimpleStringProperty("");
     private final StringProperty toDestination = new SimpleStringProperty("");
     private final ObjectProperty<javafx.scene.image.Image> tourImage = new SimpleObjectProperty<>();
+
+    public MainViewModel() throws SQLException, IOException {
+        Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
+        log = LogManager.getLogger(MainViewModel.class);
+    }
 
     public StringProperty tourNameProperty() {
         System.out.println("VM: init tourName field");
@@ -72,7 +74,7 @@ public class MainViewModel {
         System.out.println("Image init");
         return tourImage;
     }
-    public MainViewModel() throws SQLException, IOException {}
+
 
     /*public Property tourListProperty() {
         System.out.println("VM: get Tour ListView");
@@ -84,14 +86,17 @@ public class MainViewModel {
         model.addTour(newTourName);
         tourList.add(newTourName);
         this.tourListView.set(tourList);
+        log.debug("MVM Tour Insertion");
     }
 
     public void deleteTour(String item) throws SQLException {
         model.deleteTour(item);
         tourList.remove(item);
+        log.debug("MVM Tour Deletion");
     }
 
     public void updateTour(String item) throws SQLException {
+
         String tourName=this.tourName.getValue();
         String tourDescription=this.tourDescription.getValue();
         String routeInformation=this.routeInformation.getValue();
@@ -102,12 +107,14 @@ public class MainViewModel {
         }
         int curr_pos=tourList.indexOf(item);
         tourList.set(curr_pos,tourName);
+        log.debug("MVM Tour Updated");
     }
 
     private void setTourPicture(String from,String to) throws URISyntaxException, IOException, ExecutionException, InterruptedException {
         Image srcGif = new Image("file:src/main/resources/MainPackage/loading_2.gif");
         tourImage.set(srcGif);
         mapApiHttpHandler.sendMapApiRequest(tourImage,from,to);
+        log.debug("MVM send TourPicture request");
     }
 
     public void displayTourAttributes(String item) throws SQLException {
@@ -126,6 +133,7 @@ public class MainViewModel {
             tourDescription.set("----------");
             routeInformation.set("----------");
         }
+        log.info("display TourAttributes on UI");
     }
 
     public void displayTourRoute(String item) throws SQLException, URISyntaxException, IOException, ExecutionException, InterruptedException {
@@ -140,7 +148,9 @@ public class MainViewModel {
         }
         fromDestination.set(routeFrom);
         toDestination.set(routeTo);
+        log.info("set TourRoute for Tour");
         setTourPicture(fromDestination.get(),toDestination.get());
+        log.debug("start AsyncCall for TourImage");
     }
 
     public void updateTourRoute(String item) throws SQLException, URISyntaxException, IOException, ExecutionException, InterruptedException {
@@ -151,6 +161,7 @@ public class MainViewModel {
         String routeTo=toDestination.get();
         model.updateTourRoute(item,routeFrom,routeTo);
         setTourPicture(routeFrom,routeTo);
+        log.debug("MVM update TourRoute");
     }
 
 }

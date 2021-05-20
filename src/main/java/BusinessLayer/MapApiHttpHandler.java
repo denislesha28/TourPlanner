@@ -18,12 +18,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
 
 public class MapApiHttpHandler {
     String key;
+    private final Logger log;
 
     public MapApiHttpHandler() {
         key = "sbA2AG4PAtKsucb54CDBLp8YOsxS8oL1";
+        Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
+        log = LogManager.getLogger(MapApiHttpHandler.class);
     }
 
 
@@ -32,7 +38,7 @@ public class MapApiHttpHandler {
     }
 
 
-    public void sendFromToRequest(ObjectProperty<Image> tourImage,String from, String to) throws URISyntaxException, ExecutionException, InterruptedException {
+    private void sendFromToRequest(ObjectProperty<Image> tourImage,String from, String to) throws URISyntaxException, ExecutionException, InterruptedException {
 
         String requestUrl = "http://open.mapquestapi.com/directions/v2/route" +
                 "?key=" + key + "&from=" + from + "&to=" + to;
@@ -43,6 +49,7 @@ public class MapApiHttpHandler {
                 .GET()
                 .build();
 
+        log.trace("Sent 1st Async Request TourRoute");
         CompletableFuture asyncResponse = HttpClient.newBuilder()
                 .build()
                 .sendAsync(request, HttpResponse.BodyHandlers.ofString())
@@ -63,9 +70,10 @@ public class MapApiHttpHandler {
                 });
 
 
+
     }
 
-    public int sendImageRequest(ObjectProperty<Image> tourImage,String requestFromToResponse) throws IOException, ExecutionException, InterruptedException, URISyntaxException {
+    private int sendImageRequest(ObjectProperty<Image> tourImage,String requestFromToResponse) throws IOException, ExecutionException, InterruptedException, URISyntaxException {
 
         String resp = requestFromToResponse;
         JSONObject jsonObject = new JSONObject(resp);
@@ -89,6 +97,9 @@ public class MapApiHttpHandler {
                 .GET()
                 .build();
 
+        log.trace("Get Async Image Response");
+        log.info("Set ImageView with TourImage");
+
         CompletableFuture<Void> voidCompletableFuture = HttpClient.newBuilder()
                 .build()
                 .sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
@@ -103,6 +114,8 @@ public class MapApiHttpHandler {
                 })
                 .thenApply((BufferedImage bufferedImage) -> SwingFXUtils.toFXImage(bufferedImage,null))
                 .thenAccept(t -> tourImage.set(t));
+
+
         return 0;
         //HttpResponse<InputStream> response = (HttpResponse<InputStream>) responseAsync.get();
         //BufferedImage bufferedImage = ImageIO.read(response.body());

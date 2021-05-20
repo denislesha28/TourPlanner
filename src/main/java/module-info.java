@@ -14,6 +14,8 @@ module org.openjfx {
     requires org.json;
     requires java.desktop;
     requires javafx.swing;
+    requires org.apache.logging.log4j;
+    requires org.apache.logging.log4j.core;
     opens MainPackage to javafx.fxml;
     exports MainPackage;
     exports TestingPackage;

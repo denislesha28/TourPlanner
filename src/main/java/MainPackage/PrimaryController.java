@@ -9,7 +9,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
-
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -19,13 +18,22 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.ConfigurationFactory;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.util.Source;
 
 public class PrimaryController implements Initializable {
 
     // custom ViewModel
+    private final Logger log;
     public MainViewModel viewModel = new MainViewModel();
+
 
     // fx:id and use intelliJ to create field in controller
     public ListView tourList;
@@ -41,6 +49,8 @@ public class PrimaryController implements Initializable {
 
     public PrimaryController() throws SQLException, IOException {
         System.out.println("Controller generated");
+        Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
+        log = LogManager.getLogger(PrimaryController.class);
     }
 
 
@@ -96,6 +106,7 @@ public class PrimaryController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        log.debug("Binding all fields to mainViewModel");
         System.out.println("Controller init/created");
         tourList.setItems(viewModel.tourList);
         tourName.textProperty().bindBidirectional(viewModel.tourNameProperty());
@@ -105,8 +116,7 @@ public class PrimaryController implements Initializable {
         fromDestination.textProperty().bindBidirectional(viewModel.fromDestinationProperty());
         toDestination.textProperty().bindBidirectional(viewModel.toDestinationProperty());
         tourImage.imageProperty().bindBidirectional(viewModel.tourImageProperty());
-        // set cell item type tourList.setCellFactory();
-        // no need to bind listview bidirectionally because the listview is and observable list
+
     }
 
     @FXML
