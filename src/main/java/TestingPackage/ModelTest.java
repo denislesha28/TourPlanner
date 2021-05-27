@@ -1,6 +1,7 @@
 package TestingPackage;
 
 import DataAccessLayer.Model;
+import DataAccessLayer.Tour;
 import org.junit.Assert;
 import org.junit.Test;
 //import org.mockito.Mock;
@@ -55,7 +56,7 @@ public class ModelTest {
         //Arrange
         Model dataModelBackend = Model.getModelInstance();
         String tourTest="TestTour";
-        HashMap<String,String> tourDetails;
+        Tour tourDetails;
         //Act
         dataModelBackend.addTour(tourTest);
         dataModelBackend.updateTour(tourTest,"testDescription"
@@ -63,10 +64,10 @@ public class ModelTest {
         tourDetails=dataModelBackend.getTourDetails(0,"NewName");
         dataModelBackend.deleteTour("NewName");
         //Assert
-        Assert.assertEquals("NewName",tourDetails.get("tourName"));
-        Assert.assertEquals("testDescription",tourDetails.get("tourDescription"));
-        Assert.assertEquals("TestRoute",tourDetails.get("routeInformation"));
-        Assert.assertEquals("100.0",tourDetails.get("tourDistance"));
+        Assert.assertEquals("NewName",tourDetails.getTourName());
+        Assert.assertEquals("testDescription",tourDetails.getTourDescription());
+        Assert.assertEquals("TestRoute",tourDetails.getRouteInformation());
+        Assert.assertEquals("100.0",String.valueOf(tourDetails.getTourDistance()));
     }
 
     @Test
@@ -78,11 +79,11 @@ public class ModelTest {
         //Act
         dataModelBackend.addTour(tourTest);
         dataModelBackend.updateTourRoute(tourTest,"Wien","Berlin");
-        HashMap<String,String> tourDetails = dataModelBackend.getTourDetails(0,tourTest);
+        Tour tourDetails = dataModelBackend.getTourDetails(0,tourTest);
         dataModelBackend.deleteTour(tourTest);
         //Assert
-        Assert.assertEquals("Wien",tourDetails.get("from"));
-        Assert.assertEquals("Berlin",tourDetails.get("to"));
+        Assert.assertEquals("Wien",tourDetails.getTourFrom());
+        Assert.assertEquals("Berlin",tourDetails.getTourTo());
 
     }
 

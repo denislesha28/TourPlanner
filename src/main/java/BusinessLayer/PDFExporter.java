@@ -30,15 +30,15 @@ public class PDFExporter
 
 
     public void exportTourPdf(String tourName) throws SQLException, URISyntaxException, ExecutionException, InterruptedException {
-        HashMap<String,String> tourDetails=model.getTourDetails(0,tourName);
-        httpHandler.sendMapApiRequestExportImage(tourDetails.get("from"),tourDetails.get("to"),this,tourName);
+        Tour tourDetails=model.getTourDetails(0,tourName);
+        httpHandler.sendMapApiRequestExportImage(tourDetails.getTourFrom(),tourDetails.getTourTo(),this,tourName);
     }
 
 
     public void generateTourReport(String tourName,BufferedImage tourImage) throws DocumentException, IOException, SQLException, DocumentException {
 
         Document document = new Document();
-        HashMap<String,String> tourDetails=model.getTourDetails(0,tourName);
+        Tour tourDetails=model.getTourDetails(0,tourName);
         PdfWriter.getInstance(document, new FileOutputStream("TourReport_"+tourName+".pdf"));
         document.open();
 
@@ -51,14 +51,14 @@ public class PDFExporter
         Chunk tourAttributes = new Chunk(tourName+" Tour Attributes", chapterFont);
         document.add(new Chapter(new Paragraph(tourAttributes),1));
         document.add(new Paragraph(" "));
-        document.add(new Paragraph("Tour Description: "+tourDetails.get("tourDescription"),paragraphFont));
-        document.add(new Paragraph("Tour Distance: "+tourDetails.get("tourDistance"),paragraphFont));
-        document.add(new Paragraph("Route Information: "+tourDetails.get("routeInformation"),paragraphFont));
+        document.add(new Paragraph("Tour Description: "+tourDetails.getTourDescription(),paragraphFont));
+        document.add(new Paragraph("Tour Distance: "+tourDetails.getTourDistance(),paragraphFont));
+        document.add(new Paragraph("Route Information: "+tourDetails.getRouteInformation(),paragraphFont));
         document.add(new Paragraph(" "));
         document.add(new Paragraph("Tour Route",subChapterFont));
         document.add(new Paragraph(" "));
-        document.add(new Paragraph("Tour Route From: "+tourDetails.get("from"),paragraphFont));
-        document.add(new Paragraph("Tour Route to: "+tourDetails.get("to"),paragraphFont));
+        document.add(new Paragraph("Tour Route From: "+tourDetails.getTourFrom(),paragraphFont));
+        document.add(new Paragraph("Tour Route to: "+tourDetails.getTourTo(),paragraphFont));
         document.add(new Paragraph(" "));
 
         BufferedImage bufferedTourImage = tourImage;

@@ -40,6 +40,17 @@ public class Tour {
         this.to="";
     }
 
+    public Tour(int tourID, double tourDistance,
+                String tourName, String tourDescription, String routeInformation,String from,String to){
+        this.tourID=tourID;
+        this.tourName=tourName;
+        this.tourDistance=tourDistance;
+        this.tourDescription=tourDescription;
+        this.routeInformation=routeInformation;
+        this.from=from;
+        this.to=to;
+    }
+
 
     public int getTourID() {
         return tourID;

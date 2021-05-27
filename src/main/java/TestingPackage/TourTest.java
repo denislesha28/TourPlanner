@@ -11,8 +11,10 @@ public class TourTest {
     double tourDistance=111;
     String tourDescription="testDescription";
     String routeInformation="testRoute";
+    String from = "Wien";
+    String to = "Graz";
     // Act
-    Tour tour=new Tour(tourID,tourDistance,tourName,tourDescription,routeInformation);
+    Tour tour=new Tour(tourID,tourDistance,tourName,tourDescription,routeInformation,from,to);
 
     @Test
     public void createTourIDTest(){
@@ -30,6 +32,14 @@ public class TourTest {
     @Test
     public void createTourRouteInfoTest(){
         Assert.assertEquals(routeInformation,tour.getRouteInformation());
+    }
+    @Test
+    public void createTourRouteFrom(){
+        Assert.assertEquals(from,tour.getTourFrom());
+    }
+    @Test
+    public void createTourRouteTo(){
+        Assert.assertEquals(to,tour.getTourTo());
     }
 
 }

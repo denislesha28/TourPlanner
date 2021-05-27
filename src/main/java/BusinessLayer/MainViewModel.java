@@ -1,6 +1,7 @@
 package BusinessLayer;
 
 import DataAccessLayer.Model;
+import DataAccessLayer.Tour;
 import com.itextpdf.text.DocumentException;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -122,12 +123,12 @@ public class MainViewModel {
         if (item==null){
             return;
         }
-        HashMap<String,String> tourDetails=model.getTourDetails(0,item);
+        Tour tourDetails=model.getTourDetails(0,item);
         if(tourDetails!=null) {
-            tourName.set(tourDetails.get("tourName"));
-            tourDistance.set(tourDetails.get("tourDistance"));
-            tourDescription.set(tourDetails.get("tourDescription"));
-            routeInformation.set(tourDetails.get("routeInformation"));
+            tourName.set(tourDetails.getTourName());
+            tourDistance.set(String.valueOf(tourDetails.getTourDistance()));
+            tourDescription.set(tourDetails.getTourDescription());
+            routeInformation.set(tourDetails.getRouteInformation());
         }else {
             tourName.set("----------");
             tourDistance.set("----------");
@@ -141,9 +142,9 @@ public class MainViewModel {
         if (item==null){
             return;
         }
-        HashMap<String,String> tourDetails=model.getTourDetails(0,item);
-        String routeFrom=tourDetails.get("from");
-        String routeTo=tourDetails.get("to");
+        Tour tourDetails=model.getTourDetails(0,item);
+        String routeFrom=tourDetails.getTourFrom();
+        String routeTo=tourDetails.getTourTo();
         if (routeFrom==null || routeTo==null){
             return;
         }

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+
 
 public class BackendTourManager {
     IDAL dbInstance;
@@ -45,8 +45,8 @@ public class BackendTourManager {
         log.debug("Tour deleted Successfully");
     }
 
-    public HashMap<String, String> getTourDetails(int tourID, String tourName) throws SQLException {
-        HashMap<String,String> tourDetails = new HashMap<String, String>();
+    public Tour getTourDetails(int tourID, String tourName) throws SQLException {
+        Tour tourDetails = new Tour();
 
         String selectSql="select *\n" +
                 "from \"TourPlanner\".tour\n" +
@@ -59,12 +59,12 @@ public class BackendTourManager {
         preparedStatement.setString(2,tourName);
         ResultSet resultSet=preparedStatement.executeQuery();
         if (resultSet.next()) {
-            tourDetails.put("tourName", resultSet.getString("name"));
-            tourDetails.put("tourDescription", resultSet.getString("tourDescription"));
-            tourDetails.put("tourDistance", resultSet.getString("tourDistance"));
-            tourDetails.put("routeInformation", resultSet.getString("routeInformation"));
-            tourDetails.put("from",resultSet.getString("from"));
-            tourDetails.put("to",resultSet.getString("to"));
+            tourDetails.setTourName(resultSet.getString("tourName"));
+            tourDetails.setTourDescription(resultSet.getString("tourDescription"));
+            tourDetails.setTourDistance(resultSet.getDouble("tourDistance"));
+            tourDetails.setRouteInformation(resultSet.getString("routeInformation"));
+            tourDetails.setTourFrom(resultSet.getString("from"));
+            tourDetails.setTourTo(resultSet.getString("to"));
         }
         else {
             log.error("Tour doesn't exist");

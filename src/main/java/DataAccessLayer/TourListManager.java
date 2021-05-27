@@ -78,16 +78,16 @@ public class TourListManager {
         return true;
     }
 
-    public HashMap<String,String> getTour(String tourName){
-        HashMap<String,String> tourDetails = new HashMap<String, String>();
+    public Tour getTour(String tourName){
+        Tour tourDetails = new Tour();
         for (Tour tour : tours ){
             if (tourName.equals(tour.getTourName())){
-                tourDetails.put("tourName", tour.getTourName());
-                tourDetails.put("tourDescription", tour.getTourDescription());
-                tourDetails.put("tourDistance", String.valueOf(tour.getTourDistance()));
-                tourDetails.put("routeInformation", tour.getRouteInformation());
-                tourDetails.put("from", tour.getTourFrom());
-                tourDetails.put("to", tour.getTourTo());
+                tourDetails.setTourName(tour.getTourName());
+                tourDetails.setTourDescription( tour.getTourDescription());
+                tourDetails.setTourDistance(tour.getTourDistance());
+                tourDetails.setRouteInformation(tour.getRouteInformation());
+                tourDetails.setTourFrom(tour.getTourFrom());
+                tourDetails.setTourTo( tour.getTourTo());
                 log.debug("Return TourInfo for Tour");
                 return tourDetails;
             }

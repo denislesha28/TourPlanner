@@ -75,8 +75,8 @@ public class Model {
         log.debug("DAL Layer delete Tour in Backend");
     }
 
-    public HashMap<String,String> getTourDetails(int tourID,String tourName) throws SQLException {
-        HashMap<String,String> returnTour=tourListManager.getTour(tourName);
+    public Tour getTourDetails(int tourID,String tourName) throws SQLException {
+        Tour returnTour=tourListManager.getTour(tourName);
         if(returnTour != null){
             return returnTour;
         }
