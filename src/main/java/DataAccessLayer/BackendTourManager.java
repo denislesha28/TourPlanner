@@ -1,8 +1,5 @@
 package DataAccessLayer;
 
-import BusinessLayer.MapApiHttpHandler;
-import BusinessLayer.Tour;
-import BusinessLayer.TourListManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,7 +7,6 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BackendTourManager {
@@ -46,6 +42,7 @@ public class BackendTourManager {
         PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(deleteSql);
         preparedStatement.setString(1,tourName);
         preparedStatement.executeUpdate();
+        log.debug("Tour deleted Successfully");
     }
 
     public HashMap<String, String> getTourDetails(int tourID, String tourName) throws SQLException {
@@ -70,6 +67,7 @@ public class BackendTourManager {
             tourDetails.put("to",resultSet.getString("to"));
         }
         else {
+            log.error("Tour doesn't exist");
             return null;
         }
         return tourDetails;
@@ -90,6 +88,7 @@ public class BackendTourManager {
             tour.setTourTo(resultSet.getString("to"));
             tourListManager.addTour(tour);
         }
+        log.debug("Filled TourListManager with all Tours");
     }
 
     public void updateTour(String actualTourName,String tourDescription, String desTourName
@@ -104,6 +103,7 @@ public class BackendTourManager {
         preparedStatement.setDouble(4,tourDistance);
         preparedStatement.setString(5,actualTourName);
         preparedStatement.executeUpdate();
+        log.debug("TourAttributes Updated in Database");
     }
 
     public void updateTourRoute(String tourName,String from,String to) throws SQLException {
@@ -115,6 +115,7 @@ public class BackendTourManager {
         preparedStatement.setString(2,to);
         preparedStatement.setString(3,tourName);
         preparedStatement.executeUpdate();
+        log.debug("TourRoute Updated in Database");
     }
 
 

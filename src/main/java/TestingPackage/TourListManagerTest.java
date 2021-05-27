@@ -1,7 +1,7 @@
 package TestingPackage;
 
-import BusinessLayer.Tour;
-import BusinessLayer.TourListManager;
+import DataAccessLayer.Tour;
+import DataAccessLayer.TourListManager;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class TourListManagerTest {
         //Arrange
         //Act
         tourListManager.addTour(new Tour("testTour1"));
-        String tour=tourListManager.getTours().get(tourListManager.getTours().size()-1);
+        String tour=tourListManager.getToursUI().get(tourListManager.getToursUI().size()-1);
         tourListManager.deleteTour("testTour1");
         //Assert
         Assert.assertEquals("testTour1",tour);

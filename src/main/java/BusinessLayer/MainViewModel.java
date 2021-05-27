@@ -1,7 +1,7 @@
 package BusinessLayer;
 
 import DataAccessLayer.Model;
-import MainPackage.PrimaryController;
+import com.itextpdf.text.DocumentException;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,6 +24,7 @@ public class MainViewModel {
 
     private Model model=Model.getModelInstance();
     private final Logger log;
+    PDFExporter pdfExporter=null;
     MapApiHttpHandler mapApiHttpHandler = new MapApiHttpHandler();
     public ObservableList<String> tourList = FXCollections.observableArrayList(model.getTours());
     private final ObjectProperty<ObservableList<String>> tourListView = new SimpleObjectProperty<>(tourList);
@@ -111,7 +112,7 @@ public class MainViewModel {
     }
 
     private void setTourPicture(String from,String to) throws URISyntaxException, IOException, ExecutionException, InterruptedException {
-        Image srcGif = new Image("file:src/main/resources/MainPackage/loading_2.gif");
+        Image srcGif = new Image("file:src/main/resources/FrontEnd/loading_2.gif");
         tourImage.set(srcGif);
         mapApiHttpHandler.sendMapApiRequest(tourImage,from,to);
         log.debug("MVM send TourPicture request");
@@ -162,6 +163,19 @@ public class MainViewModel {
         model.updateTourRoute(item,routeFrom,routeTo);
         setTourPicture(routeFrom,routeTo);
         log.debug("MVM update TourRoute");
+    }
+
+    public void exportPdf(String item) throws SQLException, IOException, DocumentException, URISyntaxException, ExecutionException, InterruptedException {
+        if (pdfExporter == null){
+            pdfExporter = new PDFExporter();
+        }
+        if (item == null){
+            pdfExporter.exportToursPdf();
+        }
+        else {
+            pdfExporter.exportTourPdf(item);
+        }
+
     }
 
 }

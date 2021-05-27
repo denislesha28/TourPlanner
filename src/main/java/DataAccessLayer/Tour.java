@@ -1,4 +1,4 @@
-package BusinessLayer;
+package DataAccessLayer;
 
 public class Tour {
 

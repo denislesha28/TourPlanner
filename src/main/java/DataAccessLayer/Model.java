@@ -1,7 +1,5 @@
 package DataAccessLayer;
 
-import BusinessLayer.Tour;
-import BusinessLayer.TourListManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,6 +53,10 @@ public class Model {
 
     public List<String> getTours() {
         log.debug("DAL Layer return all Tours");
+        return tourListManager.getToursUI();
+    }
+
+    public List<Tour> getToursDetails(){
         return tourListManager.getTours();
     }
 
@@ -123,5 +125,7 @@ public class Model {
         backendTourManager.updateTourRoute(tourName,from,to);
         log.debug("DAL Layer update TourRoute unconditionally");
     }
+
+
 
 }

@@ -1,4 +1,4 @@
-package MainPackage;
+package FrontEnd;
 
 import java.io.IOException;
 import javafx.fxml.FXML;

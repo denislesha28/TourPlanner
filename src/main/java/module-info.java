@@ -16,8 +16,10 @@ module org.openjfx {
     requires javafx.swing;
     requires org.apache.logging.log4j;
     requires org.apache.logging.log4j.core;
-    opens MainPackage to javafx.fxml;
-    exports MainPackage;
+    requires itextpdf;
+
+    opens FrontEnd to javafx.fxml;
+    exports FrontEnd;
     exports TestingPackage;
     exports DataAccessLayer;
     opens DataAccessLayer to javafx.fxml, mockito.all;

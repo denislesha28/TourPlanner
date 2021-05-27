@@ -1,6 +1,6 @@
 package TestingPackage;
 
-import BusinessLayer.Tour;
+import DataAccessLayer.Tour;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -25,7 +25,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPackage.PrimaryController">
+<VBox maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FrontEnd.PrimaryController">
    <children>
       <MenuBar>
          <menus>
@@ -74,7 +74,7 @@
         <items>
             <VBox maxWidth="269.0" minWidth="169.0" prefHeight="699.0" prefWidth="269.0">
                <children>
-                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="45.0" prefWidth="354.0" VBox.vgrow="ALWAYS">
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="354.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Label prefHeight="45.0" prefWidth="51.0" text="Tours">
                            <padding>
@@ -84,7 +84,7 @@
                           <buttons>
                             <Button mnemonicParsing="false" onAction="#addTour" text="add" />
                               <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteTour" prefWidth="50.0" text="delete" />
-                              <Button mnemonicParsing="false" text="......." />
+                              <Button mnemonicParsing="false" onAction="#exportPdf" text="export" />
                           </buttons>
                            <HBox.margin>
                               <Insets right="5.0" />
@@ -92,7 +92,7 @@
                         </ButtonBar>
                      </children>
                   </HBox>
-                  <ListView fx:id="tourList" onMouseClicked="#displayTourInfo"  prefHeight="644.0" prefWidth="269.0" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="tourList" minWidth="-Infinity" onMouseClicked="#displayTourInfo" prefHeight="644.0" prefWidth="269.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
             <VBox>
@@ -162,7 +162,7 @@
                                           </GridPane>
                                        </content>
                                   </Tab>
-                                  <Tab text="Route" fx:id="routeTab" onSelectionChanged="#displayTourRoute">
+                                  <Tab fx:id="routeTab" onSelectionChanged="#displayTourRoute" text="Route">
                                     <content>
                                           <HBox>
                                              <children>

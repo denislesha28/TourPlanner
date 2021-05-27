@@ -1,4 +1,4 @@
-package MainPackage;
+package FrontEnd;
 
 
 import BusinessLayer.MainViewModel;
@@ -9,6 +9,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
+
+import com.itextpdf.text.DocumentException;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -20,13 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.MarkerManager;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.ConfigurationFactory;
-import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.core.util.Source;
 
 public class PrimaryController implements Initializable {
 
@@ -100,6 +96,12 @@ public class PrimaryController implements Initializable {
     public void updateTourRoute(ActionEvent actionEvent) throws SQLException, URISyntaxException, IOException, ExecutionException, InterruptedException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         viewModel.updateTourRoute(item);
+    }
+
+    @FXML
+    public void exportPdf(ActionEvent actionEvent) throws SQLException, DocumentException, IOException, URISyntaxException, ExecutionException, InterruptedException {
+        String item=(String) tourList.getSelectionModel().getSelectedItem();
+        viewModel.exportPdf(item);
     }
 
 

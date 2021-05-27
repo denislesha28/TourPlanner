@@ -1,4 +1,4 @@
-package BusinessLayer;
+package DataAccessLayer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,13 +29,17 @@ public class TourListManager {
     }
 
 
-    public List<String> getTours() {
+    public List<String> getToursUI() {
         List<String> tourNames=new ArrayList<String>();
         for (Tour tour : tours ){
             tourNames.add(tour.getTourName());
         }
         log.debug("Getting all local Tours");
         return tourNames;
+    }
+
+    public List<Tour> getTours(){
+        return tours;
     }
 
     public boolean addTour(Tour Tour){

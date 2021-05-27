@@ -1,6 +1,7 @@
 package BusinessLayer;
 
 
+import com.itextpdf.text.DocumentException;
 import javafx.beans.property.ObjectProperty;
 import org.json.JSONObject;
 
@@ -14,6 +15,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import javafx.embed.swing.SwingFXUtils;
@@ -34,11 +36,14 @@ public class MapApiHttpHandler {
 
 
     public void sendMapApiRequest(ObjectProperty<Image> tourImage, String from, String to) throws URISyntaxException, ExecutionException, InterruptedException, IOException {
-        sendFromToRequest(tourImage,from, to);
+        sendFromToRequest(tourImage,from, to,null,"");
     }
 
+    public void sendMapApiRequestExportImage(String from, String to,PDFExporter instance,String tourName) throws URISyntaxException, ExecutionException, InterruptedException {
+        sendFromToRequest(null,from,to,instance,tourName);
+    }
 
-    private void sendFromToRequest(ObjectProperty<Image> tourImage,String from, String to) throws URISyntaxException, ExecutionException, InterruptedException {
+    private void sendFromToRequest(ObjectProperty<Image> tourImage,String from, String to,PDFExporter instance,String tourName) throws URISyntaxException, ExecutionException, InterruptedException {
 
         String requestUrl = "http://open.mapquestapi.com/directions/v2/route" +
                 "?key=" + key + "&from=" + from + "&to=" + to;
@@ -56,7 +61,7 @@ public class MapApiHttpHandler {
                 .thenApply(stringHttpResponse -> stringHttpResponse.body())
                 .thenApply(input -> {
                     try {
-                        return sendImageRequest(tourImage,input);
+                        return sendImageRequest(tourImage,input,instance,tourName);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -73,7 +78,7 @@ public class MapApiHttpHandler {
 
     }
 
-    private int sendImageRequest(ObjectProperty<Image> tourImage,String requestFromToResponse) throws IOException, ExecutionException, InterruptedException, URISyntaxException {
+    private int sendImageRequest(ObjectProperty<Image> tourImage,String requestFromToResponse,PDFExporter instance,String tourName) throws IOException, ExecutionException, InterruptedException, URISyntaxException {
 
         String resp = requestFromToResponse;
         JSONObject jsonObject = new JSONObject(resp);
@@ -86,41 +91,77 @@ public class MapApiHttpHandler {
         Double ulLng = ul.getDouble("lng");
         Double lrLat = lr.getDouble("lat");
         Double lrLng = lr.getDouble("lng");
-        System.out.println(jsonObject);
 
-        String requestUrl = "https://www.mapquestapi.com/staticmap/v5/map?key=" + key + "&size=700,400" +
-                "&defaultMarker=none&zoom=11&session=" + sessionId + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
-        URI uri = new URI(requestUrl);
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri)
-                .headers("Content-Type", "image/jpeg")
-                .GET()
-                .build();
+        if(instance == null) {
 
-        log.trace("Get Async Image Response");
-        log.info("Set ImageView with TourImage");
+            String requestUrl = "https://www.mapquestapi.com/staticmap/v5/map?key=" + key + "&size=700,400" +
+                    "&defaultMarker=none&zoom=11&session=" + sessionId + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
+            URI uri = new URI(requestUrl);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(uri)
+                    .headers("Content-Type", "image/jpeg")
+                    .GET()
+                    .build();
 
-        CompletableFuture<Void> voidCompletableFuture = HttpClient.newBuilder()
-                .build()
-                .sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
-                .thenApply(inputStreamHttpResponse -> inputStreamHttpResponse.body())
-                .thenApply(input -> {
-                    try {
-                        return ImageIO.read(input);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                })
-                .thenApply((BufferedImage bufferedImage) -> SwingFXUtils.toFXImage(bufferedImage,null))
-                .thenAccept(t -> tourImage.set(t));
+            log.trace("Get Async Image Response");
+            log.info("Send Async ImageRequest for TourImage");
 
+
+            CompletableFuture<Void> voidCompletableFuture = HttpClient.newBuilder()
+                    .build()
+                    .sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
+                    .thenApply(inputStreamHttpResponse -> inputStreamHttpResponse.body())
+                    .thenApply(input -> {
+                        try {
+                            return ImageIO.read(input);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    })
+                    .thenApply((BufferedImage bufferedImage) -> SwingFXUtils.toFXImage(bufferedImage, null))
+                    .thenAccept(t -> tourImage.set(t));
+        }
+        else {
+
+            String requestUrl = "https://www.mapquestapi.com/staticmap/v5/map?key=" + key + "&size=520,350" +
+                    "&defaultMarker=none&zoom=11&session=" + sessionId + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
+            URI uri = new URI(requestUrl);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(uri)
+                    .headers("Content-Type", "image/jpeg")
+                    .GET()
+                    .build();
+
+            log.trace("Get Async Image Response");
+            log.info("Send Async ImageRequest for PDFExporter");
+
+            CompletableFuture<Void> voidCompletableFuture = HttpClient.newBuilder()
+                    .build()
+                    .sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
+                    .thenApply(inputStreamHttpResponse -> inputStreamHttpResponse.body())
+                    .thenApply(input -> {
+                        try {
+                            return ImageIO.read(input);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    })
+                    .thenAccept((BufferedImage bufferedImage) -> {
+                        try {
+                            instance.generateTourReport(tourName,bufferedImage);
+                        } catch (DocumentException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    });
+        }
 
         return 0;
-        //HttpResponse<InputStream> response = (HttpResponse<InputStream>) responseAsync.get();
-        //BufferedImage bufferedImage = ImageIO.read(response.body());
-        //Image image = SwingFXUtils.toFXImage(bufferedImage,null);
-        //tourImage.set(image);
     }
 
 }
