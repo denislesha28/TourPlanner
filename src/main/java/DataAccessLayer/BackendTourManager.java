@@ -59,7 +59,7 @@ public class BackendTourManager {
         preparedStatement.setString(2,tourName);
         ResultSet resultSet=preparedStatement.executeQuery();
         if (resultSet.next()) {
-            tourDetails.setTourName(resultSet.getString("tourName"));
+            tourDetails.setTourName(resultSet.getString("name"));
             tourDetails.setTourDescription(resultSet.getString("tourDescription"));
             tourDetails.setTourDistance(resultSet.getDouble("tourDistance"));
             tourDetails.setRouteInformation(resultSet.getString("routeInformation"));
@@ -116,6 +116,19 @@ public class BackendTourManager {
         preparedStatement.setString(3,tourName);
         preparedStatement.executeUpdate();
         log.debug("TourRoute Updated in Database");
+    }
+
+    public void updateTourVectorToken(String tourName) throws SQLException {
+        Tour tourDetails = getTourDetails(0,tourName);
+        String insertTourText="update \"TourPlanner\".tour " +
+                "set \"tourToken\" = to_tsvector(?) " +
+                "where name = ?;";
+        PreparedStatement preparedStatement = dbInstance.getConnection().prepareStatement(insertTourText);
+        preparedStatement.setString(1,tourDetails.getTourName()+" "+tourDetails.getTourDistance()
+        +" "+tourDetails.getTourDescription()+" "+tourDetails.getRouteInformation()+" "+tourDetails.getTourTo()
+        +" "+tourDetails.getTourFrom());
+        preparedStatement.setString(2,tourName);
+        preparedStatement.executeUpdate();
     }
 
 
