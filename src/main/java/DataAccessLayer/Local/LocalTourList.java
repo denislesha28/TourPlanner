@@ -1,29 +1,28 @@
-package DataAccessLayer;
+package DataAccessLayer.Local;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class TourListManager {
+public class LocalTourList {
 
     private List<Tour> tours;
     private final Logger log;
-    private static TourListManager instance=null;
+    private static LocalTourList instance=null;
 
     //public Tour getTour
-    TourListManager(){
+    LocalTourList(){
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
-        log = LogManager.getLogger(TourListManager.class);
+        log = LogManager.getLogger(LocalTourList.class);
         tours=new ArrayList<>();
     }
 
-    public static TourListManager getTourListManagerInstance(){
+    public static LocalTourList getTourListManagerInstance(){
         if(instance==null){
-            instance=new TourListManager();
+            instance=new LocalTourList();
         }
         return  instance;
     }

@@ -1,4 +1,4 @@
-package DataAccessLayer;
+package DataAccessLayer.Database;
 
 import java.io.IOException;
 import java.sql.SQLException;

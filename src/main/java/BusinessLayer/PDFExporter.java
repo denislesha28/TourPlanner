@@ -1,21 +1,17 @@
 package BusinessLayer;
 import DataAccessLayer.Model;
-import DataAccessLayer.Tour;
+import DataAccessLayer.Local.Tour;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfWriter;
 
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 public class PDFExporter

@@ -1,8 +1,7 @@
 package TestingPackage;
 
-import DataAccessLayer.DALFactory;
-import DataAccessLayer.DatabaseHandler;
-import DataAccessLayer.IDAL;
+import DataAccessLayer.Database.DALFactory;
+import DataAccessLayer.Database.IDAL;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,6 +1,5 @@
-package DataAccessLayer;
+package DataAccessLayer.Database;
 
-import BusinessLayer.MapApiHttpHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

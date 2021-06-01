@@ -1,4 +1,4 @@
-package FrontEnd;
+package View;
 
 import BusinessLayer.PDFExporter;
 import com.itextpdf.text.DocumentException;

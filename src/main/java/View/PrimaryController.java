@@ -1,7 +1,5 @@
-package FrontEnd;
+package View;
 
-
-import BusinessLayer.MainViewModel;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

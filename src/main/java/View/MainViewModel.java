@@ -1,7 +1,10 @@
-package BusinessLayer;
+package View;
 
+import BusinessLayer.MapApiHttpHandler;
+import BusinessLayer.PDFExporter;
+import BusinessLayer.TourListManager;
 import DataAccessLayer.Model;
-import DataAccessLayer.Tour;
+import DataAccessLayer.Local.Tour;
 import com.itextpdf.text.DocumentException;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -14,7 +17,6 @@ import javafx.scene.image.Image;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import org.apache.logging.log4j.LogManager;
@@ -24,12 +26,12 @@ import org.apache.logging.log4j.core.config.Configurator;
 
 public class MainViewModel {
 
-    private Model model=Model.getModelInstance();
+    private TourListManager tourListManager;
     private final Logger log;
     PDFExporter pdfExporter=null;
     MapApiHttpHandler mapApiHttpHandler = new MapApiHttpHandler();
-    public ObservableList<String> tourList = FXCollections.observableArrayList(model.getTours());
-    private ObjectProperty<ObservableList<String>> tourListView = new SimpleObjectProperty<>(tourList);
+    public ObservableList<String> tourList;
+    private ObjectProperty<ObservableList<String>> tourListView;
     private final StringProperty tourName = new SimpleStringProperty("");
     private final StringProperty tourDistance = new SimpleStringProperty("");
     private final StringProperty tourDescription = new SimpleStringProperty("");
@@ -42,6 +44,10 @@ public class MainViewModel {
     public MainViewModel() throws SQLException, IOException {
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
         log = LogManager.getLogger(MainViewModel.class);
+        tourListManager = new TourListManager();
+        tourList = FXCollections.observableArrayList(tourListManager.getTours());
+        tourListView = new SimpleObjectProperty<>(tourList);
+
     }
 
     public StringProperty tourNameProperty() {
@@ -91,14 +97,14 @@ public class MainViewModel {
     }*/
 
     public void addTour() throws SQLException {
-        String newTourName=model.generateTourRandomName();
-        model.addTour(newTourName);
+        String newTourName=tourListManager.generateTourRandomName();
+        tourListManager.addTour(newTourName);
         tourList.add(newTourName);
         log.debug("MVM Tour Insertion");
     }
 
     public void deleteTour(String item) throws SQLException {
-        model.deleteTour(item);
+        tourListManager.deleteTour(item);
         tourList.remove(item);
         log.debug("MVM Tour Deletion");
     }
@@ -109,7 +115,7 @@ public class MainViewModel {
         String tourDescription=this.tourDescription.getValue();
         String routeInformation=this.routeInformation.getValue();
         double tourDistance= Double.parseDouble(this.tourDistance.getValue());
-        model.updateTour(item,tourDescription,tourName,routeInformation,tourDistance);
+        tourListManager.updateTour(item,tourDescription,tourName,routeInformation,tourDistance);
         if (tourName.equals(item)){
             return;
         }
@@ -119,7 +125,7 @@ public class MainViewModel {
     }
 
     private void setTourPicture(String from,String to) throws URISyntaxException, IOException, ExecutionException, InterruptedException {
-        Image srcGif = new Image("file:src/main/resources/FrontEnd/loading_2.gif");
+        Image srcGif = new Image("file:src/main/resources/View/loading_2.gif");
         tourImage.set(srcGif);
         mapApiHttpHandler.sendMapApiRequest(tourImage,from,to);
         log.debug("MVM send TourPicture request");
@@ -129,7 +135,7 @@ public class MainViewModel {
         if (item==null){
             return;
         }
-        Tour tourDetails=model.getTourDetails(0,item);
+        Tour tourDetails=tourListManager.getTourAttributes(item);
         if(tourDetails!=null) {
             tourName.set(tourDetails.getTourName());
             tourDistance.set(String.valueOf(tourDetails.getTourDistance()));
@@ -148,7 +154,7 @@ public class MainViewModel {
         if (item==null){
             return;
         }
-        Tour tourDetails=model.getTourDetails(0,item);
+        Tour tourDetails=tourListManager.getTourAttributes(item);
         String routeFrom=tourDetails.getTourFrom();
         String routeTo=tourDetails.getTourTo();
         if (routeFrom==null || routeTo==null){
@@ -167,7 +173,7 @@ public class MainViewModel {
         }
         String routeFrom=fromDestination.get();
         String routeTo=toDestination.get();
-        model.updateTourRoute(item,routeFrom,routeTo);
+        tourListManager.updateTourRoute(item,routeFrom,routeTo);
         setTourPicture(routeFrom,routeTo);
         log.debug("MVM update TourRoute");
     }
@@ -185,9 +191,9 @@ public class MainViewModel {
     }
 
     public void searchTours() throws SQLException {
-        List<String> tours=model.fullTextSearch(searchField.get());
+        List<String> tours=tourListManager.fullTextSearch(searchField.get());
         if(searchField.get().isEmpty()){
-            tours = model.getTours();
+            tours = tourListManager.getTours();
             tourList.clear();
             tourList.addAll(tours);
             return;

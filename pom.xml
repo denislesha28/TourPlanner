@@ -95,7 +95,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>FrontEnd.App</mainClass>
+                    <mainClass>View.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>

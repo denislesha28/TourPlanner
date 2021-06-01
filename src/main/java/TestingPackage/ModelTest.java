@@ -1,7 +1,7 @@
 package TestingPackage;
 
 import DataAccessLayer.Model;
-import DataAccessLayer.Tour;
+import DataAccessLayer.Local.Tour;
 import org.junit.Assert;
 import org.junit.Test;
 //import org.mockito.Mock;
@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 
 //import static org.mockito.Mockito.mock;
@@ -50,7 +49,7 @@ public class ModelTest {
         Assert.assertEquals(false,matches);
     }
 
-/* todo after improving TourListManager */
+/* todo after improving LocalTourList */
     @Test
     public void testTourUpdate() throws SQLException, IOException {
         //Arrange

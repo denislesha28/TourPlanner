@@ -1,5 +1,7 @@
-package DataAccessLayer;
+package DataAccessLayer.Database;
 
+import DataAccessLayer.Local.LocalTourList;
+import DataAccessLayer.Local.Tour;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -75,7 +77,7 @@ public class BackendTourManager {
         return tourDetails;
     }
 
-    public void getAllToursFromBackend(TourListManager tourListManager) throws SQLException {
+    public void getAllToursFromBackend(LocalTourList localTourList) throws SQLException {
         String sqlSelect="select *\n" +
                 "from \"TourPlanner\".tour LIMIT 100";
         PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(sqlSelect);
@@ -88,9 +90,9 @@ public class BackendTourManager {
             tour.setRouteInformation(resultSet.getString("routeInformation"));
             tour.setTourFrom(resultSet.getString("from"));
             tour.setTourTo(resultSet.getString("to"));
-            tourListManager.addTour(tour);
+            localTourList.addTour(tour);
         }
-        log.debug("Filled TourListManager with all Tours");
+        log.debug("Filled LocalTourList with all Tours");
     }
 
     public void updateTour(String actualTourName,String tourDescription, String desTourName

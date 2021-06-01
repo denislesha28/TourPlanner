@@ -1,4 +1,4 @@
-package DataAccessLayer;
+package DataAccessLayer.Local;
 
 public class Tour {
 

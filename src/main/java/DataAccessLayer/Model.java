@@ -1,11 +1,13 @@
 package DataAccessLayer;
 
+import DataAccessLayer.Database.BackendTourManager;
+import DataAccessLayer.Local.LocalTourList;
+import DataAccessLayer.Local.Tour;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -14,15 +16,15 @@ public class Model {
     //private List<String> tours;
     private final Logger log = LogManager.getLogger(Model.class);;
     private BackendTourManager backendTourManager;
-    private TourListManager tourListManager;
+    private LocalTourList localTourList;
     private static Model instance=null;
     private static Model testInstance=null;
 
 
     private Model() throws SQLException, IOException {
-        tourListManager=TourListManager.getTourListManagerInstance();
+        localTourList = LocalTourList.getTourListManagerInstance();
         backendTourManager=new BackendTourManager();
-        backendTourManager.getAllToursFromBackend(tourListManager);
+        backendTourManager.getAllToursFromBackend(localTourList);
         log.debug("Tours pulled from Database and saved locally");
         log.debug("DAL Layer logic instantiated");
         //tours=new ArrayList<>();
@@ -30,7 +32,7 @@ public class Model {
 
     private Model(boolean Test){
         if (Test){
-            tourListManager=TourListManager.getTourListManagerInstance();;
+            localTourList = LocalTourList.getTourListManagerInstance();;
             backendTourManager=null;
         }
     }
@@ -53,15 +55,15 @@ public class Model {
 
     public List<String> getTours() {
         log.debug("DAL Layer return all Tours");
-        return tourListManager.getToursUI();
+        return localTourList.getToursUI();
     }
 
     public List<Tour> getToursDetails(){
-        return tourListManager.getTours();
+        return localTourList.getTours();
     }
 
     public void addTour(String tourName) throws SQLException {
-        tourListManager.addTour(new Tour(tourName));
+        localTourList.addTour(new Tour(tourName));
         backendTourManager.createTour(tourName);
         log.debug("DAL Layer add Tour in Backend");
     }
@@ -70,13 +72,13 @@ public class Model {
         if (tourName==null){
             return;
         }
-        tourListManager.deleteTour(tourName);
+        localTourList.deleteTour(tourName);
         backendTourManager.deleteTour(tourName);
         log.debug("DAL Layer delete Tour in Backend");
     }
 
     public Tour getTourDetails(int tourID,String tourName) throws SQLException {
-        Tour returnTour=tourListManager.getTour(tourName);
+        Tour returnTour= localTourList.getTour(tourName);
         if(returnTour != null){
             return returnTour;
         }
@@ -89,7 +91,7 @@ public class Model {
             ,String routeInformation, double tourDistance) throws SQLException {
         backendTourManager.updateTour(actualTourName,tourDescription,desTourName,
                 routeInformation,tourDistance);
-        tourListManager.updateTour(actualTourName,tourDescription,desTourName,
+        localTourList.updateTour(actualTourName,tourDescription,desTourName,
                 routeInformation,tourDistance);
         log.debug("DAL Layer update TourDetails unconditionally");
         backendTourManager.updateTourVectorToken(desTourName);
@@ -100,7 +102,7 @@ public class Model {
         while (true) {
             String randomPart=generateRandomString();
             String tourName="Tour_"+randomPart;
-            if (!tourListManager.containsTour(tourName)){
+            if (!localTourList.containsTour(tourName)){
                 log.info("Generated random name for new Tour");
                 return tourName;
             }
@@ -123,7 +125,7 @@ public class Model {
     }
 
     public void updateTourRoute(String tourName,String from,String to) throws SQLException {
-        tourListManager.updateTourRoute(tourName,from,to);
+        localTourList.updateTourRoute(tourName,from,to);
         backendTourManager.updateTourRoute(tourName,from,to);
         log.debug("DAL Layer update TourRoute unconditionally");
         backendTourManager.updateTourVectorToken(tourName);
