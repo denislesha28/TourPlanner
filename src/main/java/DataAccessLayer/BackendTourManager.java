@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class BackendTourManager {
@@ -129,6 +131,19 @@ public class BackendTourManager {
         +" "+tourDetails.getTourFrom());
         preparedStatement.setString(2,tourName);
         preparedStatement.executeUpdate();
+    }
+
+    public List<String> getToursFromSearch(String input) throws SQLException {
+        String selectSql="SELECT name FROM \"TourPlanner\".tour " +
+                "WHERE tour.\"tourToken\" @@ to_tsquery(?);";
+        PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(selectSql);
+        preparedStatement.setString(1,input);
+        ResultSet resultSet=preparedStatement.executeQuery();
+        List<String> searchedTours = new ArrayList<String>();
+        while (resultSet.next()){
+            searchedTours.add(resultSet.getString("name"));
+        }
+        return searchedTours;
     }
 
 

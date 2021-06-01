@@ -36,12 +36,14 @@ public class PrimaryController implements Initializable {
     public Tab attributesTab;
     public TextField tourName;
     public TextField tourDistance;
+    public TextField searchField;
     public TextArea tourDescription;
     public TextArea routeInformation;
     public TextField fromDestination;
     public TextField toDestination;
     public ImageView tourImage;
     public Tab routeTab;
+
 
     public PrimaryController() throws SQLException, IOException {
         System.out.println("Controller generated");
@@ -104,6 +106,12 @@ public class PrimaryController implements Initializable {
         viewModel.exportPdf(item);
     }
 
+    @FXML
+    public void searchTours(ActionEvent actionEvent) throws SQLException {
+        viewModel.searchTours();
+
+    }
+
 
 
     @Override
@@ -118,6 +126,7 @@ public class PrimaryController implements Initializable {
         fromDestination.textProperty().bindBidirectional(viewModel.fromDestinationProperty());
         toDestination.textProperty().bindBidirectional(viewModel.toDestinationProperty());
         tourImage.imageProperty().bindBidirectional(viewModel.tourImageProperty());
+        searchField.textProperty().bindBidirectional(viewModel.searchFieldProperty());
 
     }
 

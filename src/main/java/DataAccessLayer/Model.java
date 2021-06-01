@@ -89,12 +89,11 @@ public class Model {
             ,String routeInformation, double tourDistance) throws SQLException {
         backendTourManager.updateTour(actualTourName,tourDescription,desTourName,
                 routeInformation,tourDistance);
-        backendTourManager.updateTourVectorToken(desTourName);
         tourListManager.updateTour(actualTourName,tourDescription,desTourName,
                 routeInformation,tourDistance);
-
         log.debug("DAL Layer update TourDetails unconditionally");
-        log.trace("Update Vector for Tour Indexing");
+        backendTourManager.updateTourVectorToken(desTourName);
+        log.debug("Update Vector for Tour Indexing");
     }
 
     public String generateTourRandomName() {
@@ -126,9 +125,14 @@ public class Model {
     public void updateTourRoute(String tourName,String from,String to) throws SQLException {
         tourListManager.updateTourRoute(tourName,from,to);
         backendTourManager.updateTourRoute(tourName,from,to);
-        backendTourManager.updateTourVectorToken(tourName);
         log.debug("DAL Layer update TourRoute unconditionally");
-        log.trace("Update Vector for Tour Indexing");
+        backendTourManager.updateTourVectorToken(tourName);
+        log.debug("Update Vector for Tour Indexing");
+    }
+
+    public List<String> fullTextSearch(String input) throws SQLException {
+        List<String> searchedTours = backendTourManager.getToursFromSearch(input);
+        return searchedTours;
     }
 
 

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,13 +29,14 @@ public class MainViewModel {
     PDFExporter pdfExporter=null;
     MapApiHttpHandler mapApiHttpHandler = new MapApiHttpHandler();
     public ObservableList<String> tourList = FXCollections.observableArrayList(model.getTours());
-    private final ObjectProperty<ObservableList<String>> tourListView = new SimpleObjectProperty<>(tourList);
+    private ObjectProperty<ObservableList<String>> tourListView = new SimpleObjectProperty<>(tourList);
     private final StringProperty tourName = new SimpleStringProperty("");
     private final StringProperty tourDistance = new SimpleStringProperty("");
     private final StringProperty tourDescription = new SimpleStringProperty("");
     private final StringProperty routeInformation = new SimpleStringProperty("");
     private final StringProperty fromDestination = new SimpleStringProperty("");
     private final StringProperty toDestination = new SimpleStringProperty("");
+    private final StringProperty searchField = new SimpleStringProperty("");
     private final ObjectProperty<javafx.scene.image.Image> tourImage = new SimpleObjectProperty<>();
 
     public MainViewModel() throws SQLException, IOException {
@@ -72,6 +74,11 @@ public class MainViewModel {
         return toDestination;
     }
 
+    public StringProperty searchFieldProperty(){
+        System.out.println("VM: init search field");
+        return searchField;
+    }
+
     public ObjectProperty<javafx.scene.image.Image> tourImageProperty(){
         System.out.println("Image init");
         return tourImage;
@@ -87,7 +94,6 @@ public class MainViewModel {
         String newTourName=model.generateTourRandomName();
         model.addTour(newTourName);
         tourList.add(newTourName);
-        this.tourListView.set(tourList);
         log.debug("MVM Tour Insertion");
     }
 
@@ -176,6 +182,18 @@ public class MainViewModel {
         else {
             pdfExporter.exportTourPdf(item);
         }
+    }
+
+    public void searchTours() throws SQLException {
+        List<String> tours=model.fullTextSearch(searchField.get());
+        if(searchField.get().isEmpty()){
+            tours = model.getTours();
+            tourList.clear();
+            tourList.addAll(tours);
+            return;
+        }
+        tourList.clear();
+        tourList.addAll(tours);
 
     }
 
