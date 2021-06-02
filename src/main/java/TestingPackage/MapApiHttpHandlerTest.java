@@ -18,15 +18,29 @@ import static java.awt.image.ImageObserver.HEIGHT;
 import static java.awt.image.ImageObserver.WIDTH;
 
 public class MapApiHttpHandlerTest {
-   /* @Test
-    public void testFromToRequest() throws URISyntaxException, ExecutionException, InterruptedException {
-        //Arrange
-        MapApiHttpHandler mapApiHttpHandler=new MapApiHttpHandler();
+    //Arrange
+    String testResponse = "{\n" +
+            "\t\"route\": {\n" +
+            "\t\t\"hasTollRoad\": true,\n" +
+            "\t\t\"hasBridge\": false,\n" +
+            "\t\t\"boundingBox\": {\n" +
+            "\t\t\t\"lr\": {\n" +
+            "\t\t\t\t\"lng\": 16.373583,\n" +
+            "\t\t\t\t\"lat\": 47.069527\n" +
+            "\t\t\t},\n" +
+            "\t\t\t\"ul\": {\n" +
+            "\t\t\t\t\"lng\": 15.281363,\n" +
+            "\t\t\t\t\"lat\": 48.192204\n" +
+            "\t\t\t}\n" +
+            "\t\t},\n" +
+            "\t\t\"distance\": 120.009\n" +
+            "    }\n" +
+            "}";
+    @Test
+    public void testLatLngConversion() {
         //Act
-        String response=mapApiHttpHandler.sendFromToRequest("Wien","Graz");
-        JSONObject jsonObject = new JSONObject(response);
+        JSONObject jsonObject = new JSONObject(testResponse);
         JSONObject route = jsonObject.getJSONObject("route");
-        String sessionId = route.getString("sessionId");
         JSONObject boundingBox = route.getJSONObject("boundingBox");
         JSONObject ul = boundingBox.getJSONObject("ul");
         JSONObject lr = boundingBox.getJSONObject("lr");
@@ -34,17 +48,26 @@ public class MapApiHttpHandlerTest {
         Double ulLng = ul.getDouble("lng");
         Double lrLat = lr.getDouble("lat");
         Double lrLng = lr.getDouble("lng");
-        Double ulLatExpected = 48.209644;
-        Double ulLngExpected = 15.281363;
-        Double lrLatExpected = 47.069416;
-        Double lrLngExpected = 16.400137;
+
         //Assert
-        Assert.assertEquals(ulLatExpected,ulLat);
-        Assert.assertEquals(ulLngExpected,ulLng);
-        Assert.assertEquals(lrLatExpected,lrLat);
-        Assert.assertEquals(lrLngExpected,lrLng);
+        Assert.assertEquals("47.069527",String.valueOf(lrLat));
+        Assert.assertEquals("16.373583",String.valueOf(lrLng));
+
+        Assert.assertEquals("48.192204",String.valueOf(ulLat));
+        Assert.assertEquals("15.281363",String.valueOf(ulLng));
     }
-    */
+
+    @Test
+    public void testDistanceConversion() {
+        //Act
+        JSONObject jsonObject = new JSONObject(testResponse);
+        JSONObject route = jsonObject.getJSONObject("route");
+        Double distanceValue = route.getDouble("distance");
+
+        //Assert
+        Assert.assertEquals("120.009",String.valueOf(distanceValue));
+    }
+
 
 
 }

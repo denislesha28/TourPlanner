@@ -22,7 +22,7 @@ public class DatabaseHandler implements IDAL {
         log = LogManager.getLogger(DatabaseHandler.class);
         // List of connection parameters
         connectionData= new HashMap<String, String>();
-        // ObjectMapper to conver json lines to String
+        // ObjectMapper to convert json lines to String
         ObjectMapper mapper = new ObjectMapper();
         // convert JSON file to map
         Map<?, ?> readValues = mapper.readValue(Paths.get("config.json").toFile(), Map.class);
