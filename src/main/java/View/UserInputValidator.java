@@ -6,13 +6,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserInputValidator {
-    final String regex = "(([A-Z])|([a-z]))+([1-9])*|[\\&\\.\\,  ]+";
+    final String regex = "(([A-Z])|([a-z])|([@#]))+([1-9])*|[\\&\\.\\,  ]+";
     final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
     int minCharCount = 3;
 
-    boolean validateInputText(TextInputControl textInput){
-        Matcher matcher = pattern.matcher(textInput.getText());
-        if(matcher.find() && textInput.getText().length() >= minCharCount){
+    public boolean validateInputText(TextInputControl textInput){
+        if(validateText(textInput.getText())){
             textInput.setStyle("");
             textInput.setPromptText(" ");
             return true;
@@ -21,6 +20,14 @@ public class UserInputValidator {
         String errorText = textInput.getText()+" ----- not enough characters, name is too short or not allowed characters";
         textInput.setText("");
         textInput.setPromptText(errorText);
+        return false;
+    }
+
+    public boolean validateText(String text){
+        Matcher matcher = pattern.matcher(text);
+        if(matcher.find() && text.length() >= minCharCount){
+            return true;
+        }
         return false;
     }
 }

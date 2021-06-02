@@ -88,7 +88,6 @@ public class LocalTourListTest {
     @Test
     public void testTourRouteUpdate(){
         //Arrange
-        LocalTourList localTourList = LocalTourList.getTourListManagerInstance();
         //Act
         localTourList.addTour(new Tour("testTour1"));
         boolean isSuccessful= localTourList.updateTourRoute("testTour1","Wien","Berlin");
@@ -107,6 +106,18 @@ public class LocalTourListTest {
         boolean isSuccessful= localTourList.updateTourRoute("testTour1","Wien","Berlin");
         //Assert
         Assert.assertEquals(false,isSuccessful);
+    }
+
+    @Test
+    public void testDistanceUpdate(){
+        //Arrange
+        //Act
+        localTourList.addTour(new Tour("testTour1"));
+        localTourList.updateTourDistance("testTour1",100.0);
+        Tour updatedTour= localTourList.getTour("testTour1");
+        //Assert
+        Assert.assertEquals(String.valueOf(updatedTour.getTourDistance()),"100.0");
+        localTourList.deleteTour("testTour1");
     }
 
 

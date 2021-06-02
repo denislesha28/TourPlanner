@@ -1,6 +1,7 @@
 package BusinessLayer;
 
 import Components.Tour;
+import DataAccessLayer.Database.DALFactory;
 import DataAccessLayer.Model;
 
 import java.io.IOException;
@@ -13,6 +14,11 @@ public class TourListManager {
 
     public TourListManager() throws SQLException, IOException {
         model=Model.getModelInstance();
+    }
+    public TourListManager(boolean test) {
+        if (test) {
+            model = Model.getTestModelInstance();
+        }
     }
 
     public void addTour (String tourName) throws SQLException {

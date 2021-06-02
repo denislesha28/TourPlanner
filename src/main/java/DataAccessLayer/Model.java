@@ -32,7 +32,7 @@ public class Model {
 
     private Model(boolean Test){
         if (Test){
-            localTourList = LocalTourList.getTourListManagerInstance();;
+            localTourList = LocalTourList.getTourListManagerInstance();
             backendTourManager=null;
         }
     }

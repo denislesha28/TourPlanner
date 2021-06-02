@@ -75,7 +75,6 @@ public class ModelTest {
         //Arrange
         Model dataModelBackend = Model.getModelInstance();
         String tourTest="TestTour";
-        List<String> tourList;
         //Act
         dataModelBackend.addTour(tourTest);
         dataModelBackend.updateTourRoute(tourTest,"Wien","Berlin");
@@ -84,7 +83,20 @@ public class ModelTest {
         //Assert
         Assert.assertEquals("Wien",tourDetails.getTourFrom());
         Assert.assertEquals("Berlin",tourDetails.getTourTo());
+    }
 
+    @Test
+    public void testTourDistanceUpdate() throws SQLException, IOException {
+        //Arrange
+        Model dataModelBackend = Model.getModelInstance();
+        String tourTest="TestTour";
+        //Act
+        dataModelBackend.addTour(tourTest);
+        dataModelBackend.updateDistance("TestTour",100.69);
+        Tour tourDetails = dataModelBackend.getTourDetails(0,tourTest);
+        dataModelBackend.deleteTour(tourTest);
+        //Assert
+        Assert.assertEquals(String.valueOf(tourDetails.getTourDistance()),"100.69");
     }
 
 

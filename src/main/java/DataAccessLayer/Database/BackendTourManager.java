@@ -29,7 +29,7 @@ public class BackendTourManager {
         preparedStatement.setString(1,tourName);
         preparedStatement.setString(2,"------");
         preparedStatement.setString(3,"------");
-        preparedStatement.setDouble(4,100);
+        preparedStatement.setDouble(4,0.0);
         ResultSet resultSet=preparedStatement.executeQuery();
         if (resultSet.next()){
             log.debug("Created Tour Successfully");

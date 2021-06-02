@@ -71,8 +71,10 @@ public class PrimaryController implements Initializable {
     public void updateTour(ActionEvent actionEvent)throws SQLException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         System.out.println("Controller updating Tour "+item);
-        if(userInputValidator.validateInputText(this.tourName) && userInputValidator.validateInputText(this.routeInformation)
-        && userInputValidator.validateInputText(this.tourDescription)) {
+        boolean tourName = userInputValidator.validateInputText(this.tourName);
+        boolean routeInformation = userInputValidator.validateInputText(this.routeInformation);
+        boolean tourDescription = userInputValidator.validateInputText(this.tourDescription);
+        if(tourName && routeInformation && tourDescription ) {
             viewModel.updateTour(item);
         }
 
