@@ -27,16 +27,18 @@ import org.apache.logging.log4j.core.config.Configurator;
 public class MapApiHttpHandler {
     String key;
     private final Logger log;
+    TourListManager tourListManager;
 
-    public MapApiHttpHandler() {
+    public MapApiHttpHandler() throws SQLException, IOException {
         key = "sbA2AG4PAtKsucb54CDBLp8YOsxS8oL1";
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
         log = LogManager.getLogger(MapApiHttpHandler.class);
+        tourListManager = new TourListManager();
     }
 
 
-    public void sendMapApiRequest(ObjectProperty<Image> tourImage, String from, String to) throws URISyntaxException, ExecutionException, InterruptedException, IOException {
-        sendFromToRequest(tourImage,from, to,null,"");
+    public void sendMapApiRequest(ObjectProperty<Image> tourImage, String from, String to,String tourName) throws URISyntaxException, ExecutionException, InterruptedException, IOException {
+        sendFromToRequest(tourImage,from, to,null,tourName);
     }
 
     public void sendMapApiRequestExportImage(String from, String to,PDFExporter instance,String tourName) throws URISyntaxException, ExecutionException, InterruptedException {
@@ -70,6 +72,8 @@ public class MapApiHttpHandler {
                         e.printStackTrace();
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
                     }
                     return null;
                 });
@@ -78,7 +82,7 @@ public class MapApiHttpHandler {
 
     }
 
-    private int sendImageRequest(ObjectProperty<Image> tourImage,String requestFromToResponse,PDFExporter instance,String tourName) throws IOException, ExecutionException, InterruptedException, URISyntaxException {
+    private int sendImageRequest(ObjectProperty<Image> tourImage,String requestFromToResponse,PDFExporter pdfInstance,String tourName) throws IOException, ExecutionException, InterruptedException, URISyntaxException, SQLException {
 
         String resp = requestFromToResponse;
         JSONObject jsonObject = new JSONObject(resp);
@@ -91,11 +95,13 @@ public class MapApiHttpHandler {
         Double ulLng = ul.getDouble("lng");
         Double lrLat = lr.getDouble("lat");
         Double lrLng = lr.getDouble("lng");
+        Double distanceValue = route.getDouble("distance");
+        tourListManager.updateTourDistance(tourName,distanceValue);
 
-        if(instance == null) {
+        if(pdfInstance == null) {
 
             String requestUrl = "https://www.mapquestapi.com/staticmap/v5/map?key=" + key + "&size=700,400" +
-                    "&defaultMarker=none&zoom=11&session=" + sessionId + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
+                    "&defaultMarker=marker-purple-sm&zoom=11&session=" + sessionId + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
             URI uri = new URI(requestUrl);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
@@ -125,7 +131,7 @@ public class MapApiHttpHandler {
         else {
 
             String requestUrl = "https://www.mapquestapi.com/staticmap/v5/map?key=" + key + "&size=520,350" +
-                    "&defaultMarker=none&zoom=11&session=" + sessionId + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
+                    "&defaultMarker=marker-red-lg&zoom=11&session=" + sessionId + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
             URI uri = new URI(requestUrl);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
@@ -150,7 +156,7 @@ public class MapApiHttpHandler {
                     })
                     .thenAccept((BufferedImage bufferedImage) -> {
                         try {
-                            instance.generateTourReport(tourName,bufferedImage);
+                            pdfInstance.generateTourReport(tourName,bufferedImage);
                         } catch (DocumentException e) {
                             e.printStackTrace();
                         } catch (IOException e) {

@@ -1,7 +1,7 @@
 package TestingPackage;
 
 import DataAccessLayer.Model;
-import DataAccessLayer.Local.Tour;
+import Components.Tour;
 import org.junit.Assert;
 import org.junit.Test;
 //import org.mockito.Mock;
@@ -44,6 +44,7 @@ public class ModelTest {
                 matches=true;
                 break;
             }
+
         }
         //Assert
         Assert.assertEquals(false,matches);

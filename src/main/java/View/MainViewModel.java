@@ -3,8 +3,7 @@ package View;
 import BusinessLayer.MapApiHttpHandler;
 import BusinessLayer.PDFExporter;
 import BusinessLayer.TourListManager;
-import DataAccessLayer.Model;
-import DataAccessLayer.Local.Tour;
+import Components.Tour;
 import com.itextpdf.text.DocumentException;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -13,7 +12,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
-
+import java.util.regex.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
@@ -30,6 +29,7 @@ public class MainViewModel {
     private final Logger log;
     PDFExporter pdfExporter=null;
     MapApiHttpHandler mapApiHttpHandler = new MapApiHttpHandler();
+    UserInputValidator userInputValidator = new UserInputValidator();
     public ObservableList<String> tourList;
     private ObjectProperty<ObservableList<String>> tourListView;
     private final StringProperty tourName = new SimpleStringProperty("");
@@ -124,10 +124,10 @@ public class MainViewModel {
         log.debug("MVM Tour Updated");
     }
 
-    private void setTourPicture(String from,String to) throws URISyntaxException, IOException, ExecutionException, InterruptedException {
+    private void setTourPicture(String from,String to,String tourName) throws URISyntaxException, IOException, ExecutionException, InterruptedException {
         Image srcGif = new Image("file:src/main/resources/View/loading_2.gif");
         tourImage.set(srcGif);
-        mapApiHttpHandler.sendMapApiRequest(tourImage,from,to);
+        mapApiHttpHandler.sendMapApiRequest(tourImage,from,to,tourName);
         log.debug("MVM send TourPicture request");
     }
 
@@ -158,12 +158,14 @@ public class MainViewModel {
         String routeFrom=tourDetails.getTourFrom();
         String routeTo=tourDetails.getTourTo();
         if (routeFrom==null || routeTo==null){
+            fromDestination.set("");
+            toDestination.set("");
             return;
         }
         fromDestination.set(routeFrom);
         toDestination.set(routeTo);
         log.info("set TourRoute for Tour");
-        setTourPicture(fromDestination.get(),toDestination.get());
+        setTourPicture(fromDestination.get(),toDestination.get(),tourDetails.getTourName());
         log.debug("start AsyncCall for TourImage");
     }
 
@@ -174,7 +176,7 @@ public class MainViewModel {
         String routeFrom=fromDestination.get();
         String routeTo=toDestination.get();
         tourListManager.updateTourRoute(item,routeFrom,routeTo);
-        setTourPicture(routeFrom,routeTo);
+        setTourPicture(routeFrom,routeTo,item);
         log.debug("MVM update TourRoute");
     }
 
@@ -200,7 +202,8 @@ public class MainViewModel {
         }
         tourList.clear();
         tourList.addAll(tours);
-
     }
+
+
 
 }

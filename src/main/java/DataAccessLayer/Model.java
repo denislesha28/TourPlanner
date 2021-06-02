@@ -2,7 +2,7 @@ package DataAccessLayer;
 
 import DataAccessLayer.Database.BackendTourManager;
 import DataAccessLayer.Local.LocalTourList;
-import DataAccessLayer.Local.Tour;
+import Components.Tour;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -135,6 +135,11 @@ public class Model {
     public List<String> fullTextSearch(String input) throws SQLException {
         List<String> searchedTours = backendTourManager.getToursFromSearch(input);
         return searchedTours;
+    }
+
+    public void updateDistance(String tourName,Double distance) throws SQLException {
+        localTourList.updateTourDistance(tourName,distance);
+        backendTourManager.updateTourDistance(tourName,distance);
     }
 
 

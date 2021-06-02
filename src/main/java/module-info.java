@@ -21,12 +21,14 @@ module org.openjfx {
     exports View;
     exports TestingPackage;
     exports DataAccessLayer;
-    opens DataAccessLayer to javafx.fxml, mockito.all;
+    opens DataAccessLayer to javafx.fxml;
     exports BusinessLayer;
-    opens BusinessLayer to javafx.fxml, mockito.all;
-    opens View to javafx.fxml, mockito.all;
+    opens BusinessLayer to javafx.fxml;
+    opens View to javafx.fxml;
     exports DataAccessLayer.Database;
-    opens DataAccessLayer.Database to javafx.fxml, mockito.all;
+    opens DataAccessLayer.Database to javafx.fxml;
     exports DataAccessLayer.Local;
-    opens DataAccessLayer.Local to javafx.fxml, mockito.all;
+    opens DataAccessLayer.Local to javafx.fxml;
+    exports Components;
+    opens Components to javafx.fxml;
 }

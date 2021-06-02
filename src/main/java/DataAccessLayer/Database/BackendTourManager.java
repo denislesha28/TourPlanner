@@ -1,7 +1,7 @@
 package DataAccessLayer.Database;
 
 import DataAccessLayer.Local.LocalTourList;
-import DataAccessLayer.Local.Tour;
+import Components.Tour;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -146,6 +146,16 @@ public class BackendTourManager {
             searchedTours.add(resultSet.getString("name"));
         }
         return searchedTours;
+    }
+
+    public void updateTourDistance(String tourName,Double distance) throws SQLException {
+        String updateSql= "update \"TourPlanner\".tour " +
+                "set \"tourDistance\" = ? " +
+                "where name = ?;";
+        PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(updateSql);
+        preparedStatement.setDouble(1,distance);
+        preparedStatement.setString(2,tourName);
+        preparedStatement.executeUpdate();
     }
 
 

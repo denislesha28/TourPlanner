@@ -1,6 +1,6 @@
 package BusinessLayer;
 import DataAccessLayer.Model;
-import DataAccessLayer.Local.Tour;
+import Components.Tour;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.PdfWriter;

@@ -1,6 +1,6 @@
 package BusinessLayer;
 
-import DataAccessLayer.Local.Tour;
+import Components.Tour;
 import DataAccessLayer.Model;
 
 import java.io.IOException;
@@ -53,5 +53,9 @@ public class TourListManager {
 
     public List<String> fullTextSearch(String input) throws SQLException {
         return model.fullTextSearch(input);
+    }
+
+    public void updateTourDistance(String tourName,Double distance) throws SQLException {
+        model.updateDistance(tourName,distance);
     }
 }

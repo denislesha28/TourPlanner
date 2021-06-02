@@ -1,5 +1,6 @@
 package DataAccessLayer.Local;
 
+import Components.Tour;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
@@ -122,6 +123,15 @@ public class LocalTourList {
         }
         log.debug("Tour was not found in local List");
         return false;
+    }
+
+    public void updateTourDistance(String tourName,Double distance){
+        for(Tour tour : tours){
+            if(tourName.equals(tour.getTourName())){
+                tour.setTourDistance(distance);
+            }
+
+        }
     }
 
 

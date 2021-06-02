@@ -41,12 +41,15 @@ public class PrimaryController implements Initializable {
     public TextField toDestination;
     public ImageView tourImage;
     public Tab routeTab;
+    private UserInputValidator userInputValidator;
 
 
     public PrimaryController() throws SQLException, IOException {
         System.out.println("Controller generated");
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
         log = LogManager.getLogger(PrimaryController.class);
+        userInputValidator = new UserInputValidator();
+
     }
 
 
@@ -68,7 +71,11 @@ public class PrimaryController implements Initializable {
     public void updateTour(ActionEvent actionEvent)throws SQLException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         System.out.println("Controller updating Tour "+item);
-        viewModel.updateTour(item);
+        if(userInputValidator.validateInputText(this.tourName) && userInputValidator.validateInputText(this.routeInformation)
+        && userInputValidator.validateInputText(this.tourDescription)) {
+            viewModel.updateTour(item);
+        }
+
     }
 
     @FXML
@@ -86,7 +93,10 @@ public class PrimaryController implements Initializable {
 
     @FXML
     public void displayTourRoute(Event event) throws URISyntaxException, IOException, ExecutionException, InterruptedException, SQLException {
-        if(routeTab.isSelected()) {
+        if (routeTab==null) {
+            return;
+        }
+        if (routeTab.isSelected()) {
             String item = (String) tourList.getSelectionModel().getSelectedItem();
             viewModel.displayTourRoute(item);
         }
