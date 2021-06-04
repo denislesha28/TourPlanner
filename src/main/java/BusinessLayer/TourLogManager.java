@@ -40,4 +40,8 @@ public class TourLogManager {
     public TourLog getTourLog (String timestamp) throws SQLException {
         return model.getTourLog(timestamp);
     }
+
+    public void updateTourLog (String timestamp, TourLog tourLog) throws SQLException {
+        model.updateTourLog(timestamp,tourLog);
+    }
 }

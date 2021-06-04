@@ -26,8 +26,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 <VBox maxHeight="1080.0" maxWidth="1920.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.PrimaryController">
    <children>
       <MenuBar>
@@ -277,7 +275,7 @@
                                                          </font>
                                                       </Label>
                                                       <TextField fx:id="logAuthor" GridPane.columnIndex="2" />
-                                                      <TextField fx:id="logDistance" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="logDistance" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                                       <TextArea fx:id="logReport" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
                                                          <GridPane.margin>
                                                             <Insets bottom="10.0" top="10.0" />
@@ -318,8 +316,8 @@
                                                             <Font size="15.0" />
                                                          </font>
                                                       </Label>
-                                                      <ChoiceBox fx:id="logRating" prefHeight="25.0" prefWidth="72.0" GridPane.columnIndex="2" GridPane.rowIndex="3" value="0">
-                                                      </ChoiceBox >
+                                                      <ChoiceBox fx:id="logRating" prefHeight="25.0" prefWidth="72.0" value="0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                                      </ChoiceBox>
                                                    </children>
                                                    <padding>
                                                       <Insets bottom="5.0" />
@@ -357,7 +355,7 @@
                                     <Insets bottom="10.0" top="10.0" />
                                  </VBox.margin>
                               </HBox>
-                              <TableView fx:id="tourLogsTable" maxHeight="1.7976931348623157E308" onMouseClicked="#displayTourLog" maxWidth="1.7976931348623157E308" minHeight="20.0" prefHeight="389.0" prefWidth="1641.0" VBox.vgrow="ALWAYS">
+                              <TableView fx:id="tourLogsTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="20.0" onMouseClicked="#displayTourLog" prefHeight="389.0" prefWidth="1641.0" VBox.vgrow="ALWAYS">
                                 <columns>
                                     <TableColumn fx:id="authorColumn" minWidth="7.0" prefWidth="94.0" text="Author" />
                                   <TableColumn fx:id="dateColumn" minWidth="7.0" prefWidth="130.0" text="Date" />

@@ -16,7 +16,7 @@ public class UserInputValidationTest {
         // Arrange
         String numInput = "1234";
         // Act
-        boolean validation = userInputValidator.validateText(numInput);
+        boolean validation = userInputValidator.validateNecessaryText(numInput);
         // Assert
         Assert.assertEquals(false,validation);
     }
@@ -26,7 +26,7 @@ public class UserInputValidationTest {
         // Arrange
         String allowedChars = "@@@@####__";
         // Act
-        boolean validation = userInputValidator.validateText(allowedChars);
+        boolean validation = userInputValidator.validateNecessaryText(allowedChars);
         // Assert
         Assert.assertEquals(true,validation);
     }
@@ -36,7 +36,7 @@ public class UserInputValidationTest {
         // Arrange
         String unAllowedChars = "ääöäöäööäü";
         // Act
-        boolean validation = userInputValidator.validateText(unAllowedChars);
+        boolean validation = userInputValidator.validateNecessaryText(unAllowedChars);
         // Assert
         Assert.assertEquals(false,validation);
     }
@@ -46,7 +46,7 @@ public class UserInputValidationTest {
         // Arrange
         String unAllowedChars = "[]^^?$§\"!|<;>%";
         // Act
-        boolean validation = userInputValidator.validateText(unAllowedChars);
+        boolean validation = userInputValidator.validateNecessaryText(unAllowedChars);
         // Assert
         Assert.assertEquals(false,validation);
     }

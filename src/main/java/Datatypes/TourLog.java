@@ -12,6 +12,7 @@ public class TourLog {
     String remarks;
     int joule;
     String weather;
+    String timestamp;
 
     public TourLog(){
         this.logReport = "";
@@ -39,6 +40,14 @@ public class TourLog {
         this.remarks = specialRemarks;
         this.joule = joule;
         this.weather = weather;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getLogReport() {

@@ -2,6 +2,7 @@ package DataAccessLayer.Database;
 
 import DataAccessLayer.Local.LocalTourList;
 import Datatypes.Tour;
+import Datatypes.TourLog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,11 +17,14 @@ import java.util.List;
 public class BackendTourManager {
     IDAL dbInstance;
     private final Logger log;
+    BackendTourLogManager tourLogManager;
 
     public BackendTourManager() throws SQLException, IOException {
         dbInstance = DALFactory.getDAL();
         log = LogManager.getLogger(BackendTourManager.class);
+        tourLogManager = new BackendTourLogManager();
     }
+
 
     public int createTour(String tourName) throws SQLException {
         String sqlInsert="insert into \"TourPlanner\".tour (\"name\", \"tourDescription\", \"routeInformation\", \"tourDistance\")\n" +
@@ -128,18 +132,24 @@ public class BackendTourManager {
                 "set \"tourToken\" = to_tsvector(?) " +
                 "where name = ?;";
         PreparedStatement preparedStatement = dbInstance.getConnection().prepareStatement(insertTourText);
-        preparedStatement.setString(1,tourDetails.getTourName()+" "+tourDetails.getTourDistance()
-        +" "+tourDetails.getTourDescription()+" "+tourDetails.getRouteInformation()+" "+tourDetails.getTourTo()
-        +" "+tourDetails.getTourFrom());
+        String allTourText = tourDetails.getTourName()+" "+tourDetails.getTourDistance()
+                +" "+tourDetails.getTourDescription()+" "+tourDetails.getRouteInformation()+" "+tourDetails.getTourTo()
+                +" "+tourDetails.getTourFrom();
+        preparedStatement.setString(1,allTourText);
         preparedStatement.setString(2,tourName);
         preparedStatement.executeUpdate();
     }
 
     public List<String> getToursFromSearch(String input) throws SQLException {
-        String selectSql="SELECT name FROM \"TourPlanner\".tour " +
-                "WHERE tour.\"tourToken\" @@ to_tsquery(?);";
+        String selectSql="SELECT name FROM \"TourPlanner\".tour as t\n" +
+                "join \"TourPlanner\".\"tourLog\" as tL\n" +
+                "on t.\"id\" = tl.\"tourID\"\n" +
+                "WHERE  t.\"tourToken\"  @@ to_tsquery(?)\n" +
+                "OR tl.\"tourLogToken\" @@ to_tsquery(?);";
         PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(selectSql);
         preparedStatement.setString(1,input);
+        preparedStatement.setString(2,input);
+
         ResultSet resultSet=preparedStatement.executeQuery();
         List<String> searchedTours = new ArrayList<String>();
         while (resultSet.next()){

@@ -162,5 +162,10 @@ public class Model {
         return backendTourLogManager.getTourLog(timestamp);
     }
 
+    public void updateTourLog(String timestamp,TourLog tourLog) throws SQLException {
+        backendTourLogManager.updateTourLog(timestamp,tourLog);
+        backendTourLogManager.updateTourLogVector(timestamp,tourLog);
+    }
+
 
 }

@@ -10,6 +10,7 @@ import com.itextpdf.text.DocumentException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -59,7 +60,6 @@ public class MainViewModel {
 
     private final ObjectProperty<javafx.scene.image.Image> tourImage = new SimpleObjectProperty<>();
     private final ObjectProperty<ObservableList<TourLog>> tourLogsTable = new SimpleObjectProperty<>();
-    private ObjectProperty<String> tourRating = new SimpleObjectProperty<>();
 
 
 
@@ -321,9 +321,27 @@ public class MainViewModel {
                 logRemarks.set(tourLog.getRemarks());
                 logJoule.set(String.valueOf(tourLog.getJoule()));
                 logWeather.set(tourLog.getWeather());
-
+                logSpeed.set(String.valueOf(tourLog.getAvgSpeed()));
             }
         }
+    }
+
+    public void updateTourLog(String item,String timestamp,int rating) throws SQLException {
+        if (item.equals("")){
+            return;
+        }
+        TourLog tourLog = new TourLog();
+        tourLog.setAuthor(logAuthor.get());
+        tourLog.setLogReport(logReport.get());
+        tourLog.setTraveledDistance(Double.valueOf(logDistance.get()));
+        tourLog.setDuration(Double.valueOf(logDuration.get()));
+        tourLog.setRemarks(logRemarks.get());
+        tourLog.setJoule(Integer.valueOf(logJoule.get()));
+        tourLog.setWeather(logWeather.get());
+        tourLog.setRating(rating);
+        tourLog.setAvgSpeed(Double.valueOf(logSpeed.get()));
+        tourLogManager.updateTourLog(timestamp,tourLog);
+        getAllTourLogs(item);
     }
 
 

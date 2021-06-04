@@ -1,33 +1,92 @@
 package View;
 
+import Datatypes.InputTypes;
 import javafx.scene.control.TextInputControl;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserInputValidator {
-    final String regexTourInput = "(([A-Z])|([a-z])|([@#]))+([0-9])*|[\\&\\.\\, ]+";
-    final Pattern tourPattern = Pattern.compile(regexTourInput, Pattern.MULTILINE);
+    final String necessaryInput = "(([A-Z])|([a-z])|([@#]))+([0-9])*|[\\&\\.\\, ]+";
+    final String unNecessaryInput = "^(.?)$|(([A-Z])|([a-z])|([@#]))*([0-9])*|[\\&\\.\\, ]+";
+    final String numberInput = "([0-9])+|((\\.)([0-9]))+";
+    final Pattern necessaryPattern = Pattern.compile(necessaryInput, Pattern.MULTILINE);
+    final Pattern unNecessaryPattern = Pattern.compile(unNecessaryInput, Pattern.MULTILINE);
+    final Pattern numberPattern = Pattern.compile(numberInput, Pattern.MULTILINE);
     int minCharCount = 3;
 
-    public boolean validateInputText(TextInputControl textInput){
-        if(validateText(textInput.getText())){
-            textInput.setStyle("");
-            textInput.setPromptText(" ");
-            return true;
+
+    public boolean validateInputText(TextInputControl textInput, InputTypes inputType){
+        if(inputType==InputTypes.MUST){
+            if(validateNecessaryText(textInput.getText())){
+                clearTextStyle(textInput);
+                return true;
+            }
+            setTextErrorStyle(textInput);
+            return false;
         }
-        textInput.setStyle("-fx-border-color: #e74c3c ; -fx-border-width: 2px ; -fx-border-radius: 2px;  ");
-        String errorText = textInput.getText()+" ----- not enough characters, name is too short or not allowed characters";
-        textInput.setText("");
-        textInput.setPromptText(errorText);
-        return false;
+        else if(inputType==InputTypes.OPTIONAL){
+            if(validateUnNecessaryText(textInput.getText())){
+                clearTextStyle(textInput);
+                return true;
+            }
+            setTextErrorStyle(textInput);
+            return false;
+        }
+        else if(inputType==InputTypes.NUMBER){
+            if(validateNumberText(textInput.getText())){
+                clearTextStyle(textInput);
+                return true;
+            }
+            setTextErrorStyle(textInput);
+            return false;
+        }
+        return true;
     }
 
-    public boolean validateText(String text){
-        Matcher matcher = tourPattern.matcher(text);
+
+    public boolean validateNecessaryText(String text){
+        if (text==null){
+            return false;
+        }
+        Matcher matcher = necessaryPattern.matcher(text);
         if(matcher.find() && text.length() >= minCharCount){
             return true;
         }
         return false;
+    }
+
+    public boolean validateUnNecessaryText(String text){
+        if (text==null){
+            text=" ";
+        }
+        Matcher matcher = unNecessaryPattern.matcher(text);
+        if(matcher.find()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean validateNumberText(String text){
+        if (text==null){
+            text="0";
+        }
+        Matcher matcher = numberPattern.matcher(text);
+        if(matcher.find()){
+            return true;
+        }
+        return false;
+    }
+
+    private void setTextErrorStyle(TextInputControl textInput){
+        textInput.setStyle("-fx-border-color: #e74c3c ; -fx-border-width: 2px ; -fx-border-radius: 2px;  ");
+        String errorText = textInput.getText()+" ----- not enough characters, text is too short or not allowed characters";
+        textInput.setText("");
+        textInput.setPromptText(errorText);
+    }
+
+    private void clearTextStyle(TextInputControl textInput){
+        textInput.setStyle("");
+        textInput.setPromptText(" ");
     }
 }

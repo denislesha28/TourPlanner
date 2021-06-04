@@ -792,7 +792,7 @@ false YEKT
 false Z
 false Zulu
 </TimeZones>
-      <StartupTime>1622721297</StartupTime>
+      <StartupTime>1622844181</StartupTime>
     </root>
     <database id="2" parent="1" name="TourPlanner">
       <ObjectId>16394</ObjectId>
@@ -808,7 +808,7 @@ false Zulu
 13158||-9223372036854775808|U|G
 13158||10|U|G</Grants>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>776</IntrospectionStateNumber>
+      <IntrospectionStateNumber>847</IntrospectionStateNumber>
       <Current>1</Current>
       <Relations>sequence|table|16396|16398|1
 sequence|table|16433|16414|1
@@ -869,7 +869,7 @@ sequence|table|16433|16414|1
       <ObjectId>16395</ObjectId>
       <StateNumber>489</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>777</IntrospectionStateNumber>
+      <IntrospectionStateNumber>848</IntrospectionStateNumber>
     </schema>
     <schema id="16" parent="2" name="information_schema">
       <ObjectId>13158</ObjectId>
@@ -1006,7 +1006,7 @@ sequence|table|16433|16414|1
     <table id="34" parent="15" name="tourLog">
       <ObjectId>16414</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>741</StateNumber>
+      <StateNumber>846</StateNumber>
     </table>
     <column id="35" parent="33" name="id">
       <Position>1</Position>
@@ -1139,7 +1139,8 @@ sequence|table|16433|16414|1
     <column id="52" parent="34" name="rating">
       <Position>6</Position>
       <DataType>integer|0s</DataType>
-      <StateNumber>737</StateNumber>
+      <StateNumber>842</StateNumber>
+      <DefaultExpression>0</DefaultExpression>
       <TypeId>23</TypeId>
     </column>
     <column id="53" parent="34" name="avgSpeed">
@@ -1182,7 +1183,13 @@ sequence|table|16433|16414|1
       <StateNumber>740</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <index id="59" parent="34" name="tourlog_pk">
+    <column id="59" parent="34" name="tourLogToken">
+      <Position>13</Position>
+      <DataType>tsvector|0s</DataType>
+      <StateNumber>846</StateNumber>
+      <TypeId>3614</TypeId>
+    </column>
+    <index id="60" parent="34" name="tourlog_pk">
       <ObjectId>16422</ObjectId>
       <StateNumber>737</StateNumber>
       <ColNames>logID</ColNames>
@@ -1192,14 +1199,14 @@ sequence|table|16433|16414|1
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <key id="60" parent="34" name="tourlog_pk">
+    <key id="61" parent="34" name="tourlog_pk">
       <ObjectId>16423</ObjectId>
       <StateNumber>737</StateNumber>
       <ColNames>logID</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>tourlog_pk</UnderlyingIndexName>
     </key>
-    <foreign-key id="61" parent="34" name="tourlog_tour_id_fk">
+    <foreign-key id="62" parent="34" name="tourlog_tour_id_fk">
       <ObjectId>16424</ObjectId>
       <StateNumber>741</StateNumber>
       <ColNames>tourID</ColNames>

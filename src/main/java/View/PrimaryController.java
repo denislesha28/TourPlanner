@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
+import Datatypes.InputTypes;
 import Datatypes.TourLog;
 import com.itextpdf.text.DocumentException;
 import javafx.beans.property.SimpleListProperty;
@@ -96,9 +97,9 @@ public class PrimaryController implements Initializable {
     public void updateTour(ActionEvent actionEvent)throws SQLException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         System.out.println("Controller updating Tour "+item);
-        boolean tourName = userInputValidator.validateInputText(this.tourName);
-        boolean routeInformation = userInputValidator.validateInputText(this.routeInformation);
-        boolean tourDescription = userInputValidator.validateInputText(this.tourDescription);
+        boolean tourName = userInputValidator.validateInputText(this.tourName, InputTypes.MUST);
+        boolean routeInformation = userInputValidator.validateInputText(this.routeInformation, InputTypes.OPTIONAL);
+        boolean tourDescription = userInputValidator.validateInputText(this.tourDescription, InputTypes.OPTIONAL);
         if(tourName && routeInformation && tourDescription ) {
             viewModel.updateTour(item);
         }
@@ -183,6 +184,18 @@ public class PrimaryController implements Initializable {
 
     @FXML
     public void updateTourLog(ActionEvent actionEvent) throws SQLException {
+        String item=(String) tourList.getSelectionModel().getSelectedItem();
+        String rating = (String) logRating.getValue();
+        boolean logAuthor = userInputValidator.validateInputText(this.logAuthor,InputTypes.MUST);
+        boolean logReport = userInputValidator.validateInputText(this.logReport,InputTypes.MUST);
+        boolean logSpecialRemarks = userInputValidator.validateInputText(this.logRemarks,InputTypes.OPTIONAL);
+        boolean logWeather = userInputValidator.validateInputText(this.logWeather,InputTypes.OPTIONAL);
+        boolean logDistance = userInputValidator.validateInputText(this.logDistance, InputTypes.NUMBER);
+        boolean logDuration = userInputValidator.validateInputText(this.logTotalTime, InputTypes.NUMBER);
+        boolean logSpeed = userInputValidator.validateInputText(this.logSpeed, InputTypes.NUMBER);
+        if(logAuthor && logSpecialRemarks && logReport && logWeather && logDistance && logDuration && logSpeed){
+            viewModel.updateTourLog(item,getTableSelection(),Integer.valueOf(rating));
+        }
 
     }
 
@@ -215,6 +228,9 @@ public class PrimaryController implements Initializable {
     }
 
     private String getTableSelection(){
+        if(tourLogsTable.getSelectionModel().getSelectedCells() == null){
+            return "";
+        }
         TablePosition tablePosition = (TablePosition) tourLogsTable.getSelectionModel().getSelectedCells().get(0);
         int row = tablePosition.getRow();
         TourLog item = (TourLog) tourLogsTable.getItems().get(row);
