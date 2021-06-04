@@ -1,4 +1,4 @@
-package Components;
+package Datatypes;
 
 public class Tour {
 

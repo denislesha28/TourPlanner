@@ -3,19 +3,19 @@ package View;
 import BusinessLayer.MapApiHttpHandler;
 import BusinessLayer.PDFExporter;
 import BusinessLayer.TourListManager;
-import Components.Tour;
+import BusinessLayer.TourLogManager;
+import Datatypes.Tour;
+import Datatypes.TourLog;
 import com.itextpdf.text.DocumentException;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
-import java.util.regex.*;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import org.apache.logging.log4j.LogManager;
@@ -26,12 +26,17 @@ import org.apache.logging.log4j.core.config.Configurator;
 public class MainViewModel {
 
     private TourListManager tourListManager;
+    private TourLogManager tourLogManager;
     private final Logger log;
     PDFExporter pdfExporter=null;
-    MapApiHttpHandler mapApiHttpHandler = new MapApiHttpHandler();
-    UserInputValidator userInputValidator = new UserInputValidator();
-    public ObservableList<String> tourList;
+
+    private ObservableList<String> tourList;
+    private ObservableList<TourLog> tourLogs;
+    private ObservableList<String> tourRatings;
     private ObjectProperty<ObservableList<String>> tourListView;
+
+    MapApiHttpHandler mapApiHttpHandler = new MapApiHttpHandler();
+
     private final StringProperty tourName = new SimpleStringProperty("");
     private final StringProperty tourDistance = new SimpleStringProperty("");
     private final StringProperty tourDescription = new SimpleStringProperty("");
@@ -39,15 +44,33 @@ public class MainViewModel {
     private final StringProperty fromDestination = new SimpleStringProperty("");
     private final StringProperty toDestination = new SimpleStringProperty("");
     private final StringProperty searchField = new SimpleStringProperty("");
+
+    private final StringProperty logAuthor = new SimpleStringProperty("");
+    private final StringProperty logReport = new SimpleStringProperty("");
+    private final StringProperty logDistance = new SimpleStringProperty("");
+    private final StringProperty logDuration = new SimpleStringProperty("");
+
+
+
+    private final StringProperty logSpeed = new SimpleStringProperty("");
+    private final StringProperty logRemarks = new SimpleStringProperty("");
+    private final StringProperty logJoule = new SimpleStringProperty("");
+    private final StringProperty logWeather = new SimpleStringProperty("");
+
     private final ObjectProperty<javafx.scene.image.Image> tourImage = new SimpleObjectProperty<>();
+    private final ObjectProperty<ObservableList<TourLog>> tourLogsTable = new SimpleObjectProperty<>();
+    private ObjectProperty<String> tourRating = new SimpleObjectProperty<>();
+
+
 
     public MainViewModel() throws SQLException, IOException {
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
         log = LogManager.getLogger(MainViewModel.class);
         tourListManager = new TourListManager();
+        tourLogManager = new TourLogManager();
         tourList = FXCollections.observableArrayList(tourListManager.getTours());
         tourListView = new SimpleObjectProperty<>(tourList);
-
+        tourRatings = FXCollections.observableArrayList(new ArrayList<>(List.of("1","2","3","4","5")));
     }
 
     public StringProperty tourNameProperty() {
@@ -85,16 +108,75 @@ public class MainViewModel {
         return searchField;
     }
 
+
+    public StringProperty logAuthorProperty() {
+        return logAuthor;
+    }
+
+
+    public StringProperty logReportProperty() {
+        return logReport;
+    }
+
+
+    public StringProperty logDistanceProperty() {
+        return logDistance;
+    }
+
+    public StringProperty logDurationProperty() {
+        return logDuration;
+    }
+
+
+    public StringProperty logSpeedProperty() {
+        return logSpeed;
+    }
+
+
+
+    public StringProperty logRemarksProperty() {
+        return logRemarks;
+    }
+
+
+
+    public StringProperty logJouleProperty() {
+        return logJoule;
+    }
+
+
+    public StringProperty logWeatherProperty() {
+        return logWeather;
+    }
+
     public ObjectProperty<javafx.scene.image.Image> tourImageProperty(){
         System.out.println("Image init");
         return tourImage;
     }
+
+    public ObjectProperty<ObservableList<TourLog>> tourLogsTableProperty(){
+        System.out.println("TableView init");
+        return tourLogsTable;
+    }
+
+    public ObservableList<String> getTourRatingsList(){
+        return tourRatings;
+    }
+
 
 
     /*public Property tourListProperty() {
         System.out.println("VM: get Tour ListView");
         return tourListView;
     }*/
+
+    public ObservableList<String> getTourList() {
+        return tourList;
+    }
+
+    public ObservableList<TourLog> getTourLogs() {
+        return tourLogs;
+    }
 
     public void addTour() throws SQLException {
         String newTourName=tourListManager.generateTourRandomName();
@@ -202,6 +284,46 @@ public class MainViewModel {
         }
         tourList.clear();
         tourList.addAll(tours);
+    }
+
+    public void addTourLog(String item) throws SQLException {
+        if (item != null){
+            tourLogManager.addTourLog(item);
+            getAllTourLogs(item);
+        }
+    }
+
+    public void deleteTourLog(String item,String tableSelection) throws SQLException {
+        if (tableSelection != null && item != null){
+            tourLogManager.deleteTourLog(tableSelection);
+            getAllTourLogs(item);
+        }
+    }
+
+    public void getAllTourLogs(String item) throws SQLException {
+        if (item != null){
+            tourLogs=FXCollections.observableArrayList(tourLogManager.getAllTourLogs(item));
+            tourLogsTable.set(tourLogs);
+        }
+    }
+
+    public void displayTourLog(String item) throws SQLException {
+        if (item != null){
+            TourLog tourLog = tourLogManager.getTourLog(item);
+            if (tourLog == null){
+                return;
+            }
+            else {
+                logAuthor.set(tourLog.getAuthor());
+                logReport.set(tourLog.getLogReport());
+                logDistance.set(String.valueOf(tourLog.getTraveledDistance()));
+                logDuration.set(String.valueOf(tourLog.getDuration()));
+                logRemarks.set(tourLog.getRemarks());
+                logJoule.set(String.valueOf(tourLog.getJoule()));
+                logWeather.set(tourLog.getWeather());
+
+            }
+        }
     }
 
 

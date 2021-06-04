@@ -1,7 +1,7 @@
 package TestingPackage;
 
 import DataAccessLayer.Model;
-import Components.Tour;
+import Datatypes.Tour;
 import org.junit.Assert;
 import org.junit.Test;
 //import org.mockito.Mock;

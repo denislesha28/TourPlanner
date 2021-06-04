@@ -6,8 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserInputValidator {
-    final String regex = "(([A-Z])|([a-z])|([@#]))+([1-9])*|[\\&\\.\\,  ]+";
-    final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+    final String regexTourInput = "(([A-Z])|([a-z])|([@#]))+([0-9])*|[\\&\\.\\, ]+";
+    final Pattern tourPattern = Pattern.compile(regexTourInput, Pattern.MULTILINE);
     int minCharCount = 3;
 
     public boolean validateInputText(TextInputControl textInput){
@@ -24,7 +24,7 @@ public class UserInputValidator {
     }
 
     public boolean validateText(String text){
-        Matcher matcher = pattern.matcher(text);
+        Matcher matcher = tourPattern.matcher(text);
         if(matcher.find() && text.length() >= minCharCount){
             return true;
         }

@@ -5,18 +5,21 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
+import Datatypes.TourLog;
 import com.itextpdf.text.DocumentException;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,7 +43,29 @@ public class PrimaryController implements Initializable {
     public TextField fromDestination;
     public TextField toDestination;
     public ImageView tourImage;
+
     public Tab routeTab;
+    public TabPane selectionTab;
+    public Tab logTab;
+
+    public TableView tourLogsTable;
+    public TableColumn authorColumn;
+    public TableColumn dateColumn;
+    public TableColumn durationColumn;
+    public TableColumn ratingColumn;
+    public TableColumn remarkColumn;
+    public TableColumn weatherColumn;
+
+    public TextField logAuthor;
+    public TextField logDistance;
+    public TextField logTotalTime;
+    public ChoiceBox logRating;
+    public TextField logSpeed;
+    public TextArea logReport;
+    public TextArea logRemarks;
+    public TextField logWeather;
+    public TextField logJoule;
+
     private UserInputValidator userInputValidator;
 
 
@@ -82,8 +107,15 @@ public class PrimaryController implements Initializable {
 
     @FXML
     public void displayTourInfo(Event event) throws SQLException, URISyntaxException, IOException, ExecutionException, InterruptedException {
-        displayTourDetails(event);
-        displayTourRoute(event);
+        Tab activeTab = selectionTab.getSelectionModel().getSelectedItem();
+        if(activeTab == routeTab){
+            displayTourRoute(event);
+        }
+        else {
+            displayTourDetails(event);
+        }
+        getAllTourLogs(event);
+
     }
 
     @FXML
@@ -119,16 +151,48 @@ public class PrimaryController implements Initializable {
     @FXML
     public void searchTours(ActionEvent actionEvent) throws SQLException {
         viewModel.searchTours();
-
     }
 
+    @FXML
+    public void addTourLog(ActionEvent actionEvent) throws SQLException {
+        String item=(String) tourList.getSelectionModel().getSelectedItem();
+        viewModel.addTourLog(item);
+    }
 
+    @FXML
+    public void deleteTourLog(ActionEvent actionEvent) throws SQLException {
+        String item=(String) tourList.getSelectionModel().getSelectedItem();
+        viewModel.deleteTourLog(item,getTableSelection());
+    }
+
+    @FXML
+    private void getAllTourLogs(Event event) throws SQLException {
+        if (tourLogsTable==null) {
+            return;
+        }
+        String item=(String) tourList.getSelectionModel().getSelectedItem();
+        viewModel.getAllTourLogs(item);
+    }
+
+    @FXML
+    private void displayTourLog(Event event) throws SQLException {
+        if(logTab.isSelected()) {
+            viewModel.displayTourLog(getTableSelection());
+        }
+    }
+
+    @FXML
+    public void updateTourLog(ActionEvent actionEvent) throws SQLException {
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         log.debug("Binding all fields to mainViewModel");
         System.out.println("Controller init/created");
-        tourList.setItems(viewModel.tourList);
+        tourList.setItems(viewModel.getTourList());
+        initializeLogTable();
+        tourLogsTable.itemsProperty().bindBidirectional(viewModel.tourLogsTableProperty());
         tourName.textProperty().bindBidirectional(viewModel.tourNameProperty());
         tourDistance.textProperty().bindBidirectional(viewModel.tourDistanceProperty());
         tourDescription.textProperty().bindBidirectional(viewModel.tourDescriptionProperty());
@@ -138,12 +202,38 @@ public class PrimaryController implements Initializable {
         tourImage.imageProperty().bindBidirectional(viewModel.tourImageProperty());
         searchField.textProperty().bindBidirectional(viewModel.searchFieldProperty());
 
+        logAuthor.textProperty().bindBidirectional(viewModel.logAuthorProperty());
+        logDistance.textProperty().bindBidirectional(viewModel.logDistanceProperty());
+        logTotalTime.textProperty().bindBidirectional(viewModel.logDurationProperty());
+        logRating.setItems(viewModel.getTourRatingsList());
+        logSpeed.textProperty().bindBidirectional(viewModel.logSpeedProperty());
+        logReport.textProperty().bindBidirectional(viewModel.logReportProperty());
+        logRemarks.textProperty().bindBidirectional(viewModel.logRemarksProperty());
+        logWeather.textProperty().bindBidirectional(viewModel.logWeatherProperty());
+        logJoule.textProperty().bindBidirectional(viewModel.logJouleProperty());
+
     }
 
-    @FXML
-    private void switchToSecondary() throws IOException {
-        App.setRoot("secondary");
+    private String getTableSelection(){
+        TablePosition tablePosition = (TablePosition) tourLogsTable.getSelectionModel().getSelectedCells().get(0);
+        int row = tablePosition.getRow();
+        TourLog item = (TourLog) tourLogsTable.getItems().get(row);
+        // choose the date column
+        TableColumn col = (TableColumn) tourLogsTable.getColumns().get(1);
+        String tourLogName = (String) col.getCellObservableValue(item).getValue();
+        return tourLogName;
     }
+
+    private void initializeLogTable(){
+        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        remarkColumn.setCellValueFactory(new PropertyValueFactory<>("remarks"));
+        weatherColumn.setCellValueFactory(new PropertyValueFactory<>("weather"));
+    }
+
+
 
 
 }

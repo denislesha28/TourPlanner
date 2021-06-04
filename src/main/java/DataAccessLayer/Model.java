@@ -1,8 +1,10 @@
 package DataAccessLayer;
 
+import DataAccessLayer.Database.BackendTourLogManager;
 import DataAccessLayer.Database.BackendTourManager;
 import DataAccessLayer.Local.LocalTourList;
-import Components.Tour;
+import Datatypes.Tour;
+import Datatypes.TourLog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +19,7 @@ public class Model {
     private final Logger log = LogManager.getLogger(Model.class);;
     private BackendTourManager backendTourManager;
     private LocalTourList localTourList;
+    private BackendTourLogManager backendTourLogManager;
     private static Model instance=null;
     private static Model testInstance=null;
 
@@ -25,6 +28,7 @@ public class Model {
         localTourList = LocalTourList.getTourListManagerInstance();
         backendTourManager=new BackendTourManager();
         backendTourManager.getAllToursFromBackend(localTourList);
+        backendTourLogManager = new BackendTourLogManager();
         log.debug("Tours pulled from Database and saved locally");
         log.debug("DAL Layer logic instantiated");
         //tours=new ArrayList<>();
@@ -142,6 +146,21 @@ public class Model {
         backendTourManager.updateTourDistance(tourName,distance);
     }
 
+    public void addTourLog(String tourName) throws SQLException {
+        backendTourLogManager.addTourLog(backendTourManager.getTourID(tourName));
+    }
+
+    public void deleteTourLog(String timestamp) throws SQLException {
+        backendTourLogManager.deleteTourLog(timestamp);
+    }
+
+    public List<TourLog> getAllTourLogs(String tourName) throws SQLException {
+        return backendTourLogManager.getAllTourLogs(backendTourManager.getTourID(tourName));
+    }
+
+    public TourLog getTourLog(String timestamp) throws SQLException {
+        return backendTourLogManager.getTourLog(timestamp);
+    }
 
 
 }

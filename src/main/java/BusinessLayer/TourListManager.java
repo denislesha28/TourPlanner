@@ -1,11 +1,11 @@
 package BusinessLayer;
 
-import Components.Tour;
-import DataAccessLayer.Database.DALFactory;
+import Datatypes.Tour;
 import DataAccessLayer.Model;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 public class TourListManager {
@@ -50,6 +50,9 @@ public class TourListManager {
     }
 
     public List<String> getTours(){
+        if(model.getTours()==null){
+            return Collections.emptyList();
+        }
         return model.getTours();
     }
 

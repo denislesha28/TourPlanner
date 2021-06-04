@@ -1,7 +1,7 @@
 package DataAccessLayer.Database;
 
 import DataAccessLayer.Local.LocalTourList;
-import Components.Tour;
+import Datatypes.Tour;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -158,6 +158,17 @@ public class BackendTourManager {
         preparedStatement.executeUpdate();
     }
 
+    public int getTourID(String tourName) throws SQLException {
+        String selectSql="SELECT id FROM \"TourPlanner\".tour\n" +
+                "WHERE tour.\"name\" = ?;";
+        PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(selectSql);
+        preparedStatement.setString(1,tourName);
+        ResultSet resultSet=preparedStatement.executeQuery();
+        while (resultSet.next()){
+            return resultSet.getInt("id");
+        }
+        return 0;
+    }
 
 
 }

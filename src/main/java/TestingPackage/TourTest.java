@@ -1,6 +1,6 @@
 package TestingPackage;
 
-import Components.Tour;
+import Datatypes.Tour;
 import org.junit.Assert;
 import org.junit.Test;
 

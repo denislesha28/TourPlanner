@@ -100,7 +100,7 @@ public class MapApiHttpHandler {
 
         if(pdfInstance == null) {
 
-            String requestUrl = "https://www.mapquestapi.com/staticmap/v5/map?key=" + key + "&size=700,400" +
+            String requestUrl = "https://www.mapquestapi.com/staticmap/v5/map?key=" + key + "&size=1000,400" +
                     "&defaultMarker=marker-purple-sm&zoom=11&session=" + sessionId + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
             URI uri = new URI(requestUrl);
             HttpRequest request = HttpRequest.newBuilder()

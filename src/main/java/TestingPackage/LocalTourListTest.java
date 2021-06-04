@@ -1,7 +1,7 @@
 package TestingPackage;
 
 import DataAccessLayer.Local.LocalTourList;
-import Components.Tour;
+import Datatypes.Tour;
 import org.junit.Assert;
 import org.junit.Test;
 

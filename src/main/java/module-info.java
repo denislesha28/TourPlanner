@@ -29,6 +29,6 @@ module org.openjfx {
     opens DataAccessLayer.Database to javafx.fxml;
     exports DataAccessLayer.Local;
     opens DataAccessLayer.Local to javafx.fxml;
-    exports Components;
-    opens Components to javafx.fxml;
+    exports Datatypes;
+    opens Datatypes to javafx.fxml;
 }

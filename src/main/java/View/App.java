@@ -25,11 +25,10 @@ public class App extends Application {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
         double height = screenSize.getHeight()-70;
-        // todo set layout based on screen size
+        // set layout based on screen size
         scene = new Scene(loadFXML("mainUI_v2"), width  , height);
         stage.setScene(scene);
         stage.show();
-        PDFExporter pdfExporter = new PDFExporter();
     }
 
     static void setRoot(String fxml) throws IOException {
