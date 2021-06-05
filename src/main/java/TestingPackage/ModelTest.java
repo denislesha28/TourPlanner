@@ -1,5 +1,6 @@
 package TestingPackage;
 
+import DataAccessLayer.Exceptions.ModelOperationException;
 import DataAccessLayer.Model;
 import Datatypes.Tour;
 import org.junit.Assert;
@@ -17,7 +18,7 @@ import java.util.List;
 public class ModelTest {
 
     @Test
-    public void testToursCreation() throws SQLException, IOException {
+    public void testToursCreation() throws ModelOperationException {
         //Arrange
         Model dataModelBackend = Model.getModelInstance();
         String tourTest="TestTour";
@@ -52,7 +53,7 @@ public class ModelTest {
 
 /* todo after improving LocalTourList */
     @Test
-    public void testTourUpdate() throws SQLException, IOException {
+    public void testTourUpdate() throws ModelOperationException {
         //Arrange
         Model dataModelBackend = Model.getModelInstance();
         String tourTest="TestTour";
@@ -71,7 +72,7 @@ public class ModelTest {
     }
 
     @Test
-    public void testGetTourRoute() throws SQLException, IOException {
+    public void testGetTourRoute() throws ModelOperationException {
         //Arrange
         Model dataModelBackend = Model.getModelInstance();
         String tourTest="TestTour";
@@ -86,7 +87,7 @@ public class ModelTest {
     }
 
     @Test
-    public void testTourDistanceUpdate() throws SQLException, IOException {
+    public void testTourDistanceUpdate() throws ModelOperationException {
         //Arrange
         Model dataModelBackend = Model.getModelInstance();
         String tourTest="TestTour";

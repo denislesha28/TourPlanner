@@ -1,5 +1,7 @@
 package BusinessLayer;
 
+import BusinessLayer.Exceptions.TourLogManagerException;
+import DataAccessLayer.Exceptions.ModelOperationException;
 import DataAccessLayer.Model;
 import Datatypes.Tour;
 import Datatypes.TourLog;
@@ -12,8 +14,12 @@ import java.util.List;
 public class TourLogManager {
     private Model model;
 
-    public TourLogManager() throws SQLException, IOException {
-        model=Model.getModelInstance();
+    public TourLogManager() throws  TourLogManagerException {
+        try {
+            model=Model.getModelInstance();
+        } catch (ModelOperationException e) {
+            throw new TourLogManagerException("Could not get DAL ModelInterface",e);
+        }
     }
 
     public TourLogManager(boolean test) {
@@ -22,26 +28,46 @@ public class TourLogManager {
         }
     }
 
-    public void addTourLog(String tourName) throws SQLException {
-        model.addTourLog(tourName);
-    }
-
-    public void deleteTourLog(String timestamp) throws SQLException {
-        model.deleteTourLog(timestamp);
-    }
-
-    public List<TourLog> getAllTourLogs(String tourName) throws SQLException {
-        if(model.getAllTourLogs(tourName)==null){
-            return Collections.emptyList();
+    public void addTourLog(String tourName) throws TourLogManagerException {
+        try {
+            model.addTourLog(tourName);
+        } catch (ModelOperationException e) {
+            throw new TourLogManagerException("Could not add TourLog",e);
         }
-        return model.getAllTourLogs(tourName);
     }
 
-    public TourLog getTourLog (String timestamp) throws SQLException {
-        return model.getTourLog(timestamp);
+    public void deleteTourLog(String timestamp) throws TourLogManagerException {
+        try {
+            model.deleteTourLog(timestamp);
+        } catch (ModelOperationException e) {
+            throw new TourLogManagerException("Could not delete TourLog",e);
+        }
     }
 
-    public void updateTourLog (String timestamp, TourLog tourLog) throws SQLException {
-        model.updateTourLog(timestamp,tourLog);
+    public List<TourLog> getAllTourLogs(String tourName) throws TourLogManagerException {
+        try {
+            if(model.getAllTourLogs(tourName)==null){
+                return Collections.emptyList();
+            }
+            return model.getAllTourLogs(tourName);
+        } catch (ModelOperationException e) {
+            throw new TourLogManagerException("Could not get All TourLogs for selected Tour",e);
+        }
+    }
+
+    public TourLog getTourLog (String timestamp) throws TourLogManagerException {
+        try {
+            return model.getTourLog(timestamp);
+        } catch (ModelOperationException e) {
+            throw new TourLogManagerException("Could not get TourLog",e);
+        }
+    }
+
+    public void updateTourLog (String timestamp, TourLog tourLog) throws TourLogManagerException {
+        try {
+            model.updateTourLog(timestamp,tourLog);
+        } catch (ModelOperationException e) {
+            throw new TourLogManagerException("Could not update TourLog",e);
+        }
     }
 }

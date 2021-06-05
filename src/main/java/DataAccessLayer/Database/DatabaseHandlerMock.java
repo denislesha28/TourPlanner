@@ -1,5 +1,6 @@
 package DataAccessLayer.Database;
 
+import DataAccessLayer.Exceptions.DatabaseInstanceException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -15,14 +16,19 @@ public class DatabaseHandlerMock implements IDAL {
     private Connection connection;
     private static DatabaseHandlerMock instance=null;
 
-    private DatabaseHandlerMock() throws SQLException, IOException {
+    private DatabaseHandlerMock() throws DatabaseInstanceException {
         // List of connection parameters
         connectionData= new HashMap<String, String>();
         connection=null;
         // ObjectMapper to conver json lines to String
         ObjectMapper mapper = new ObjectMapper();
         // convert JSON file to map
-        Map<?, ?> readValues = mapper.readValue(Paths.get("config.json").toFile(), Map.class);
+        Map<?, ?> readValues = null;
+        try {
+            readValues = mapper.readValue(Paths.get("config.json").toFile(), Map.class);
+        } catch (IOException e) {
+            throw new DatabaseInstanceException("could not read config file in MockDB Instance",e);
+        }
         // read lines into connection Data
         for (Map.Entry<?, ?> entry : readValues.entrySet()) {
             connectionData.put(entry.getKey().toString(),entry.getValue().toString());
@@ -33,11 +39,11 @@ public class DatabaseHandlerMock implements IDAL {
     }
 
     @Override
-    public void initialize() throws SQLException {
+    public void initialize()  {
         System.out.println("Mock Database Connected");
     }
 
-    public static DatabaseHandlerMock getDatabaseInstance() throws SQLException, IOException {
+    public static DatabaseHandlerMock getDatabaseInstance() throws DatabaseInstanceException {
         if(instance==null){
             instance=new DatabaseHandlerMock();
         }

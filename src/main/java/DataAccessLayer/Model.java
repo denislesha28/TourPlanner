@@ -2,6 +2,10 @@ package DataAccessLayer;
 
 import DataAccessLayer.Database.BackendTourLogManager;
 import DataAccessLayer.Database.BackendTourManager;
+import DataAccessLayer.Exceptions.DatabaseInstanceException;
+import DataAccessLayer.Exceptions.ModelOperationException;
+import DataAccessLayer.Exceptions.TourDatabaseOperationException;
+import DataAccessLayer.Exceptions.TourLogDatabaseOperationException;
 import DataAccessLayer.Local.LocalTourList;
 import Datatypes.Tour;
 import Datatypes.TourLog;
@@ -24,11 +28,19 @@ public class Model {
     private static Model testInstance=null;
 
 
-    private Model() throws SQLException, IOException {
+    private Model() throws ModelOperationException {
         localTourList = LocalTourList.getTourListManagerInstance();
-        backendTourManager=new BackendTourManager();
-        backendTourManager.getAllToursFromBackend(localTourList);
-        backendTourLogManager = new BackendTourLogManager();
+        try {
+            backendTourManager=new BackendTourManager();
+            backendTourManager.getAllToursFromBackend(localTourList);
+            backendTourLogManager = new BackendTourLogManager();
+
+        } catch (TourLogDatabaseOperationException | TourDatabaseOperationException e) {
+            throw new ModelOperationException("couldn't instantiate TourLogManager for Model",e);
+        } catch (DatabaseInstanceException e) {
+            throw new ModelOperationException("couldn't get DatabaseInstance for Model",e);
+        }
+
         log.debug("Tours pulled from Database and saved locally");
         log.debug("DAL Layer logic instantiated");
         //tours=new ArrayList<>();
@@ -42,7 +54,7 @@ public class Model {
     }
 
 
-    public static Model getModelInstance() throws SQLException, IOException {
+    public static Model getModelInstance() throws ModelOperationException {
         if(instance==null){
             instance=new Model();
         }
@@ -62,44 +74,63 @@ public class Model {
         return localTourList.getToursUI();
     }
 
-    public List<Tour> getToursDetails(){
+    public List<Tour> getAllToursDetails(){
         return localTourList.getTours();
     }
 
-    public void addTour(String tourName) throws SQLException {
+    public void addTour(String tourName) throws ModelOperationException{
         localTourList.addTour(new Tour(tourName));
-        backendTourManager.createTour(tourName);
+        try {
+            backendTourManager.createTour(tourName);
+        } catch (TourDatabaseOperationException e) {
+            throw new ModelOperationException("couldn't get add Tour",e);
+        }
         log.debug("DAL Layer add Tour in Backend");
     }
 
-    public void deleteTour(String tourName) throws SQLException {
+    public void deleteTour(String tourName) throws ModelOperationException {
         if (tourName==null){
             return;
         }
         localTourList.deleteTour(tourName);
-        backendTourManager.deleteTour(tourName);
-        log.debug("DAL Layer delete Tour in Backend");
+        try {
+            backendTourManager.deleteTour(tourName);
+            log.debug("DAL Layer delete Tour in Backend");
+        } catch (TourDatabaseOperationException throwables) {
+            throw new ModelOperationException("couldn't delete Tour",throwables);
+        }
+
     }
 
-    public Tour getTourDetails(int tourID,String tourName) throws SQLException {
+    public Tour getTourDetails(int tourID,String tourName) throws ModelOperationException {
         Tour returnTour= localTourList.getTour(tourName);
         if(returnTour != null){
             return returnTour;
         }
         log.debug("DAL Layer return TourDetails unconditionally");
-        return backendTourManager.getTourDetails(tourID,tourName);
+        try {
+            return backendTourManager.getTourDetails(tourID,tourName);
+        } catch (TourDatabaseOperationException throwables) {
+            throw new ModelOperationException("couldn't get tourDetails",throwables);
+        }
+
 
     }
 
     public void updateTour(String actualTourName,String tourDescription, String desTourName
-            ,String routeInformation, double tourDistance) throws SQLException {
-        backendTourManager.updateTour(actualTourName,tourDescription,desTourName,
-                routeInformation,tourDistance);
-        localTourList.updateTour(actualTourName,tourDescription,desTourName,
-                routeInformation,tourDistance);
-        log.debug("DAL Layer update TourDetails unconditionally");
-        backendTourManager.updateTourVectorToken(desTourName);
-        log.debug("Update Vector for Tour Indexing");
+            ,String routeInformation, double tourDistance) throws ModelOperationException {
+        try {
+            backendTourManager.updateTour(actualTourName,tourDescription,desTourName,
+                    routeInformation,tourDistance);
+            localTourList.updateTour(actualTourName,tourDescription,desTourName,
+                    routeInformation,tourDistance);
+            log.debug("DAL Layer update TourDetails unconditionally");
+            backendTourManager.updateTourVectorToken(desTourName);
+            log.debug("Update Vector for Tour Indexing");
+        } catch (TourDatabaseOperationException throwables) {
+            throw new ModelOperationException("couldn't get update TourAttributes",throwables);
+        }
+
     }
 
     public String generateTourRandomName() {
@@ -128,43 +159,78 @@ public class Model {
         return generatedString;
     }
 
-    public void updateTourRoute(String tourName,String from,String to) throws SQLException {
+    public void updateTourRoute(String tourName,String from,String to) throws ModelOperationException {
         localTourList.updateTourRoute(tourName,from,to);
-        backendTourManager.updateTourRoute(tourName,from,to);
-        log.debug("DAL Layer update TourRoute unconditionally");
-        backendTourManager.updateTourVectorToken(tourName);
-        log.debug("Update Vector for Tour Indexing");
+        try {
+            backendTourManager.updateTourRoute(tourName,from,to);
+            log.debug("DAL Layer update TourRoute unconditionally");
+            backendTourManager.updateTourVectorToken(tourName);
+            log.debug("Update Vector for Tour Indexing");
+
+        } catch (TourDatabaseOperationException throwables) {
+            throw new ModelOperationException("couldn't get update TourRoute",throwables);
+        }
+
     }
 
-    public List<String> fullTextSearch(String input) throws SQLException {
-        List<String> searchedTours = backendTourManager.getToursFromSearch(input);
-        return searchedTours;
+    public List<String> fullTextSearch(String input) throws ModelOperationException {
+        List<String> searchedTours = null;
+        try {
+            return searchedTours = backendTourManager.getToursFromSearch(input);
+        } catch (TourDatabaseOperationException throwables) {
+            throw new ModelOperationException("couldn't get searched Tours",throwables);
+        }
     }
 
-    public void updateDistance(String tourName,Double distance) throws SQLException {
+    public void updateDistance(String tourName,Double distance) throws ModelOperationException {
         localTourList.updateTourDistance(tourName,distance);
-        backendTourManager.updateTourDistance(tourName,distance);
+        try {
+            backendTourManager.updateTourDistance(tourName,distance);
+        } catch (TourDatabaseOperationException throwables) {
+            throw new ModelOperationException("couldn't update TourDistance for selected TourLog",throwables);
+        }
     }
 
-    public void addTourLog(String tourName) throws SQLException {
-        backendTourLogManager.addTourLog(backendTourManager.getTourID(tourName));
+    public void addTourLog(String tourName) throws ModelOperationException {
+        try {
+            backendTourLogManager.addTourLog(backendTourManager.getTourID(tourName));
+        } catch (TourLogDatabaseOperationException | TourDatabaseOperationException e) {
+            throw new ModelOperationException("couldn't add TourLog Model",e);
+        }
     }
 
-    public void deleteTourLog(String timestamp) throws SQLException {
-        backendTourLogManager.deleteTourLog(timestamp);
+    public void deleteTourLog(String timestamp) throws ModelOperationException {
+        try {
+            backendTourLogManager.deleteTourLog(timestamp);
+        } catch (TourLogDatabaseOperationException e) {
+            throw new ModelOperationException("couldn't delete tourLog",e);
+        }
     }
 
-    public List<TourLog> getAllTourLogs(String tourName) throws SQLException {
-        return backendTourLogManager.getAllTourLogs(backendTourManager.getTourID(tourName));
+    public List<TourLog> getAllTourLogs(String tourName) throws ModelOperationException {
+        try {
+            return backendTourLogManager.getAllTourLogs(backendTourManager.getTourID(tourName));
+        } catch (TourLogDatabaseOperationException | TourDatabaseOperationException e) {
+            throw new ModelOperationException("couldn't get all tourLogs for tour",e);
+        }
     }
 
-    public TourLog getTourLog(String timestamp) throws SQLException {
-        return backendTourLogManager.getTourLog(timestamp);
+    public TourLog getTourLog(String timestamp) throws ModelOperationException {
+        try {
+            return backendTourLogManager.getTourLog(timestamp);
+        } catch (TourLogDatabaseOperationException e) {
+           throw new ModelOperationException("couldn't get TourLog Details for selected TourLog",e);
+        }
     }
 
-    public void updateTourLog(String timestamp,TourLog tourLog) throws SQLException {
-        backendTourLogManager.updateTourLog(timestamp,tourLog);
-        backendTourLogManager.updateTourLogVector(timestamp,tourLog);
+    public void updateTourLog(String timestamp,TourLog tourLog) throws ModelOperationException {
+        try {
+            backendTourLogManager.updateTourLog(timestamp,tourLog);
+            backendTourLogManager.updateTourLogVector(timestamp,tourLog);
+        } catch (TourLogDatabaseOperationException e) {
+            throw new ModelOperationException("couldn't update TourLog Details for selected TourLog",e);
+        }
+
     }
 
 

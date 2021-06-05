@@ -2,6 +2,7 @@ package TestingPackage;
 
 import DataAccessLayer.Database.DALFactory;
 import DataAccessLayer.Database.IDAL;
+import DataAccessLayer.Exceptions.DatabaseInstanceException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ import java.util.HashMap;
 
 public class DatabaseHandlerTest {
     @Test
-    public void testSingleInstance() throws SQLException, IOException {
+    public void testSingleInstance() throws DatabaseInstanceException {
         //Arrange
         DALFactory dalFactory=new DALFactory();
         dalFactory.useMock();
@@ -29,7 +30,7 @@ public class DatabaseHandlerTest {
         Assert.assertEquals(true,actualRes);
     }
     @Test
-    public void testGetConnection() throws SQLException, IOException {
+    public void testGetConnection() throws DatabaseInstanceException {
         //Arrange
         DALFactory dalFactory=new DALFactory();
         dalFactory.useMock();
@@ -42,7 +43,7 @@ public class DatabaseHandlerTest {
     }
 
     @Test
-    public void testConnectionData() throws SQLException, IOException {
+    public void testConnectionData() throws DatabaseInstanceException {
         //Arrange
         DALFactory dalFactory=new DALFactory();
         dalFactory.useMock();

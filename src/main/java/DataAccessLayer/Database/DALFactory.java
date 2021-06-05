@@ -1,5 +1,7 @@
 package DataAccessLayer.Database;
 
+import DataAccessLayer.Exceptions.DatabaseInstanceException;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -10,7 +12,7 @@ public class DALFactory {
         useMock=true;
     }
 
-    public static IDAL getDAL() throws SQLException, IOException {
+    public static IDAL getDAL() throws DatabaseInstanceException {
         if(useMock){
             return DatabaseHandlerMock.getDatabaseInstance();
 

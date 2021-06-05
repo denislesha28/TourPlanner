@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
+import BusinessLayer.Exceptions.MapApiHandlerException;
+import BusinessLayer.Exceptions.PDFExporterException;
+import BusinessLayer.Exceptions.TourListManagerException;
+import BusinessLayer.Exceptions.TourLogManagerException;
 import Datatypes.InputTypes;
 import Datatypes.TourLog;
 import com.itextpdf.text.DocumentException;
@@ -70,7 +74,7 @@ public class PrimaryController implements Initializable {
     private UserInputValidator userInputValidator;
 
 
-    public PrimaryController() throws SQLException, IOException {
+    public PrimaryController() throws TourListManagerException, TourLogManagerException, MapApiHandlerException {
         System.out.println("Controller generated");
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
         log = LogManager.getLogger(PrimaryController.class);
@@ -80,13 +84,13 @@ public class PrimaryController implements Initializable {
 
 
     @FXML
-    public void addTour(ActionEvent actionEvent) throws SQLException {
+    public void addTour(ActionEvent actionEvent) throws TourListManagerException {
         System.out.println("Controller generate new Tour");
         viewModel.addTour();
     }
 
     @FXML
-    public void deleteTour(ActionEvent actionEvent)throws SQLException {
+    public void deleteTour(ActionEvent actionEvent) throws TourListManagerException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         System.out.println("Controller deleting Tour "+item);
         viewModel.deleteTour(item);
@@ -94,7 +98,7 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void updateTour(ActionEvent actionEvent)throws SQLException {
+    public void updateTour(ActionEvent actionEvent) throws TourListManagerException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         System.out.println("Controller updating Tour "+item);
         boolean tourName = userInputValidator.validateInputText(this.tourName, InputTypes.MUST);
@@ -107,7 +111,7 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void displayTourInfo(Event event) throws SQLException, URISyntaxException, IOException, ExecutionException, InterruptedException {
+    public void displayTourInfo(Event event) throws TourListManagerException, MapApiHandlerException, TourLogManagerException {
         Tab activeTab = selectionTab.getSelectionModel().getSelectedItem();
         if(activeTab == routeTab){
             displayTourRoute(event);
@@ -120,14 +124,14 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void displayTourDetails(Event actionEvent) throws SQLException {
+    public void displayTourDetails(Event actionEvent) throws TourListManagerException {
         System.out.println("Showing Details for selected Element");
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         viewModel.displayTourAttributes(item);
     }
 
     @FXML
-    public void displayTourRoute(Event event) throws URISyntaxException, IOException, ExecutionException, InterruptedException, SQLException {
+    public void displayTourRoute(Event event) throws TourListManagerException, MapApiHandlerException {
         if (routeTab==null) {
             return;
         }
@@ -138,36 +142,36 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void updateTourRoute(ActionEvent actionEvent) throws SQLException, URISyntaxException, IOException, ExecutionException, InterruptedException {
+    public void updateTourRoute(ActionEvent actionEvent) throws TourListManagerException, MapApiHandlerException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         viewModel.updateTourRoute(item);
     }
 
     @FXML
-    public void exportPdf(ActionEvent actionEvent) throws SQLException, DocumentException, IOException, URISyntaxException, ExecutionException, InterruptedException {
+    public void exportPdf(ActionEvent actionEvent) throws PDFExporterException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         viewModel.exportPdf(item);
     }
 
     @FXML
-    public void searchTours(ActionEvent actionEvent) throws SQLException {
+    public void searchTours(ActionEvent actionEvent) throws TourListManagerException {
         viewModel.searchTours();
     }
 
     @FXML
-    public void addTourLog(ActionEvent actionEvent) throws SQLException {
+    public void addTourLog(ActionEvent actionEvent) throws TourLogManagerException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         viewModel.addTourLog(item);
     }
 
     @FXML
-    public void deleteTourLog(ActionEvent actionEvent) throws SQLException {
+    public void deleteTourLog(ActionEvent actionEvent) throws TourLogManagerException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         viewModel.deleteTourLog(item,getTableSelection());
     }
 
     @FXML
-    private void getAllTourLogs(Event event) throws SQLException {
+    private void getAllTourLogs(Event event) throws TourLogManagerException {
         if (tourLogsTable==null) {
             return;
         }
@@ -176,14 +180,14 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    private void displayTourLog(Event event) throws SQLException {
+    private void displayTourLog(Event event) throws TourLogManagerException {
         if(logTab.isSelected()) {
             viewModel.displayTourLog(getTableSelection());
         }
     }
 
     @FXML
-    public void updateTourLog(ActionEvent actionEvent) throws SQLException {
+    public void updateTourLog(ActionEvent actionEvent) throws TourLogManagerException {
         String item=(String) tourList.getSelectionModel().getSelectedItem();
         String rating = (String) logRating.getValue();
         boolean logAuthor = userInputValidator.validateInputText(this.logAuthor,InputTypes.MUST);

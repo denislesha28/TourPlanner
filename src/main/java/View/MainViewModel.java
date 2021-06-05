@@ -1,24 +1,21 @@
 package View;
 
+import BusinessLayer.Exceptions.MapApiHandlerException;
+import BusinessLayer.Exceptions.PDFExporterException;
+import BusinessLayer.Exceptions.TourListManagerException;
+import BusinessLayer.Exceptions.TourLogManagerException;
 import BusinessLayer.MapApiHttpHandler;
 import BusinessLayer.PDFExporter;
 import BusinessLayer.TourListManager;
 import BusinessLayer.TourLogManager;
 import Datatypes.Tour;
 import Datatypes.TourLog;
-import com.itextpdf.text.DocumentException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.SelectionModel;
 import javafx.scene.image.Image;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
@@ -63,7 +60,7 @@ public class MainViewModel {
 
 
 
-    public MainViewModel() throws SQLException, IOException {
+    public MainViewModel() throws TourLogManagerException, TourListManagerException, MapApiHandlerException {
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
         log = LogManager.getLogger(MainViewModel.class);
         tourListManager = new TourListManager();
@@ -178,20 +175,20 @@ public class MainViewModel {
         return tourLogs;
     }
 
-    public void addTour() throws SQLException {
+    public void addTour() throws TourListManagerException {
         String newTourName=tourListManager.generateTourRandomName();
         tourListManager.addTour(newTourName);
         tourList.add(newTourName);
         log.debug("MVM Tour Insertion");
     }
 
-    public void deleteTour(String item) throws SQLException {
+    public void deleteTour(String item) throws TourListManagerException {
         tourListManager.deleteTour(item);
         tourList.remove(item);
         log.debug("MVM Tour Deletion");
     }
 
-    public void updateTour(String item) throws SQLException {
+    public void updateTour(String item) throws TourListManagerException {
 
         String tourName=this.tourName.getValue();
         String tourDescription=this.tourDescription.getValue();
@@ -206,14 +203,14 @@ public class MainViewModel {
         log.debug("MVM Tour Updated");
     }
 
-    private void setTourPicture(String from,String to,String tourName) throws URISyntaxException, IOException, ExecutionException, InterruptedException {
+    private void setTourPicture(String from,String to,String tourName) throws MapApiHandlerException {
         Image srcGif = new Image("file:src/main/resources/View/loading_2.gif");
         tourImage.set(srcGif);
         mapApiHttpHandler.sendMapApiRequest(tourImage,from,to,tourName);
         log.debug("MVM send TourPicture request");
     }
 
-    public void displayTourAttributes(String item) throws SQLException {
+    public void displayTourAttributes(String item) throws TourListManagerException {
         if (item==null){
             return;
         }
@@ -232,7 +229,7 @@ public class MainViewModel {
         log.info("display TourAttributes on UI");
     }
 
-    public void displayTourRoute(String item) throws SQLException, URISyntaxException, IOException, ExecutionException, InterruptedException {
+    public void displayTourRoute(String item) throws TourListManagerException, MapApiHandlerException {
         if (item==null){
             return;
         }
@@ -251,7 +248,7 @@ public class MainViewModel {
         log.debug("start AsyncCall for TourImage");
     }
 
-    public void updateTourRoute(String item) throws SQLException, URISyntaxException, IOException, ExecutionException, InterruptedException {
+    public void updateTourRoute(String item) throws TourListManagerException, MapApiHandlerException {
         if (item==null){
             return;
         }
@@ -262,7 +259,7 @@ public class MainViewModel {
         log.debug("MVM update TourRoute");
     }
 
-    public void exportPdf(String item) throws SQLException, IOException, DocumentException, URISyntaxException, ExecutionException, InterruptedException {
+    public void exportPdf(String item) throws PDFExporterException {
         if (pdfExporter == null){
             pdfExporter = new PDFExporter();
         }
@@ -274,7 +271,7 @@ public class MainViewModel {
         }
     }
 
-    public void searchTours() throws SQLException {
+    public void searchTours() throws TourListManagerException {
         List<String> tours=tourListManager.fullTextSearch(searchField.get());
         if(searchField.get().isEmpty()){
             tours = tourListManager.getTours();
@@ -286,28 +283,28 @@ public class MainViewModel {
         tourList.addAll(tours);
     }
 
-    public void addTourLog(String item) throws SQLException {
+    public void addTourLog(String item) throws TourLogManagerException {
         if (item != null){
             tourLogManager.addTourLog(item);
             getAllTourLogs(item);
         }
     }
 
-    public void deleteTourLog(String item,String tableSelection) throws SQLException {
+    public void deleteTourLog(String item,String tableSelection) throws TourLogManagerException {
         if (tableSelection != null && item != null){
             tourLogManager.deleteTourLog(tableSelection);
             getAllTourLogs(item);
         }
     }
 
-    public void getAllTourLogs(String item) throws SQLException {
+    public void getAllTourLogs(String item) throws TourLogManagerException {
         if (item != null){
             tourLogs=FXCollections.observableArrayList(tourLogManager.getAllTourLogs(item));
             tourLogsTable.set(tourLogs);
         }
     }
 
-    public void displayTourLog(String item) throws SQLException {
+    public void displayTourLog(String item) throws TourLogManagerException {
         if (item != null){
             TourLog tourLog = tourLogManager.getTourLog(item);
             if (tourLog == null){
@@ -326,7 +323,7 @@ public class MainViewModel {
         }
     }
 
-    public void updateTourLog(String item,String timestamp,int rating) throws SQLException {
+    public void updateTourLog(String item,String timestamp,int rating) throws TourLogManagerException {
         if (item.equals("")){
             return;
         }

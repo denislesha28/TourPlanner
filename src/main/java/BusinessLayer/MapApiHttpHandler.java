@@ -1,6 +1,9 @@
 package BusinessLayer;
 
 
+import BusinessLayer.Exceptions.MapApiHandlerException;
+import BusinessLayer.Exceptions.PDFExporterException;
+import BusinessLayer.Exceptions.TourListManagerException;
 import com.itextpdf.text.DocumentException;
 import javafx.beans.property.ObjectProperty;
 import org.json.JSONObject;
@@ -29,27 +32,36 @@ public class MapApiHttpHandler {
     private final Logger log;
     TourListManager tourListManager;
 
-    public MapApiHttpHandler() throws SQLException, IOException {
+    public MapApiHttpHandler() throws  MapApiHandlerException {
         key = "sbA2AG4PAtKsucb54CDBLp8YOsxS8oL1";
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
         log = LogManager.getLogger(MapApiHttpHandler.class);
-        tourListManager = new TourListManager();
+        try {
+            tourListManager = new TourListManager();
+        } catch (TourListManagerException e) {
+            throw new MapApiHandlerException("could not get tourListManager Interface",e);
+        }
     }
 
-
-    public void sendMapApiRequest(ObjectProperty<Image> tourImage, String from, String to,String tourName) throws URISyntaxException, ExecutionException, InterruptedException, IOException {
+    public void sendMapApiRequest(ObjectProperty<Image> tourImage, String from, String to,String tourName) throws MapApiHandlerException {
         sendFromToRequest(tourImage,from, to,null,tourName);
+
     }
 
-    public void sendMapApiRequestExportImage(String from, String to,PDFExporter instance,String tourName) throws URISyntaxException, ExecutionException, InterruptedException {
+    public void sendMapApiRequestExportImage(String from, String to,PDFExporter instance,String tourName) throws MapApiHandlerException {
         sendFromToRequest(null,from,to,instance,tourName);
     }
 
-    private void sendFromToRequest(ObjectProperty<Image> tourImage,String from, String to,PDFExporter instance,String tourName) throws URISyntaxException, ExecutionException, InterruptedException {
+    private void sendFromToRequest(ObjectProperty<Image> tourImage,String from, String to,PDFExporter instance,String tourName) throws MapApiHandlerException {
 
         String requestUrl = "http://open.mapquestapi.com/directions/v2/route" +
                 "?key=" + key + "&from=" + from + "&to=" + to;
-        URI uri = new URI(requestUrl);
+        URI uri = null;
+        try {
+            uri = new URI(requestUrl);
+        } catch (URISyntaxException e) {
+            throw new MapApiHandlerException("could not generate URI for http request",e);
+        }
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
                 .headers("Content-Type", "application/json")
@@ -64,16 +76,8 @@ public class MapApiHttpHandler {
                 .thenApply(input -> {
                     try {
                         return sendImageRequest(tourImage,input,instance,tourName);
-                    } catch (IOException e) {
+                    } catch (MapApiHandlerException e) {
                         e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
                     }
                     return null;
                 });
@@ -82,7 +86,7 @@ public class MapApiHttpHandler {
 
     }
 
-    private int sendImageRequest(ObjectProperty<Image> tourImage,String requestFromToResponse,PDFExporter pdfInstance,String tourName) throws IOException, ExecutionException, InterruptedException, URISyntaxException, SQLException {
+    private int sendImageRequest(ObjectProperty<Image> tourImage,String requestFromToResponse,PDFExporter pdfInstance,String tourName) throws MapApiHandlerException {
 
         String resp = requestFromToResponse;
         JSONObject jsonObject = new JSONObject(resp);
@@ -96,13 +100,24 @@ public class MapApiHttpHandler {
         Double lrLat = lr.getDouble("lat");
         Double lrLng = lr.getDouble("lng");
         Double distanceValue = route.getDouble("distance");
-        tourListManager.updateTourDistance(tourName,distanceValue);
+        try {
+            tourListManager.updateTourDistance(tourName,distanceValue);
+        } catch (TourListManagerException e) {
+            throw new MapApiHandlerException("could not update Tour Distance",e);
+        }
 
         if(pdfInstance == null) {
 
             String requestUrl = "https://www.mapquestapi.com/staticmap/v5/map?key=" + key + "&size=1000,400" +
                     "&defaultMarker=marker-purple-sm&zoom=11&session=" + sessionId + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
-            URI uri = new URI(requestUrl);
+
+            URI uri = null;
+            try {
+                uri = new URI(requestUrl);
+            } catch (URISyntaxException e) {
+                throw new MapApiHandlerException("could not create URI for http Request",e);
+            }
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
                     .headers("Content-Type", "image/jpeg")
@@ -132,7 +147,12 @@ public class MapApiHttpHandler {
 
             String requestUrl = "https://www.mapquestapi.com/staticmap/v5/map?key=" + key + "&size=520,350" +
                     "&defaultMarker=marker-red-lg&zoom=11&session=" + sessionId + "&boundingBox=" + ulLat + "," + ulLng + "," + lrLat + "," + lrLng;
-            URI uri = new URI(requestUrl);
+            URI uri = null;
+            try {
+                uri = new URI(requestUrl);
+            } catch (URISyntaxException e) {
+                throw new MapApiHandlerException("could not generate URI for http request for pdf export",e);
+            }
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
                     .headers("Content-Type", "image/jpeg")
@@ -157,16 +177,11 @@ public class MapApiHttpHandler {
                     .thenAccept((BufferedImage bufferedImage) -> {
                         try {
                             pdfInstance.generateTourReport(tourName,bufferedImage);
-                        } catch (DocumentException e) {
+                        } catch (PDFExporterException e) {
                             e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (SQLException throwables) {
-                            throwables.printStackTrace();
                         }
                     });
         }
-
         return 0;
     }
 
