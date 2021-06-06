@@ -189,7 +189,7 @@ public class BackendTourManager {
     }
 
     public List<String> getToursFromSearch(String input)  throws TourDatabaseOperationException {
-        String selectSql="SELECT name FROM \"TourPlanner\".tour as t\n" +
+        String selectSql="SELECT Distinct name FROM \"TourPlanner\".tour as t\n" +
                 "join \"TourPlanner\".\"tourLog\" as tL\n" +
                 "on t.\"id\" = tl.\"tourID\"\n" +
                 "WHERE  t.\"tourToken\"  @@ to_tsquery(?)\n" +

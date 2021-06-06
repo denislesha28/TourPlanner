@@ -1,13 +1,18 @@
-package BusinessLayer;
+package BusinessLayer.Exporting;
 
 import BusinessLayer.Exceptions.JsonExporterException;
 import BusinessLayer.Exceptions.TourListManagerException;
 import BusinessLayer.Exceptions.TourLogManagerException;
+import BusinessLayer.TourListManager;
+import BusinessLayer.TourLogManager;
 import Datatypes.Tour;
 import Datatypes.TourLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -15,11 +20,12 @@ import java.util.List;
 public class JsonExporter {
     TourLogManager tourLogManager;
     TourListManager tourListManager;
-
+    Logger log;
     public JsonExporter() throws JsonExporterException {
         try {
             tourLogManager = new TourLogManager();
             tourListManager = new TourListManager();
+            log = LogManager.getLogger(PDFExporter.class);
         } catch (TourLogManagerException | TourListManagerException e) {
             throw new JsonExporterException("Couldn't get Tour Manager Interfaces",e);
         }
@@ -34,6 +40,7 @@ public class JsonExporter {
             file.write(jsonTourObject);
             file.flush();
             file.close();
+            log.debug("Writing TourJsonObject to file");
         } catch (IOException e) {
             throw new JsonExporterException("Couldn't write json to file",e);
         }
@@ -50,6 +57,7 @@ public class JsonExporter {
         try {
             exportTour = tourListManager.getTourAttributes(tourName);
             tourLogList = tourLogManager.getAllTourLogs(tourName);
+            log.debug("Retrieved All Tour Data for Json Export");
         } catch (TourListManagerException e) {
             throw new JsonExporterException("could not get tourAttributes in Json Exporter",e);
         }catch (TourLogManagerException e){
@@ -66,6 +74,7 @@ public class JsonExporter {
         tourRouteChild.put("To",exportTour.getTourTo());
 
         tourRoot.set("TourRoute",tourRouteChild);
+        log.debug("Added All Tour Attributes for Json Export");
 
         ObjectNode tourLogsChild = mapper.createObjectNode();
         for (TourLog tourLog: tourLogList){
@@ -84,6 +93,7 @@ public class JsonExporter {
         }
 
         tourRoot.set("TourLogs",tourLogsChild);
+        log.debug("Added All TourLog Attributes for Json Export");
 
         String jsonString = null;
         try {

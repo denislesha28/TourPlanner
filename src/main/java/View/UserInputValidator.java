@@ -7,13 +7,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserInputValidator {
-    final String necessaryInput = "(([A-Z])|([a-z])|([@#]))+([0-9])*|[\\&\\.\\, ]+";
-    final String unNecessaryInput = "^(.?)$|(([A-Z])|([a-z])|([@#]))*([0-9])*|[\\&\\.\\, ]+";
-    final String numberInput = "([0-9])+|((\\.)([0-9]))+";
+    final String necessaryInput = "([$^§?üäößÜÄÖ;:|])+";
+    final String unNecessaryInput = "([/^§üäößÜÄÖ|])+";
+    final String numberInput = "\\p{Lower}|\\p{Upper}|(\\!\\\"#$%&'()*+,-./:;<=>?@\\[\\]^_`\\{|}~)";
     final Pattern necessaryPattern = Pattern.compile(necessaryInput, Pattern.MULTILINE);
     final Pattern unNecessaryPattern = Pattern.compile(unNecessaryInput, Pattern.MULTILINE);
     final Pattern numberPattern = Pattern.compile(numberInput, Pattern.MULTILINE);
-    int minCharCount = 3;
 
 
     public boolean validateInputText(TextInputControl textInput, InputTypes inputType){
@@ -50,10 +49,10 @@ public class UserInputValidator {
             return false;
         }
         Matcher matcher = necessaryPattern.matcher(text);
-        if(matcher.find() && text.length() >= minCharCount){
-            return true;
+        if(matcher.find()){
+            return false;
         }
-        return false;
+        return true;
     }
 
     public boolean validateUnNecessaryText(String text){
@@ -62,9 +61,9 @@ public class UserInputValidator {
         }
         Matcher matcher = unNecessaryPattern.matcher(text);
         if(matcher.find()){
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     public boolean validateNumberText(String text){
@@ -73,9 +72,9 @@ public class UserInputValidator {
         }
         Matcher matcher = numberPattern.matcher(text);
         if(matcher.find()){
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     private void setTextErrorStyle(TextInputControl textInput){

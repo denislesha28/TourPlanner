@@ -21,7 +21,7 @@ public class BackendTourLogManager {
         } catch (DatabaseInstanceException e) {
             throw new TourLogDatabaseOperationException("Could not read config Database file",e);
         }
-        log = LogManager.getLogger(BackendTourManager.class);
+        log = LogManager.getLogger(BackendTourLogManager.class);
     }
 
     public void addTourLog(int tourID) throws TourLogDatabaseOperationException {
@@ -31,6 +31,7 @@ public class BackendTourLogManager {
             PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(insertSql);
             preparedStatement.setInt(1,tourID);
             preparedStatement.executeUpdate();
+            log.debug("Tour Log added in Database");
         }
         catch (SQLException throwables){
             throw new TourLogDatabaseOperationException("error Adding TourLog in Database",throwables);
@@ -46,6 +47,7 @@ public class BackendTourLogManager {
             PreparedStatement preparedStatement=dbInstance.getConnection().prepareStatement(deleteSql);
             preparedStatement.setTimestamp(1, Timestamp.valueOf(timestamp));
             preparedStatement.executeUpdate();
+            log.debug("Tour Log deleted from Database");
         }catch (SQLException throwables){
             throw new TourLogDatabaseOperationException("error Deleting TourLog from Database",throwables);
         }
@@ -76,6 +78,7 @@ public class BackendTourLogManager {
                 tourLog.setTimestamp(resultSet.getString("timestamp"));
                 tourLogList.add(tourLog);
             }
+            log.debug("Retrieved TourLogs from Database");
         }catch (SQLException throwables){
             throw new TourLogDatabaseOperationException("Error getting all TourLogs for Tour from Database",throwables);
         }
@@ -107,6 +110,7 @@ public class BackendTourLogManager {
                 tourLog.setJoule(resultSet.getInt("joule"));
                 tourLog.setWeather(resultSet.getString("weather"));
                 tourLog.setTimestamp(resultSet.getString("timestamp"));
+                log.debug("Getting specific TourLog from Database");
                 return tourLog;
             }
         } catch (SQLException throwables) {
@@ -134,6 +138,7 @@ public class BackendTourLogManager {
             preparedStatement.setString(9,tourLog.getWeather());
             preparedStatement.setTimestamp(10, Timestamp.valueOf(timestamp));
             preparedStatement.executeUpdate();
+            log.debug("Specific TourLog updated in Database");
         } catch (SQLException throwables) {
             throw new TourLogDatabaseOperationException("UpdateTour Operation in Datbase was unsuccesfull",throwables);
         }
@@ -152,6 +157,7 @@ public class BackendTourLogManager {
             preparedStatement.setString(1,allTourLogText);
             preparedStatement.setTimestamp(2,Timestamp.valueOf(timestamp));
             preparedStatement.executeUpdate();
+            log.debug("Tour Log Vector for Searching Purposes updated in Database");
         }
         catch (SQLException throwables){
             throw new TourLogDatabaseOperationException("error updating Search Vector for TourLog",throwables);

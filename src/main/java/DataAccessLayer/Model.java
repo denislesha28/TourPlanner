@@ -176,6 +176,7 @@ public class Model {
     public List<String> fullTextSearch(String input) throws ModelOperationException {
         List<String> searchedTours = null;
         try {
+            log.debug("Return all Searched Tours from Model");
             return searchedTours = backendTourManager.getToursFromSearch(input);
         } catch (TourDatabaseOperationException throwables) {
             throw new ModelOperationException("couldn't get searched Tours",throwables);
@@ -186,6 +187,7 @@ public class Model {
         localTourList.updateTourDistance(tourName,distance);
         try {
             backendTourManager.updateTourDistance(tourName,distance);
+            log.debug("Model update Tour Distance from MapApi");
         } catch (TourDatabaseOperationException throwables) {
             throw new ModelOperationException("couldn't update TourDistance for selected TourLog",throwables);
         }
@@ -194,6 +196,7 @@ public class Model {
     public void addTourLog(String tourName) throws ModelOperationException {
         try {
             backendTourLogManager.addTourLog(backendTourManager.getTourID(tourName));
+            log.debug("Model added TourLog");
         } catch (TourLogDatabaseOperationException | TourDatabaseOperationException e) {
             throw new ModelOperationException("couldn't add TourLog Model",e);
         }
@@ -202,6 +205,7 @@ public class Model {
     public void deleteTourLog(String timestamp) throws ModelOperationException {
         try {
             backendTourLogManager.deleteTourLog(timestamp);
+            log.debug("Model deleted TourLog");
         } catch (TourLogDatabaseOperationException e) {
             throw new ModelOperationException("couldn't delete tourLog",e);
         }
@@ -209,6 +213,7 @@ public class Model {
 
     public List<TourLog> getAllTourLogs(String tourName) throws ModelOperationException {
         try {
+            log.debug("Model returning all TourLogs for Tour");
             return backendTourLogManager.getAllTourLogs(backendTourManager.getTourID(tourName));
         } catch (TourLogDatabaseOperationException | TourDatabaseOperationException e) {
             throw new ModelOperationException("couldn't get all tourLogs for tour",e);
@@ -217,6 +222,7 @@ public class Model {
 
     public TourLog getTourLog(String timestamp) throws ModelOperationException {
         try {
+            log.debug("Model returning specific TourLog for Tour");
             return backendTourLogManager.getTourLog(timestamp);
         } catch (TourLogDatabaseOperationException e) {
            throw new ModelOperationException("couldn't get TourLog Details for selected TourLog",e);
@@ -227,6 +233,7 @@ public class Model {
         try {
             backendTourLogManager.updateTourLog(timestamp,tourLog);
             backendTourLogManager.updateTourLogVector(timestamp,tourLog);
+            log.debug("Model updating specific TourLog for Tour");
         } catch (TourLogDatabaseOperationException e) {
             throw new ModelOperationException("couldn't update TourLog Details for selected TourLog",e);
         }

@@ -2,11 +2,14 @@ package View;
 
 import BusinessLayer.*;
 import BusinessLayer.Exceptions.*;
+import BusinessLayer.Exporting.JsonExporter;
+import BusinessLayer.Exporting.PDFExporter;
 import Datatypes.Tour;
 import Datatypes.TourLog;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +55,7 @@ public class MainViewModel {
 
     private final ObjectProperty<javafx.scene.image.Image> tourImage = new SimpleObjectProperty<>();
     private final ObjectProperty<ObservableList<TourLog>> tourLogsTable = new SimpleObjectProperty<>();
+    private final ObjectProperty<SelectionModel> tourListSelectionProperty = new SimpleObjectProperty<>();
 
 
 
@@ -151,24 +155,19 @@ public class MainViewModel {
         return tourLogsTable;
     }
 
+    public ObjectProperty<SelectionModel> tourListSelectionProperty(){
+        return tourListSelectionProperty;
+    }
+
     public ObservableList<String> getTourRatingsList(){
         return tourRatings;
     }
-
-
-
-    /*public Property tourListProperty() {
-        System.out.println("VM: get Tour ListView");
-        return tourListView;
-    }*/
 
     public ObservableList<String> getTourList() {
         return tourList;
     }
 
-    public ObservableList<TourLog> getTourLogs() {
-        return tourLogs;
-    }
+
 
     public void addTour() throws TourListManagerException {
         String newTourName=tourListManager.generateTourRandomName();
@@ -184,7 +183,9 @@ public class MainViewModel {
     }
 
     public void updateTour(String item) throws TourListManagerException {
-
+        if(item == null){
+            return;
+        }
         String tourName=this.tourName.getValue();
         String tourDescription=this.tourDescription.getValue();
         String routeInformation=this.routeInformation.getValue();

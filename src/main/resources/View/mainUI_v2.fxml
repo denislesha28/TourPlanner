@@ -334,7 +334,6 @@
                                       <buttons>
                                         <Button mnemonicParsing="false" onAction="#addTourLog" text="add" />
                                           <Button mnemonicParsing="false" onAction="#deleteTourLog" text="delete" />
-                                          <Button mnemonicParsing="false" text="......." />
                                       </buttons>
                                        <padding>
                                           <Insets right="10.0" />

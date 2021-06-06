@@ -4,23 +4,20 @@ package BusinessLayer;
 import BusinessLayer.Exceptions.MapApiHandlerException;
 import BusinessLayer.Exceptions.PDFExporterException;
 import BusinessLayer.Exceptions.TourListManagerException;
-import com.itextpdf.text.DocumentException;
+import BusinessLayer.Exporting.PDFExporter;
 import javafx.beans.property.ObjectProperty;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +45,7 @@ public class MapApiHttpHandler {
 
     }
 
-    public void sendMapApiRequestExportImage(String from, String to,PDFExporter instance,String tourName) throws MapApiHandlerException {
+    public void sendMapApiRequestExportImage(String from, String to, PDFExporter instance, String tourName) throws MapApiHandlerException {
         sendFromToRequest(null,from,to,instance,tourName);
     }
 

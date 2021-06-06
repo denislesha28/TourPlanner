@@ -1,9 +1,12 @@
 package BusinessLayer;
 
 import BusinessLayer.Exceptions.TourListManagerException;
+import DataAccessLayer.Database.BackendTourLogManager;
 import DataAccessLayer.Exceptions.ModelOperationException;
 import Datatypes.Tour;
 import DataAccessLayer.Model;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -13,10 +16,12 @@ import java.util.List;
 public class TourListManager {
 
     private Model model;
+    private Logger log;
 
     public TourListManager() throws TourListManagerException {
         try {
             model=Model.getModelInstance();
+            log = LogManager.getLogger(TourListManager.class);
         } catch (ModelOperationException e) {
             throw new TourListManagerException("Could not get DAL ModelInterface",e);
         }
@@ -30,6 +35,7 @@ public class TourListManager {
     public void addTour (String tourName) throws TourListManagerException {
         try {
             model.addTour(tourName);
+            log.debug("BL added Tour to List");
         } catch (ModelOperationException e) {
             throw new TourListManagerException("Could not add Tour Distance",e);
         }
@@ -38,6 +44,7 @@ public class TourListManager {
     public void deleteTour (String tourName) throws TourListManagerException {
         try {
             model.deleteTour(tourName);
+            log.debug("BL deleted Tour from List");
         } catch (ModelOperationException e) {
             throw new TourListManagerException("Could not delete Tour",e);
         }
@@ -48,6 +55,7 @@ public class TourListManager {
 
         try {
             model.updateTour(currentTour,tourDescription,tourName,routeInformation,tourDistance);
+            log.debug("BL updated Tour in List");
         } catch (ModelOperationException e) {
             throw new TourListManagerException("Could not update TourAttributes",e);
         }
@@ -57,6 +65,7 @@ public class TourListManager {
         Tour tourDetails= null;
         try {
             tourDetails = model.getTourDetails(0,tourName);
+            log.debug("BL retrieved specific Tour from List");
         } catch (ModelOperationException e) {
             throw new TourListManagerException("Could not get TourAttributes",e);
         }
@@ -67,6 +76,7 @@ public class TourListManager {
     public void updateTourRoute(String tourName,String routeFrom,String routeTo) throws TourListManagerException {
         try {
             model.updateTourRoute(tourName,routeFrom,routeTo);
+            log.debug("BL updated specific TourRoute from List");
         } catch (ModelOperationException e) {
             throw new TourListManagerException("Could not update Tour Route",e);
         }
@@ -76,6 +86,7 @@ public class TourListManager {
         if(model.getTours()==null){
             return Collections.emptyList();
         }
+        log.debug("BL returned all available Tours");
         return model.getTours();
     }
 
@@ -85,6 +96,7 @@ public class TourListManager {
 
     public List<String> fullTextSearch(String input) throws TourListManagerException {
         try {
+            log.debug("BL performed full text search on Tours");
             return model.fullTextSearch(input);
         } catch (ModelOperationException e) {
             throw new TourListManagerException("Could not perform fullTextSearch",e);
@@ -93,6 +105,7 @@ public class TourListManager {
 
     public void updateTourDistance(String tourName,Double distance) throws TourListManagerException {
         try {
+            log.debug("BL updated Tour Distance based on mapApiRequest");
             model.updateDistance(tourName,distance);
         } catch (ModelOperationException e) {
            throw new TourListManagerException("Could not update Tour Distance",e);
@@ -100,6 +113,7 @@ public class TourListManager {
     }
 
     public List<Tour> getAllToursAttributes(){
-       return model.getAllToursDetails();
+        log.debug("BL retrieved all Tours with all of their Info");
+        return model.getAllToursDetails();
     }
 }

@@ -1,6 +1,5 @@
 package View;
 
-import BusinessLayer.PDFExporter;
 import com.itextpdf.text.DocumentException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

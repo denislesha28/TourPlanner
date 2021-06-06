@@ -1,14 +1,19 @@
-package BusinessLayer;
+package BusinessLayer.Exporting;
 import BusinessLayer.Exceptions.MapApiHandlerException;
 import BusinessLayer.Exceptions.PDFExporterException;
 import BusinessLayer.Exceptions.TourListManagerException;
 import BusinessLayer.Exceptions.TourLogManagerException;
+import BusinessLayer.MapApiHttpHandler;
+import BusinessLayer.TourListManager;
+import BusinessLayer.TourLogManager;
 import DataAccessLayer.Model;
 import Datatypes.Tour;
 import Datatypes.TourLog;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import javax.imageio.ImageIO;
@@ -27,12 +32,14 @@ public class PDFExporter
     TourListManager tourListManager;
     TourLogManager tourLogManager;
     MapApiHttpHandler httpHandler;
+    Logger log;
 
     public PDFExporter() throws PDFExporterException {
         try {
             tourListManager = new TourListManager();
             tourLogManager = new TourLogManager();
             httpHandler = new MapApiHttpHandler();
+            log = LogManager.getLogger(PDFExporter.class);
         } catch (TourListManagerException | TourLogManagerException | MapApiHandlerException e) {
             throw new PDFExporterException("could not get necessary Tour Managers for Exporting",e);
         }
@@ -44,6 +51,7 @@ public class PDFExporter
         Tour tourDetails= null;
         try {
             tourDetails = tourListManager.getTourAttributes(tourName);
+            log.debug("send API Request to get Image for single Tour Pdf Export");
             httpHandler.sendMapApiRequestExportImage(tourDetails.getTourFrom(),tourDetails.getTourTo(),this,tourName);
         } catch (TourListManagerException e) {
             throw new PDFExporterException("could not get TourDetails",e);
@@ -61,6 +69,7 @@ public class PDFExporter
         try {
             tourDetails = tourListManager.getTourAttributes(tourName);
             List<TourLog> tourLogList = tourLogManager.getAllTourLogs(tourName);
+            log.debug("Retrieved all Tour Infos and TourLogs for PDF Exporting");
             PdfWriter.getInstance(document, new FileOutputStream("TourReport_"+tourName+".pdf"));
             document.open();
 
@@ -83,12 +92,14 @@ public class PDFExporter
             document.add(new Paragraph("Tour Route From: "+tourDetails.getTourFrom(),paragraphFont));
             document.add(new Paragraph("Tour Route to: "+tourDetails.getTourTo(),paragraphFont));
             document.add(new Paragraph(" "));
+            log.debug("Single Export : added all TourInfos to document");
 
             BufferedImage bufferedTourImage = tourImage;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(bufferedTourImage, "jpg", baos);
             byte[] bytes = baos.toByteArray();
             document.add(new Jpeg(bytes));
+            log.debug("Single Export : added Tour Picture to document");
 
             int logCounter=0;
             document.add(new Chapter(new Paragraph(tourLogs),2));
@@ -109,6 +120,7 @@ public class PDFExporter
                 document.add(new Paragraph("TourLog Weather: " + tourLog.getWeather(), paragraphFont));
                 document.add(new Paragraph(" "));
             }
+            log.debug("Single Export : added all TourLogs to document");
 
         } catch (TourListManagerException | DocumentException | TourLogManagerException | FileNotFoundException e) {
             e.printStackTrace();
@@ -124,6 +136,7 @@ public class PDFExporter
 
         Document document = new Document();
         List<Tour> tours = tourListManager.getAllToursAttributes();
+        log.debug("Retrieved all Tour Infos and TourLogs for PDF Exporting");
         try {
             PdfWriter.getInstance(document, new FileOutputStream("TourReport_AllTours.pdf"));
             document.open();
@@ -152,6 +165,7 @@ public class PDFExporter
                 document.add(new Paragraph("Tour Route From: "+tour.getTourFrom(),paragraphFont));
                 document.add(new Paragraph("Tour Route to: "+tour.getTourTo(),paragraphFont));
                 document.add(new Paragraph(" "));
+                log.debug("Export all : Added all TourInfos for Tour in Document");
 
                 HashMap<String,String> averages = calculateStatsTourLogs(tour.getTourName());
                 document.add(new Paragraph("Tour Logs Summary",subChapterFont));
@@ -161,6 +175,7 @@ public class PDFExporter
                 document.add(new Paragraph("Tour Logs Average Duration: "+averages.get("avgDuration"),paragraphFont));
                 document.add(new Paragraph("Tour Logs Average Joule: "+averages.get("avgJoule"),paragraphFont));
                 document.add(new Paragraph("Tour Logs Average Rating: "+averages.get("avgRating"),paragraphFont));
+                log.debug("Export all : Added all Averages for all TourLogs of current Tour in Document");
 
                 chapterCounter++;
 
@@ -201,6 +216,7 @@ public class PDFExporter
             averages.put("avgDuration",""+tourLogsTotalDuration / tourLogsCount);
             averages.put("avgJoule",""+tourLogsTotalJoule / tourLogsCount);
             averages.put("avgRating",""+ (tourLogsTotalRatings + tourLogsCount - 1) / tourLogsCount);
+            log.debug("Export all : Calculated all Averages for all TourLogs of current Tour in Document");
 
             return averages;
         } catch (TourLogManagerException e) {
