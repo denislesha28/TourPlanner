@@ -31,7 +31,4 @@ module org.openjfx {
     opens DataAccessLayer.Local to javafx.fxml;
     exports Datatypes;
     opens Datatypes to javafx.fxml;
-    exports BusinessLayer.Exporting;
-    opens BusinessLayer.Exporting to javafx.fxml;
-
 }

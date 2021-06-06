@@ -1,2 +1,2 @@
 # TourPlanner
-TourPlanner SWE2 App
+TourPlanner SWE2 View.UserInputValidator.App

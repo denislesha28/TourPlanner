@@ -95,7 +95,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>View.App</mainClass>
+                    <mainClass>View.UserInputValidator.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>
