@@ -63,15 +63,6 @@ public class TourListManager {
         return tourDetails;
     }
 
-    public Tour getTourRoute(String tourName) throws TourListManagerException {
-        Tour tourDetails= null;
-        try {
-            tourDetails = model.getTourDetails(0,tourName);
-        } catch (ModelOperationException e) {
-            throw new TourListManagerException("Could get TourRoute",e);
-        }
-        return tourDetails;
-    }
 
     public void updateTourRoute(String tourName,String routeFrom,String routeTo) throws TourListManagerException {
         try {
@@ -108,7 +99,7 @@ public class TourListManager {
         }
     }
 
-    public List<Tour> getAllTourAttributes(){
+    public List<Tour> getAllToursAttributes(){
        return model.getAllToursDetails();
     }
 }

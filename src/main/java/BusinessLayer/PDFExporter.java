@@ -123,7 +123,7 @@ public class PDFExporter
     public void exportToursPdf() throws PDFExporterException {
 
         Document document = new Document();
-        List<Tour> tours = tourListManager.getAllTourAttributes();
+        List<Tour> tours = tourListManager.getAllToursAttributes();
         try {
             PdfWriter.getInstance(document, new FileOutputStream("TourReport_AllTours.pdf"));
             document.open();

@@ -10,10 +10,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
-import BusinessLayer.Exceptions.MapApiHandlerException;
-import BusinessLayer.Exceptions.PDFExporterException;
-import BusinessLayer.Exceptions.TourListManagerException;
-import BusinessLayer.Exceptions.TourLogManagerException;
+import BusinessLayer.Exceptions.*;
 import Datatypes.InputTypes;
 import Datatypes.TourLog;
 import com.itextpdf.text.DocumentException;
@@ -74,7 +71,7 @@ public class PrimaryController implements Initializable {
     private UserInputValidator userInputValidator;
 
 
-    public PrimaryController() throws TourListManagerException, TourLogManagerException, MapApiHandlerException {
+    public PrimaryController() throws TourListManagerException, TourLogManagerException, MapApiHandlerException, JsonExporterException {
         System.out.println("Controller generated");
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
         log = LogManager.getLogger(PrimaryController.class);
@@ -201,6 +198,12 @@ public class PrimaryController implements Initializable {
             viewModel.updateTourLog(item,getTableSelection(),Integer.valueOf(rating));
         }
 
+    }
+
+    @FXML
+    public void exportJson(ActionEvent actionEvent) throws JsonExporterException{
+        String item=(String) tourList.getSelectionModel().getSelectedItem();
+        viewModel.exportJson(item);
     }
 
     @Override

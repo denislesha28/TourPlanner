@@ -1,13 +1,7 @@
 package View;
 
-import BusinessLayer.Exceptions.MapApiHandlerException;
-import BusinessLayer.Exceptions.PDFExporterException;
-import BusinessLayer.Exceptions.TourListManagerException;
-import BusinessLayer.Exceptions.TourLogManagerException;
-import BusinessLayer.MapApiHttpHandler;
-import BusinessLayer.PDFExporter;
-import BusinessLayer.TourListManager;
-import BusinessLayer.TourLogManager;
+import BusinessLayer.*;
+import BusinessLayer.Exceptions.*;
 import Datatypes.Tour;
 import Datatypes.TourLog;
 import javafx.beans.property.*;
@@ -34,6 +28,7 @@ public class MainViewModel {
     private ObjectProperty<ObservableList<String>> tourListView;
 
     MapApiHttpHandler mapApiHttpHandler = new MapApiHttpHandler();
+    JsonExporter jsonExporter = new JsonExporter();
 
     private final StringProperty tourName = new SimpleStringProperty("");
     private final StringProperty tourDistance = new SimpleStringProperty("");
@@ -60,7 +55,7 @@ public class MainViewModel {
 
 
 
-    public MainViewModel() throws TourLogManagerException, TourListManagerException, MapApiHandlerException {
+    public MainViewModel() throws TourLogManagerException, TourListManagerException, MapApiHandlerException, JsonExporterException {
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
         log = LogManager.getLogger(MainViewModel.class);
         tourListManager = new TourListManager();
@@ -341,6 +336,9 @@ public class MainViewModel {
         getAllTourLogs(item);
     }
 
+    public void exportJson(String item) throws JsonExporterException {
+        jsonExporter.exportJson(item);
+    }
 
 
 }
