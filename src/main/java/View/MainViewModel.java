@@ -6,16 +6,21 @@ import BusinessLayer.Exporting.JsonExporter;
 import BusinessLayer.Exporting.PDFExporter;
 import Datatypes.Tour;
 import Datatypes.TourLog;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
+
+import javafx.beans.value.ChangeListener;
 
 
 public class MainViewModel {
@@ -57,7 +62,10 @@ public class MainViewModel {
     private final ObjectProperty<ObservableList<TourLog>> tourLogsTable = new SimpleObjectProperty<>();
     private final ObjectProperty<SelectionModel> tourListSelectionProperty = new SimpleObjectProperty<>();
 
-
+    private String selectedListItem=null;
+    private TourLog selectedLog=null;
+    private int selectedRating=0;
+    private Tab selectedTab=null;
 
     public MainViewModel() throws TourLogManagerException, TourListManagerException, MapApiHandlerException, JsonExporterException {
         Configurator.initialize(null, "TourPlannerLog4j.conf.xml");
@@ -67,6 +75,33 @@ public class MainViewModel {
         tourList = FXCollections.observableArrayList(tourListManager.getTours());
         tourListView = new SimpleObjectProperty<>(tourList);
         tourRatings = FXCollections.observableArrayList(new ArrayList<>(List.of("1","2","3","4","5")));
+    }
+
+
+    public ChangeListener<String> getSelectedTourChange(){
+        return (observableValue,oldValue,newValue)->{
+            selectedListItem = newValue;
+        };
+    }
+
+    public ChangeListener<TourLog> getSelectedTourLogChange(){
+        return (observableValue,oldValue,newValue)->{
+            selectedLog = newValue;
+        };
+    }
+
+    public ChangeListener<Tab> getSelectedTabChange(){
+        return (observableValue,oldValue,newValue)->{
+            selectedTab = newValue;
+        };
+    }
+
+
+    public ChangeListener<String> getSelectedRatingChange(){
+        return (observableValue,oldValue,newValue)->{
+            selectedRating = Integer.valueOf(newValue);
+
+        };
     }
 
     public StringProperty tourNameProperty() {
@@ -176,25 +211,25 @@ public class MainViewModel {
         log.debug("MVM Tour Insertion");
     }
 
-    public void deleteTour(String item) throws TourListManagerException {
-        tourListManager.deleteTour(item);
-        tourList.remove(item);
+    public void deleteTour() throws TourListManagerException {
+        tourListManager.deleteTour(selectedListItem);
+        tourList.remove(selectedListItem);
         log.debug("MVM Tour Deletion");
     }
 
-    public void updateTour(String item) throws TourListManagerException {
-        if(item == null){
+    public void updateTour() throws TourListManagerException {
+        if(selectedListItem == null){
             return;
         }
         String tourName=this.tourName.getValue();
         String tourDescription=this.tourDescription.getValue();
         String routeInformation=this.routeInformation.getValue();
         double tourDistance= Double.parseDouble(this.tourDistance.getValue());
-        tourListManager.updateTour(item,tourDescription,tourName,routeInformation,tourDistance);
-        if (tourName.equals(item)){
+        tourListManager.updateTour(selectedListItem,tourDescription,tourName,routeInformation,tourDistance);
+        if (tourName.equals(selectedListItem)){
             return;
         }
-        int curr_pos=tourList.indexOf(item);
+        int curr_pos=tourList.indexOf(selectedListItem);
         tourList.set(curr_pos,tourName);
         log.debug("MVM Tour Updated");
     }
@@ -206,11 +241,16 @@ public class MainViewModel {
         log.debug("MVM send TourPicture request");
     }
 
-    public void displayTourAttributes(String item) throws TourListManagerException {
-        if (item==null){
+    public void displayTourAttributes() throws TourListManagerException {
+        if (selectedTab == null ||selectedTab.textProperty().get().equals("Description")) {
+
+        }
+
+        if (selectedListItem==null ){
             return;
         }
-        Tour tourDetails=tourListManager.getTourAttributes(item);
+
+        Tour tourDetails=tourListManager.getTourAttributes(selectedListItem);
         if(tourDetails!=null) {
             tourName.set(tourDetails.getTourName());
             tourDistance.set(String.valueOf(tourDetails.getTourDistance()));
@@ -225,14 +265,17 @@ public class MainViewModel {
         log.info("display TourAttributes on UI");
     }
 
-    public void displayTourRoute(String item) throws TourListManagerException, MapApiHandlerException {
-        if (item==null){
+    public void displayTourRoute() throws TourListManagerException, MapApiHandlerException {
+        if(selectedTab == null || !selectedTab.textProperty().get().equals("Route")){
             return;
         }
-        Tour tourDetails=tourListManager.getTourAttributes(item);
+        if (selectedListItem==null ){
+            return;
+        }
+        Tour tourDetails=tourListManager.getTourAttributes(selectedListItem);
         String routeFrom=tourDetails.getTourFrom();
         String routeTo=tourDetails.getTourTo();
-        if (routeFrom==null || routeTo==null){
+        if (routeFrom.isEmpty() || routeTo.isEmpty()){
             fromDestination.set("");
             toDestination.set("");
             return;
@@ -244,26 +287,26 @@ public class MainViewModel {
         log.debug("start AsyncCall for TourImage");
     }
 
-    public void updateTourRoute(String item) throws TourListManagerException, MapApiHandlerException {
-        if (item==null){
+    public void updateTourRoute() throws TourListManagerException, MapApiHandlerException {
+        if (selectedListItem==null){
             return;
         }
         String routeFrom=fromDestination.get();
         String routeTo=toDestination.get();
-        tourListManager.updateTourRoute(item,routeFrom,routeTo);
-        setTourPicture(routeFrom,routeTo,item);
+        tourListManager.updateTourRoute(selectedListItem,routeFrom,routeTo);
+        setTourPicture(routeFrom,routeTo,selectedListItem);
         log.debug("MVM update TourRoute");
     }
 
-    public void exportPdf(String item) throws PDFExporterException {
+    public void exportPdf() throws PDFExporterException {
         if (pdfExporter == null){
             pdfExporter = new PDFExporter();
         }
-        if (item == null){
+        if (selectedListItem == null){
             pdfExporter.exportToursPdf();
         }
         else {
-            pdfExporter.exportTourPdf(item);
+            pdfExporter.exportTourPdf(selectedListItem);
         }
     }
 
@@ -279,30 +322,33 @@ public class MainViewModel {
         tourList.addAll(tours);
     }
 
-    public void addTourLog(String item) throws TourLogManagerException {
-        if (item != null){
-            tourLogManager.addTourLog(item);
-            getAllTourLogs(item);
+    public void addTourLog() throws TourLogManagerException {
+        if (selectedListItem != null){
+            tourLogManager.addTourLog(selectedListItem);
+            getAllTourLogs();
         }
     }
 
-    public void deleteTourLog(String item,String tableSelection) throws TourLogManagerException {
-        if (tableSelection != null && item != null){
-            tourLogManager.deleteTourLog(tableSelection);
-            getAllTourLogs(item);
+    public void deleteTourLog() throws TourLogManagerException {
+        if (selectedLog != null && selectedListItem != null){
+            tourLogManager.deleteTourLog(selectedLog.getTimestamp());
+            getAllTourLogs();
         }
     }
 
-    public void getAllTourLogs(String item) throws TourLogManagerException {
-        if (item != null){
-            tourLogs=FXCollections.observableArrayList(tourLogManager.getAllTourLogs(item));
+    public void getAllTourLogs() throws TourLogManagerException {
+        if (selectedListItem != null){
+            tourLogs=FXCollections.observableArrayList(tourLogManager.getAllTourLogs(selectedListItem));
             tourLogsTable.set(tourLogs);
         }
     }
 
-    public void displayTourLog(String item) throws TourLogManagerException {
-        if (item != null){
-            TourLog tourLog = tourLogManager.getTourLog(item);
+    public void displayTourLog() throws TourLogManagerException {
+        if(selectedTab == null || !selectedTab.textProperty().get().equals("Logs")){
+            return;
+        }
+        if (selectedLog != null){
+            TourLog tourLog = tourLogManager.getTourLog(selectedLog.getTimestamp());
             if (tourLog == null){
                 return;
             }
@@ -319,8 +365,8 @@ public class MainViewModel {
         }
     }
 
-    public void updateTourLog(String item,String timestamp,int rating) throws TourLogManagerException {
-        if (item.equals("")){
+    public void updateTourLog() throws TourLogManagerException {
+        if (selectedListItem.equals("")){
             return;
         }
         TourLog tourLog = new TourLog();
@@ -331,14 +377,14 @@ public class MainViewModel {
         tourLog.setRemarks(logRemarks.get());
         tourLog.setJoule(Integer.valueOf(logJoule.get()));
         tourLog.setWeather(logWeather.get());
-        tourLog.setRating(rating);
+        tourLog.setRating(selectedRating);
         tourLog.setAvgSpeed(Double.valueOf(logSpeed.get()));
-        tourLogManager.updateTourLog(timestamp,tourLog);
-        getAllTourLogs(item);
+        tourLogManager.updateTourLog(selectedLog.getTimestamp(),tourLog);
+        getAllTourLogs();
     }
 
-    public void exportJson(String item) throws JsonExporterException {
-        jsonExporter.exportJson(item);
+    public void exportJson() throws JsonExporterException {
+        jsonExporter.exportJson(selectedListItem);
     }
 
 

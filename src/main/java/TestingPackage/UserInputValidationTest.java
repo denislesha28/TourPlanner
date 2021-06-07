@@ -18,7 +18,7 @@ public class UserInputValidationTest {
         // Act
         boolean validation = userInputValidator.validateNecessaryText(numInput);
         // Assert
-        Assert.assertEquals(false,validation);
+        Assert.assertEquals(true,validation);
     }
 
     @Test

@@ -21,7 +21,7 @@ public class App extends Application {
     private static Scene scene;
 
     @Override
-    public void start(Stage stage) throws IOException, SQLException, DocumentException, URISyntaxException, ExecutionException, InterruptedException {
+    public void start(Stage stage) throws IOException {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
         double height = screenSize.getHeight()-70;

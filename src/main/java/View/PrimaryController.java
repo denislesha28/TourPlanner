@@ -79,34 +79,27 @@ public class PrimaryController implements Initializable {
 
     @FXML
     public void deleteTour(ActionEvent actionEvent) throws TourListManagerException {
-        String item = getTourListSelection();
-        System.out.println("Controller deleting Tour "+item);
-        viewModel.deleteTour(item);
+        System.out.println("Controller deleting Tour ");
+        viewModel.deleteTour();
 
     }
 
     @FXML
     public void updateTour(ActionEvent actionEvent) throws TourListManagerException {
-        String item = getTourListSelection();
-        System.out.println("Controller updating Tour "+item);
+        System.out.println("Controller updating Tour");
         boolean tourName = userInputValidator.validateInputText(this.tourName, InputTypes.MUST);
         boolean routeInformation = userInputValidator.validateInputText(this.routeInformation, InputTypes.OPTIONAL);
         boolean tourDescription = userInputValidator.validateInputText(this.tourDescription, InputTypes.OPTIONAL);
         if(tourName && routeInformation && tourDescription ) {
-            viewModel.updateTour(item);
+            viewModel.updateTour();
         }
 
     }
 
     @FXML
     public void displayTourInfo(Event event) throws TourListManagerException, MapApiHandlerException, TourLogManagerException {
-        Tab activeTab = selectionTab.getSelectionModel().getSelectedItem();
-        if(activeTab == routeTab){
-            displayTourRoute(event);
-        }
-        else {
-            displayTourDetails(event);
-        }
+        displayTourRoute(event);
+        displayTourDetails(event);
         getAllTourLogs(event);
 
     }
@@ -114,31 +107,22 @@ public class PrimaryController implements Initializable {
     @FXML
     public void displayTourDetails(Event actionEvent) throws TourListManagerException {
         System.out.println("Showing Details for selected Element");
-        String item = getTourListSelection();
-        viewModel.displayTourAttributes(item);
+        viewModel.displayTourAttributes();
     }
 
     @FXML
     public void displayTourRoute(Event event) throws TourListManagerException, MapApiHandlerException {
-        if (routeTab==null) {
-            return;
-        }
-        if (routeTab.isSelected()) {
-            String item = getTourListSelection();
-            viewModel.displayTourRoute(item);
-        }
+        viewModel.displayTourRoute();
     }
 
     @FXML
     public void updateTourRoute(ActionEvent actionEvent) throws TourListManagerException, MapApiHandlerException {
-        String item = getTourListSelection();
-        viewModel.updateTourRoute(item);
+        viewModel.updateTourRoute();
     }
 
     @FXML
     public void exportPdf(ActionEvent actionEvent) throws PDFExporterException {
-        String item = getTourListSelection();
-        viewModel.exportPdf(item);
+        viewModel.exportPdf();
     }
 
     @FXML
@@ -148,36 +132,28 @@ public class PrimaryController implements Initializable {
 
     @FXML
     public void addTourLog(ActionEvent actionEvent) throws TourLogManagerException {
-        String item = getTourListSelection();
-        viewModel.addTourLog(item);
+        viewModel.addTourLog();
     }
 
     @FXML
     public void deleteTourLog(ActionEvent actionEvent) throws TourLogManagerException {
-        String item = getTourListSelection();
-        viewModel.deleteTourLog(item,getTableSelection());
+        viewModel.deleteTourLog();
     }
 
     @FXML
     private void getAllTourLogs(Event event) throws TourLogManagerException {
-        if (tourLogsTable==null) {
-            return;
-        }
-        String item = getTourListSelection();
-        viewModel.getAllTourLogs(item);
+        viewModel.getAllTourLogs();
     }
 
     @FXML
     private void displayTourLog(Event event) throws TourLogManagerException {
-        if(logTab.isSelected()) {
-            viewModel.displayTourLog(getTableSelection());
-        }
+        viewModel.displayTourLog();
+
     }
 
     @FXML
     public void updateTourLog(ActionEvent actionEvent) throws TourLogManagerException {
-        String item = getTourListSelection();
-        String rating = (String) logRating.getValue();
+
         boolean logAuthor = userInputValidator.validateInputText(this.logAuthor,InputTypes.MUST);
         boolean logReport = userInputValidator.validateInputText(this.logReport,InputTypes.MUST);
         boolean logSpecialRemarks = userInputValidator.validateInputText(this.logRemarks,InputTypes.OPTIONAL);
@@ -186,15 +162,14 @@ public class PrimaryController implements Initializable {
         boolean logDuration = userInputValidator.validateInputText(this.logTotalTime, InputTypes.NUMBER);
         boolean logSpeed = userInputValidator.validateInputText(this.logSpeed, InputTypes.NUMBER);
         if(logAuthor && logSpecialRemarks && logReport && logWeather && logDistance && logDuration && logSpeed){
-            viewModel.updateTourLog(item,getTableSelection(),Integer.valueOf(rating));
+            viewModel.updateTourLog();
         }
 
     }
 
     @FXML
     public void exportJson(ActionEvent actionEvent) throws JsonExporterException{
-        String item = getTourListSelection();
-        viewModel.exportJson(item);
+        viewModel.exportJson();
     }
 
     @Override
@@ -213,10 +188,16 @@ public class PrimaryController implements Initializable {
         tourImage.imageProperty().bindBidirectional(viewModel.tourImageProperty());
         searchField.textProperty().bindBidirectional(viewModel.searchFieldProperty());
 
+        tourList.getSelectionModel().selectedItemProperty().addListener(viewModel.getSelectedTourChange());
+        tourLogsTable.getSelectionModel().selectedItemProperty().addListener(viewModel.getSelectedTourLogChange());
+
+        selectionTab.getSelectionModel().selectedItemProperty().addListener(viewModel.getSelectedTabChange());
+
         logAuthor.textProperty().bindBidirectional(viewModel.logAuthorProperty());
         logDistance.textProperty().bindBidirectional(viewModel.logDistanceProperty());
         logTotalTime.textProperty().bindBidirectional(viewModel.logDurationProperty());
         logRating.setItems(viewModel.getTourRatingsList());
+        logRating.getSelectionModel().selectedItemProperty().addListener(viewModel.getSelectedRatingChange());
         logSpeed.textProperty().bindBidirectional(viewModel.logSpeedProperty());
         logReport.textProperty().bindBidirectional(viewModel.logReportProperty());
         logRemarks.textProperty().bindBidirectional(viewModel.logRemarksProperty());
@@ -224,25 +205,6 @@ public class PrimaryController implements Initializable {
         logJoule.textProperty().bindBidirectional(viewModel.logJouleProperty());
 
     }
-
-    private String getTourListSelection(){
-        String item=(String) tourList.getSelectionModel().getSelectedItem();
-        return item;
-    }
-
-    private String getTableSelection(){
-        if( tourLogsTable.getSelectionModel().getSelectedCells() == null){
-            return null;
-        }
-        TablePosition tablePosition = (TablePosition) tourLogsTable.getSelectionModel().getSelectedCells().get(0);
-        int row = tablePosition.getRow();
-        TourLog item = (TourLog) tourLogsTable.getItems().get(row);
-        // choose the date column
-        TableColumn col = (TableColumn) tourLogsTable.getColumns().get(1);
-        String tourLogName = (String) col.getCellObservableValue(item).getValue();
-        return tourLogName;
-    }
-
 
     private void initializeLogTable(){
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
